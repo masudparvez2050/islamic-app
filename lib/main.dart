@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:hijri/hijri_calendar.dart';
@@ -7,6 +8,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('en', null);
   await initializeDateFormatting('bn_BD', null);
+
+  // debugPaintSizeEnabled = true;
+
   runApp(const MyApp());
 }
 
@@ -324,7 +328,8 @@ class HomeScreen extends StatelessWidget {
         '${hijri.hDay} ${hijri.getLongMonthName()} ${hijri.hYear} H';
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16)
+          .copyWith(top: 16),
       child: Stack(
         children: [
           // Main Column with Date and Location Info
@@ -517,7 +522,8 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildTimeDisplay() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16)
+          .copyWith(bottom: 20),
       child: Stack(
         children: [
           // Centered Time and Prayer Info
