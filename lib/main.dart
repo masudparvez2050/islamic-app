@@ -636,11 +636,11 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(
-                'Ngajii Online',
+                'Recent News ',
                 style: TextStyle(
                   color: Color(0xFF00BFA5),
                   fontSize: 18,
@@ -695,7 +695,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-          Positioned(
+          const Positioned(
             bottom: 8,
             left: 8,
             child: Row(
