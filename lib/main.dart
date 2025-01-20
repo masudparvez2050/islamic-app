@@ -391,61 +391,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildPrayerTimes() {
-  //   final prayers = [
-  //     {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
-  //     {'name': 'Dzuhr', 'time': '12:00', 'icon': Icons.wb_sunny},
-  //     {'name': 'Asr', 'time': '15:14', 'icon': Icons.wb_cloudy},
-  //     {'name': 'Maghrib', 'time': '18:02', 'icon': Icons.nights_stay},
-  //     {'name': 'Isha', 'time': '19:11', 'icon': Icons.star},
-  //   ];
-
-  //   return Container(
-  //     height: 100,
-  //     child: ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: prayers.length,
-  //       itemBuilder: (context, index) {
-  //         final prayer = prayers[index];
-  //         return Container(
-  //           width: 80,
-  //           margin: const EdgeInsets.symmetric(horizontal: 4),
-  //           padding: const EdgeInsets.all(8),
-  //           decoration: BoxDecoration(
-  //             color: Colors.white.withOpacity(0.1),
-  //             borderRadius: BorderRadius.circular(12),
-  //           ),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               Icon(prayer['icon'] as IconData, color: Colors.white, size: 24),
-  //               const SizedBox(height: 8),
-  //               Text(
-  //                 prayer['name'] as String,
-  //                 style: const TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.w500,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //               Text(
-  //                 prayer['time'] as String,
-  //                 style: const TextStyle(
-  //                   color: Colors.white70,
-  //                   fontSize: 12,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
+ 
   Widget _buildPrayerTimes() {
     final prayers = [
       {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
@@ -455,51 +401,54 @@ class HomeScreen extends StatelessWidget {
       {'name': 'Isha', 'time': '19:11', 'icon': Icons.star},
     ];
 
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: prayers.length,
-        padding: const EdgeInsets.symmetric(
-            horizontal: 16), // Add padding to center items
-        itemBuilder: (context, index) {
-          final prayer = prayers[index];
-          return Container(
-            width: 80,
-            margin: const EdgeInsets.symmetric(
-                horizontal: 8), // Space between items
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly, // Even spacing vertically
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(prayer['icon'] as IconData, color: Colors.white, size: 24),
-                Text(
-                  prayer['name'] as String,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
+    return Padding(
+      padding: const EdgeInsets.all(0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+         
+          Row(
+            mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly, // Horizontal spacing
+            children: prayers.map((prayer) {
+              return Container(
+                width: 80,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.4),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                Text(
-                  prayer['time'] as String,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(prayer['icon'] as IconData,
+                        color: Colors.white, size: 28),
+                    const SizedBox(height: 8),
+                    Text(
+                      prayer['name'] as String,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      prayer['time'] as String,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
@@ -507,47 +456,66 @@ class HomeScreen extends StatelessWidget {
   Widget _buildRamadanInfo() {
     return Container(
       padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0)
-          .copyWith(top: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 16),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 3, 117, 121).withOpacity(0.4),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          _buildTimeInfo(
-              Icons.breakfast_dining, ' Sehri |', ' 04:15 AM', ' Starts '),
-          _buildTimeInfo(
-              Icons.dinner_dining, ' Iftar |', ' 06:32 PM ', ' Starts '),
+          const Text(
+            'Next Sehri & Iftar',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center, // Align text at the center
+          ),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildTimeInfo('Sehri', '04:15 AM', 'Starts'),
+              _buildTimeInfo('Iftar', '06:32 PM', 'Starts'),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTimeInfo(
-      IconData icon, String title, String time, String label) {
+  Widget _buildTimeInfo(String title, String time, String label) {
     return Row(
       children: [
-        Icon(icon, color: Colors.white, size: 24),
-        const SizedBox(height: 4),
         Text(
           title,
           style: const TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 14,
+          ),
         ),
+        const SizedBox(width: 4), // Space between title and time
         Text(
           time,
-          style: const TextStyle(color: Colors.white, fontSize: 14),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        const SizedBox(width: 4), // Space between time and label
         Text(
           label,
-          style: const TextStyle(color: Colors.white70, fontSize: 12),
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 12,
+          ),
         ),
       ],
     );
   }
 
+  
   Widget _buildFeatures() {
     final features = [
       {'name': 'Quran', 'icon': Icons.book},
