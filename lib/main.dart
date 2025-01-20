@@ -57,9 +57,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             left: 0,
             right: 0,
             child: Image.asset(
-              'images/logo.png',
+              'images/screen_bg.png',
               color: Colors.white.withOpacity(0.1),
-              height: 400,
+              height: 500,
+              width: double.infinity,
             ),
           ),
           // Logo and text
@@ -102,6 +103,53 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: SafeArea(
+  //       child: Column(
+  //         children: [
+  //           _buildHeader(),
+  //           _buildTimeDisplay(),
+  //           Stack(
+  //             children: [
+  //               Positioned(
+  //                 top: -25, // Move the icon upward
+  //                 left: 0,
+  //                 right: 0,
+  //                 child: Icon(
+  //                   Icons.mosque,
+  //                   size: 300,
+  //                   color: Colors.white.withOpacity(0.1),
+  //                 ),
+  //               ),
+  //               _buildPrayerTimes(),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 20),
+  //           Expanded(
+  //             child: Container(
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.only(
+  //                   topLeft: Radius.circular(30),
+  //                   topRight: Radius.circular(30),
+  //                 ),
+  //               ),
+  //               child: ListView(
+  //                 children: [
+  //                   _buildFeatures(),
+  //                   _buildNgajiSection(),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           _buildBottomNavBar(),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -110,18 +158,26 @@ class HomeScreen extends StatelessWidget {
             _buildHeader(),
             _buildTimeDisplay(),
             Stack(
+              clipBehavior:
+                  Clip.none, // Allows the icon to overflow without clipping
               children: [
+                // Positioned icon at the top but within the same space
                 Positioned(
-                  top: -25, // Move the icon upward
+                  top: -450, // Move the icon upwards
                   left: 0,
                   right: 0,
-                  child: Icon(
-                    Icons.mosque,
-                    size: 300,
-                    color: Colors.white.withOpacity(0.1),
+                  child: Align(
+                    alignment:
+                        Alignment.topCenter, // Center the icon horizontally
+                    child: Image.asset(
+                      'images/screen_bg.png',
+                      color: Colors.white.withOpacity(0.1),
+                      height: 1000,
+                      width: double.infinity,
+                    ),
                   ),
                 ),
-                _buildPrayerTimes(),
+                _buildPrayerTimes(), // Keep this below the icon
               ],
             ),
             const SizedBox(height: 20),
