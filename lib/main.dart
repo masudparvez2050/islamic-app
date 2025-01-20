@@ -315,6 +315,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  //version 1
+
   // Widget _buildTimeDisplay() {
   //   return Container(
   //     padding: const EdgeInsets.symmetric(vertical: 20),
@@ -337,14 +339,54 @@ class HomeScreen extends StatelessWidget {
   //   );
   // }
 
+// version 2
+  // Widget _buildTimeDisplay() {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         const Expanded(
+  //           child: Column(
+  //             children: [
+  //               Text(
+  //                 '04:41',
+  //                 style: TextStyle(
+  //                   color: Colors.white,
+  //                   fontSize: 72,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //               Text(
+  //                 'Fajr 3 hour 9 min left',
+  //                 style: TextStyle(color: Colors.white70),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         Column(
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: [
+  //             _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise', '05:42 AM'),
+  //             const SizedBox(height: 8),
+  //             _buildSunTimeInfo(Icons.nightlight_round, 'Sunset', '06:38 PM'),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _buildTimeDisplay() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          const Expanded(
+          // Centered Time and Prayer Info
+          Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   '04:41',
@@ -361,13 +403,24 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise', '05:42 AM'),
-              const SizedBox(height: 8),
-              _buildSunTimeInfo(Icons.nightlight_round, 'Sunset', '06:38 PM'),
-            ],
+
+          // Positioned Sun Times Info at the bottom-right of the screen
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(16), // Optional padding
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _buildSunTimeInfo(
+                      Icons.wb_sunny_outlined, 'Sunrise', '05:42 AM'),
+                  const SizedBox(height: 8),
+                  _buildSunTimeInfo(
+                      Icons.nightlight_round, 'Sunset', '06:38 PM'),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -391,14 +444,14 @@ class HomeScreen extends StatelessWidget {
               label,
               style: const TextStyle(
                 color: Colors.white70,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             Text(
               time,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
             ),
