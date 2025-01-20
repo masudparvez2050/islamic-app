@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:hijri/hijri_calendar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('en', null);
+  await initializeDateFormatting('bn_BD', null);
   runApp(const MyApp());
 }
 
@@ -127,7 +132,7 @@ class HomeScreen extends StatelessWidget {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: Column(
+                child: ListView(
                   children: [
                     _buildFeatures(),
                     _buildNgajiSection(),
@@ -143,29 +148,110 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildHeader() {
+    final now = DateTime.now();
+    final englishDate = DateFormat('d MMMM yyyy').format(now);
+    final banglaDate = DateFormat('d MMMM yyyy', 'bn_BD').format(now);
+    final hijri = HijriCalendar.now();
+    final hijriDate =
+        '${hijri.hDay} ${hijri.getLongMonthName()} ${hijri.hYear} H';
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                '9 Ramadhan 1444 H',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  englishDate,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
+                const SizedBox(height: 2),
+                Text(
+                  banglaDate,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  hijriDate,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                // const Text(
+                //   'Dhaka, Bangladesh',
+                //   style: TextStyle(
+                //     color: Colors.white70,
+                //     fontSize: 14,
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                size: 24,
               ),
-              Text(
-                'Dhaka, Bangladesh',
-                style: TextStyle(color: Colors.white70),
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: 'BN',
+                    icon: const Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.white,
+                    ),
+                    dropdownColor: const Color(0xFF00BFA5),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'BN',
+                        child: Text(
+                          'BN',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'EN',
+                        child: Text(
+                          'EN',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                    onChanged: (String? value) {
+                      // Handle language change
+                    },
+                  ),
+                ),
               ),
             ],
           ),
-          const Icon(Icons.notifications_outlined, color: Colors.white),
         ],
       ),
     );
@@ -328,7 +414,7 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Container(
+          SizedBox(
             height: 200,
             child: ListView(
               scrollDirection: Axis.horizontal,
