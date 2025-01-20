@@ -257,25 +257,96 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // Widget _buildTimeDisplay() {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 20),
+  //     child: Column(
+  //       children: const [
+  //         Text(
+  //           '04:41',
+  //           style: TextStyle(
+  //             color: Colors.white,
+  //             fontSize: 72,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         Text(
+  //           'Fajr 3 hour 9 min left',
+  //           style: TextStyle(color: Colors.white70),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _buildTimeDisplay() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        children: const [
-          Text(
-            '04:41',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 72,
-              fontWeight: FontWeight.bold,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              children: const [
+                Text(
+                  '04:41',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 72,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Fajr 3 hour 9 min left',
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ],
             ),
           ),
-          Text(
-            'Fajr 3 hour 9 min left',
-            style: TextStyle(color: Colors.white70),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise', '05:42 AM'),
+              const SizedBox(height: 8),
+              _buildSunTimeInfo(Icons.nightlight_round, 'Sunset', '06:38 PM'),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSunTimeInfo(IconData icon, String label, String time) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          color: Colors.white70,
+          size: 16,
+        ),
+        const SizedBox(width: 4),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+              ),
+            ),
+            Text(
+              time,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
