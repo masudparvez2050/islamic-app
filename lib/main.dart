@@ -107,53 +107,6 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: SafeArea(
-  //       child: Column(
-  //         children: [
-  //           _buildHeader(),
-  //           _buildTimeDisplay(),
-  //           Stack(
-  //             children: [
-  //               Positioned(
-  //                 top: -25, // Move the icon upward
-  //                 left: 0,
-  //                 right: 0,
-  //                 child: Icon(
-  //                   Icons.mosque,
-  //                   size: 300,
-  //                   color: Colors.white.withOpacity(0.1),
-  //                 ),
-  //               ),
-  //               _buildPrayerTimes(),
-  //             ],
-  //           ),
-  //           const SizedBox(height: 20),
-  //           Expanded(
-  //             child: Container(
-  //               decoration: const BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.only(
-  //                   topLeft: Radius.circular(30),
-  //                   topRight: Radius.circular(30),
-  //                 ),
-  //               ),
-  //               child: ListView(
-  //                 children: [
-  //                   _buildFeatures(),
-  //                   _buildNgajiSection(),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //           _buildBottomNavBar(),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -167,7 +120,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 // Positioned icon at the top but within the same space
                 Positioned(
-                  top: -450, // Move the icon upwards
+                  top: -400, // Move the icon upwards
                   left: 0,
                   right: 0,
                   child: Align(
@@ -175,8 +128,8 @@ class HomeScreen extends StatelessWidget {
                         Alignment.topCenter, // Center the icon horizontally
                     child: Image.asset(
                       'images/screen_bg.png',
-                      color: Colors.white.withOpacity(0.1),
-                      height: 1000,
+                      color: Colors.white.withOpacity(0.09),
+                      height: 1200,
                       width: double.infinity,
                     ),
                   ),
@@ -184,6 +137,7 @@ class HomeScreen extends StatelessWidget {
                 _buildPrayerTimes(), // Keep this below the icon
               ],
             ),
+            _buildRamadanInfo(),
             const SizedBox(height: 20),
             Expanded(
               child: Container(
@@ -208,116 +162,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _buildHeader() {
-  //   final now = DateTime.now();
-  //   final englishDate = DateFormat('d MMMM yyyy').format(now);
-  //   final banglaDate = DateFormat('d MMMM yyyy', 'bn_BD').format(now);
-  //   final hijri = HijriCalendar.now();
-  //   final hijriDate =
-  //       '${hijri.hDay} ${hijri.getLongMonthName()} ${hijri.hYear} H';
-
-  //   return Padding(
-  //     padding: const EdgeInsets.all(16.0),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       children: [
-  //         Expanded(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 englishDate,
-  //                 style: const TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.w500,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 1),
-  //               Text(
-  //                 banglaDate,
-  //                 style: const TextStyle(
-  //                   color: Colors.white70,
-  //                   fontSize: 13,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 1),
-  //               Text(
-  //                 hijriDate,
-  //                 style: const TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 12,
-  //                   // fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 4),
-  //               // const Text(
-  //               //   'Dhaka, Bangladesh',
-  //               //   style: TextStyle(
-  //               //     color: Colors.white70,
-  //               //     fontSize: 14,
-  //               //   ),
-  //               // ),
-  //             ],
-  //           ),
-  //         ),
-  //         Row(
-  //           children: [
-  //             const Icon(
-  //               Icons.notifications_outlined,
-  //               color: Colors.white,
-  //               size: 24,
-  //             ),
-  //             const SizedBox(height: 4),
-  //             Container(
-  //               decoration: BoxDecoration(
-  //                 color: Colors.white.withOpacity(0.1),
-  //                 borderRadius: BorderRadius.circular(4),
-  //               ),
-  //               padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
-  //               child: DropdownButtonHideUnderline(
-  //                 child: DropdownButton<String>(
-  //                   value: 'BN',
-  //                   icon: const Icon(
-  //                     Icons.arrow_drop_down,
-  //                     color: Colors.white,
-  //                   ),
-  //                   dropdownColor: const Color(0xFF00BFA5),
-  //                   items: const [
-  //                     DropdownMenuItem(
-  //                       value: 'BN',
-  //                       child: Text(
-  //                         'BN',
-  //                         style: TextStyle(
-  //                           color: Colors.white,
-  //                           fontSize: 12,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     DropdownMenuItem(
-  //                       value: 'EN',
-  //                       child: Text(
-  //                         'EN',
-  //                         style: TextStyle(
-  //                           color: Colors.white,
-  //                           fontSize: 12,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                   onChanged: (String? value) {
-  //                     // Handle language change
-  //                   },
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildHeader() {
     final now = DateTime.now();
@@ -383,7 +227,7 @@ class HomeScreen extends StatelessWidget {
                         'Dhaka, Bangladesh',
                         style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 14,
+                          fontSize: 10,
                         ),
                       ),
                     ],
@@ -458,68 +302,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  //version 1
-
-  // Widget _buildTimeDisplay() {
-  //   return Container(
-  //     padding: const EdgeInsets.symmetric(vertical: 20),
-  //     child: Column(
-  //       children: const [
-  //         Text(
-  //           '04:41',
-  //           style: TextStyle(
-  //             color: Colors.white,
-  //             fontSize: 72,
-  //             fontWeight: FontWeight.bold,
-  //           ),
-  //         ),
-  //         Text(
-  //           'Fajr 3 hour 9 min left',
-  //           style: TextStyle(color: Colors.white70),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-// version 2
-  // Widget _buildTimeDisplay() {
-  //   return Container(
-  //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-  //     child: Row(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children: [
-  //         const Expanded(
-  //           child: Column(
-  //             children: [
-  //               Text(
-  //                 '04:41',
-  //                 style: TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 72,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               Text(
-  //                 'Fajr 3 hour 9 min left',
-  //                 style: TextStyle(color: Colors.white70),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         Column(
-  //           crossAxisAlignment: CrossAxisAlignment.end,
-  //           children: [
-  //             _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise', '05:42 AM'),
-  //             const SizedBox(height: 8),
-  //             _buildSunTimeInfo(Icons.nightlight_round, 'Sunset', '06:38 PM'),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget _buildTimeDisplay() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16)
@@ -536,12 +318,16 @@ class HomeScreen extends StatelessWidget {
                   '04:41',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 72,
+                    fontSize: 40,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  'Fajr 3 hour 9 min left',
+                  'Isha Time | 6.55PM - 10.55PM',
+                  style: TextStyle(color: Colors.white70),
+                ),
+                Text(
+                  'Time Left: 3 hours 9 min',
                   style: TextStyle(color: Colors.white70),
                 ),
               ],
@@ -684,7 +470,7 @@ class HomeScreen extends StatelessWidget {
                 horizontal: 8), // Space between items
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withOpacity(0.4),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -715,6 +501,50 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildRamadanInfo() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0)
+          .copyWith(top: 16),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 3, 117, 121).withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildTimeInfo(
+              Icons.breakfast_dining, ' Sehri |', ' 04:15 AM', ' Starts '),
+          _buildTimeInfo(
+              Icons.dinner_dining, ' Iftar |', ' 06:32 PM ', ' Starts '),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimeInfo(
+      IconData icon, String title, String time, String label) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.white, size: 24),
+        const SizedBox(height: 4),
+        Text(
+          title,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          time,
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        Text(
+          label,
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
+        ),
+      ],
     );
   }
 
@@ -864,9 +694,9 @@ class HomeScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
+        children: [
           Icon(Icons.home, color: Color(0xFF00BFA5)),
           Icon(Icons.calendar_today, color: Colors.grey),
           Icon(Icons.note, color: Colors.grey),
