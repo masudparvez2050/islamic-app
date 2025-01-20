@@ -226,25 +226,25 @@ class HomeScreen extends StatelessWidget {
                   englishDate,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Text(
                   banglaDate,
                   style: const TextStyle(
                     color: Colors.white70,
-                    fontSize: 14,
+                    fontSize: 13,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Text(
                   hijriDate,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -258,20 +258,20 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          Column(
+          Row(
             children: [
               const Icon(
                 Icons.notifications_outlined,
                 color: Colors.white,
                 size: 24,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: 'BN',
@@ -287,7 +287,7 @@ class HomeScreen extends StatelessWidget {
                           'BN',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                           ),
                         ),
                       ),
@@ -297,7 +297,7 @@ class HomeScreen extends StatelessWidget {
                           'EN',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                           ),
                         ),
                       ),
@@ -343,9 +343,9 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
+          const Expanded(
             child: Column(
-              children: const [
+              children: [
                 Text(
                   '04:41',
                   style: TextStyle(
