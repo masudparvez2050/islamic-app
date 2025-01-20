@@ -112,10 +112,12 @@ class HomeScreen extends StatelessWidget {
             Stack(
               children: [
                 Positioned(
+                  top: -25, // Move the icon upward
+                  left: 0,
                   right: 0,
                   child: Icon(
                     Icons.mosque,
-                    size: 100,
+                    size: 300,
                     color: Colors.white.withOpacity(0.1),
                   ),
                 ),
@@ -405,61 +407,63 @@ class HomeScreen extends StatelessWidget {
   //   );
   // }
 
-Widget _buildPrayerTimes() {
-  final prayers = [
-    {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
-    {'name': 'Dzuhr', 'time': '12:00', 'icon': Icons.wb_sunny},
-    {'name': 'Asr', 'time': '15:14', 'icon': Icons.wb_cloudy},
-    {'name': 'Maghrib', 'time': '18:02', 'icon': Icons.nights_stay},
-    {'name': 'Isha', 'time': '19:11', 'icon': Icons.star},
-  ];
+  Widget _buildPrayerTimes() {
+    final prayers = [
+      {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
+      {'name': 'Dzuhr', 'time': '12:00', 'icon': Icons.wb_sunny},
+      {'name': 'Asr', 'time': '15:14', 'icon': Icons.wb_cloudy},
+      {'name': 'Maghrib', 'time': '18:02', 'icon': Icons.nights_stay},
+      {'name': 'Isha', 'time': '19:11', 'icon': Icons.star},
+    ];
 
-  return SizedBox(
-    height: 100,
-    child: ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: prayers.length,
-      padding: const EdgeInsets.symmetric(horizontal: 16), // Add padding to center items
-      itemBuilder: (context, index) {
-        final prayer = prayers[index];
-        return Container(
-          width: 80,
-          margin: const EdgeInsets.symmetric(horizontal: 8), // Space between items
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Even spacing vertically
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(prayer['icon'] as IconData, color: Colors.white, size: 24),
-              Text(
-                prayer['name'] as String,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+    return SizedBox(
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: prayers.length,
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16), // Add padding to center items
+        itemBuilder: (context, index) {
+          final prayer = prayers[index];
+          return Container(
+            width: 80,
+            margin: const EdgeInsets.symmetric(
+                horizontal: 8), // Space between items
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceEvenly, // Even spacing vertically
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(prayer['icon'] as IconData, color: Colors.white, size: 24),
+                Text(
+                  prayer['name'] as String,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                prayer['time'] as String,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12,
+                Text(
+                  prayer['time'] as String,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-  );
-}
-
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   Widget _buildFeatures() {
     final features = [
