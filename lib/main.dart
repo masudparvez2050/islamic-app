@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
 }
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen({super.key});
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
@@ -391,7 +391,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
- 
   Widget _buildPrayerTimes() {
     final prayers = [
       {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
@@ -406,7 +405,6 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-         
           Row(
             mainAxisAlignment:
                 MainAxisAlignment.spaceEvenly, // Horizontal spacing
@@ -515,7 +513,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  
   Widget _buildFeatures() {
     final features = [
       {'name': 'Quran', 'icon': Icons.book},
