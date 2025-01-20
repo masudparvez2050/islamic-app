@@ -350,62 +350,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildPrayerTimes() {
-  //   final prayers = [
-  //     {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
-  //     {'name': 'Dzuhr', 'time': '12:00', 'icon': Icons.wb_sunny},
-  //     {'name': 'Asr', 'time': '15:14', 'icon': Icons.wb_cloudy},
-  //     {'name': 'Maghrib', 'time': '18:02', 'icon': Icons.nights_stay},
-  //     {'name': 'Isha', 'time': '19:11', 'icon': Icons.star},
-  //   ];
-
-  //   return Container(
-  //     height: 100,
-  //     child: ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: prayers.length,
-  //       itemBuilder: (context, index) {
-  //         final prayer = prayers[index];
-  //         return Container(
-  //           width: 80,
-  //           margin: const EdgeInsets.symmetric(horizontal: 4),
-  //           padding: const EdgeInsets.all(8),
-  //           decoration: BoxDecoration(
-  //             color: Colors.white.withOpacity(0.1),
-  //             borderRadius: BorderRadius.circular(12),
-  //           ),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               Icon(prayer['icon'] as IconData, color: Colors.white, size: 24),
-  //               const SizedBox(height: 8),
-  //               Text(
-  //                 prayer['name'] as String,
-  //                 style: const TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 14,
-  //                   fontWeight: FontWeight.w500,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //               Text(
-  //                 prayer['time'] as String,
-  //                 style: const TextStyle(
-  //                   color: Colors.white70,
-  //                   fontSize: 12,
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
-  Widget _buildPrayerTimes(BuildContext context) {
+  Widget _buildPrayerTimes() {
     final prayers = [
       {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
       {'name': 'Dzuhr', 'time': '12:00', 'icon': Icons.wb_sunny},
@@ -414,69 +359,52 @@ class HomeScreen extends StatelessWidget {
       {'name': 'Isha', 'time': '19:11', 'icon': Icons.star},
     ];
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // Center the column
-        children: [
-          Text(
-            'Prayer Times',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: prayers.length,
-              itemBuilder: (context, index) {
-                final prayer = prayers[index];
-                return Container(
-                  width: 80,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        prayer['icon'] as IconData,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        prayer['name'] as String,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        prayer['time'] as String,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: Colors.white70),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-              },
+    return Container(
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: prayers.length,
+        itemBuilder: (context, index) {
+          final prayer = prayers[index];
+          return Container(
+            width: 80,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
             ),
-          ),
-        ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(prayer['icon'] as IconData, color: Colors.white, size: 24),
+                const SizedBox(height: 8),
+                Text(
+                  prayer['name'] as String,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  prayer['time'] as String,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
+
 
   Widget _buildFeatures() {
     final features = [
