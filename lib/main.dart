@@ -73,21 +73,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 150,
+                  height: 150,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(50),
+                    color: const Color.fromARGB(255, 5, 207, 140),
+                    borderRadius: BorderRadius.circular(100),
                   ),
-                  child: const Icon(
-                    Icons.nights_stay,
-                    color: Color(0xFF00BFA5),
-                    size: 50,
+                  child:
+                      // const Icon(
+                      // Icons.nights_stay,
+                      //   color: Color(0xFF00BFA5),
+                      //   size: 50,
+                      // ),
+                      Image.asset(
+                    'images/logo.png',
+                    color: Colors.white.withOpacity(1),
+                    height: 200,
+                    width: double.infinity,
                   ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Islam App',
+                  '', // you can set app name here
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,
