@@ -383,7 +383,7 @@ class HomeScreen extends StatelessWidget {
       child: Stack(
         children: [
           // Centered Time and Prayer Info
-          Center(
+          const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
