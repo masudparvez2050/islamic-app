@@ -3,6 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:hijri/hijri_calendar.dart';
+import 'package:islam_app/widgets/book_library.dart';
+import 'package:islam_app/widgets/carousel_buttons.dart';
+import 'package:islam_app/widgets/donation_carousel.dart';
+import 'package:islam_app/widgets/video_gallery.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,14 +61,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         children: [
           // Mosque silhouette at bottom
           Positioned(
-            bottom: 0,
+            bottom: -200,
             left: 0,
             right: 0,
             child: Image.asset(
-              'images/screen_bg.png',
-              color: Colors.white.withOpacity(0.1),
-              height: 500,
-              width: double.infinity,
+              'assets/images/home_bg.png',
+              color: const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
+              height: 600,
+              width: double.infinity, // Use the full width of the screen
+
+              fit: BoxFit.cover, // Scale proportionally to cover the area
+              alignment:
+                  Alignment.bottomCenter, // Align the image to the bottom
             ),
           ),
           // Logo and text
@@ -86,7 +94,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       //   size: 50,
                       // ),
                       Image.asset(
-                    'images/logo.png',
+                    'assets/images/logo.png',
                     color: Colors.white.withOpacity(1),
                     height: 200,
                     width: double.infinity,
@@ -134,8 +142,9 @@ class HomeScreen extends StatelessWidget {
                     alignment:
                         Alignment.topCenter, // Center the icon horizontally
                     child: Image.asset(
-                      'images/screen_bg.png',
-                      color: Colors.white.withOpacity(0.09),
+                      'assets/images/home_bg.png',
+                      color:
+                          const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
                       height: 1200,
                       width: double.infinity,
                     ),
@@ -158,6 +167,11 @@ class HomeScreen extends StatelessWidget {
                 child: ListView(
                   children: [
                     _buildFeatures(),
+                    const DonationCarousel(),
+                    const SizedBox(height: 16),
+                    // const CarouselButtons(),
+                    const BookLibrary(),
+                    const VideoGallery(),
                     _buildNgajiSection(),
                   ],
                 ),
@@ -469,7 +483,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: [
           const Text(
-            'Next Sehri & Iftar',
+            'পরবর্তী সময়সূচী সেহরি ও ইফতার ',
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -480,8 +494,8 @@ class HomeScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildTimeInfo('Sehri', '04:15 AM', 'Starts'),
-              _buildTimeInfo('Iftar', '06:32 PM', 'Starts'),
+              _buildTimeInfo('সেহরি', '04:15 AM', 'শুরু'),
+              _buildTimeInfo('ইফতার', '06:32 PM', 'শুরু'),
             ],
           ),
         ],
@@ -575,10 +589,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
 
   Widget _buildNgajiSection() {
     return Padding(
