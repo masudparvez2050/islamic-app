@@ -576,6 +576,10 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+
+
+
+
   Widget _buildNgajiSection() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
