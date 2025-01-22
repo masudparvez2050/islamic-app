@@ -220,7 +220,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         ),
 
         // New prayer status section
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         Text(
           'এখন চলছে',
           style: TextStyle(
@@ -232,7 +232,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
         // Current prayer time range
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white.withOpacity(0.3)),

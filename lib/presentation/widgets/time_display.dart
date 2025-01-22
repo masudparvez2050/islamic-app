@@ -100,7 +100,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
     List<String> timeParts = formattedTime.split(' ');
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16)
-          .copyWith(bottom: 20),
+          .copyWith(bottom: 10),
       child: Stack(
         children: [
           Center(
@@ -157,7 +157,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
                   if (_prayerTimes != null) ...[
                     _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise',
                         _formatTime(_prayerTimes!.sunrise)),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 3),
                     _buildSunTimeInfo(Icons.nightlight_round, 'Sunset',
                         _formatTime(_prayerTimes!.maghrib)),
                   ],
