@@ -84,7 +84,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     if (now.isBefore(_prayerTimes!.asr)) return _prayerTimes!.asr;
     if (now.isBefore(_prayerTimes!.maghrib)) return _prayerTimes!.maghrib;
     if (now.isBefore(_prayerTimes!.isha)) return _prayerTimes!.isha;
-    if (now.isBefore(_getTahajjudTime())) return _getTahajjudTime();
 
     // If past isha, calculate tomorrow's fajr
     if (_currentPosition != null) {
@@ -220,28 +219,29 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         ),
 
         // New prayer status section
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         Text(
-          'এখন চলছে',
+          'Now Prayer Time Running',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
         ),
 
         // Current prayer time range
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white.withOpacity(0.3)),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            '${_getCurrentPrayer()} | ${DateFormat('hh:mm a').format(_prayerTimes!.fajr)} - '
-            '${DateFormat('hh:mm a').format(_getPrayerEndTime(_getCurrentPrayer()))}',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            '${_getCurrentPrayer()} | ${_prayerTimes != null ? DateFormat('hh:mm a').format(_prayerTimes!.fajr) : '--:--'} - '
+            '${_prayerTimes != null ? DateFormat('hh:mm a').format(_getPrayerEndTime(_getCurrentPrayer())) : '--:--'}',
+            style: TextStyle(color: Colors.white),
             textAlign: TextAlign.center,
           ),
         ),
@@ -250,38 +250,38 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         Text(
           'সময় বাকি: ${_getTimeRemaining()}',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.white70,
             fontSize: 14,
           ),
           textAlign: TextAlign.center,
         ),
 
         // Schedule header
-        // const SizedBox(height: 20),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Text(
-        //         'All Schedule',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //           fontSize: 16,
-        //           fontWeight: FontWeight.bold,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Next Waqt',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //           fontSize: 16,
-        //           fontWeight: FontWeight.bold,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'All Schedule',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Next Waqt',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
