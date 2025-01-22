@@ -219,9 +219,9 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         ),
 
         // New prayer status section
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         Text(
-          'Now Prayer Time Running',
+          'এখন চলছে',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
@@ -232,7 +232,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
         // Current prayer time range
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white.withOpacity(0.3)),
@@ -241,7 +241,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           child: Text(
             '${_getCurrentPrayer()} | ${_prayerTimes != null ? DateFormat('hh:mm a').format(_prayerTimes!.fajr) : '--:--'} - '
             '${_prayerTimes != null ? DateFormat('hh:mm a').format(_getPrayerEndTime(_getCurrentPrayer())) : '--:--'}',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontSize: 20),
             textAlign: TextAlign.center,
           ),
         ),
@@ -250,38 +250,38 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         Text(
           'সময় বাকি: ${_getTimeRemaining()}',
           style: TextStyle(
-            color: Colors.white70,
+            color: Colors.white,
             fontSize: 14,
           ),
           textAlign: TextAlign.center,
         ),
 
         // Schedule header
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'All Schedule',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'Next Waqt',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
+        // const SizedBox(height: 20),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 20),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text(
+        //         'All Schedule',
+        //         style: TextStyle(
+        //           color: Colors.white,
+        //           fontSize: 16,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //       Text(
+        //         'Next Waqt',
+        //         style: TextStyle(
+        //           color: Colors.white,
+        //           fontSize: 16,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }
