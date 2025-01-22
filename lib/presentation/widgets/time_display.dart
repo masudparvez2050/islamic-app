@@ -135,10 +135,10 @@ class _TimeDisplayState extends State<TimeDisplay> {
                     '$_nextPrayer Time | ${_formatTime(_prayerTimes!.timeForPrayer(Prayer.values.firstWhere((p) => p.name.toLowerCase() == _nextPrayer.toLowerCase()))!)}',
                     style: const TextStyle(color: Colors.white70),
                   ),
-                  Text(
-                    'Time Left: ${_timeLeft.inHours}h ${_timeLeft.inMinutes % 60}m',
-                    style: const TextStyle(color: Colors.white70),
-                  ),
+                  // Text(
+                  //   'Time Left: ${_timeLeft.inHours}h ${_timeLeft.inMinutes % 60}m',
+                  //   style: const TextStyle(color: Colors.white70),
+                  // ),
                 ] else
                   const Text(
                     'Loading prayer times...',
