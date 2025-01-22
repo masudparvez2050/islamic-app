@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 
 class TimeDisplay extends StatefulWidget {
-  const TimeDisplay({Key? key}) : super(key: key);
+  const TimeDisplay({super.key});
 
   @override
   _TimeDisplayState createState() => _TimeDisplayState();
@@ -54,7 +54,8 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
   void _updatePrayerTimes() {
     if (_currentPosition != null) {
-      final coordinates = Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
+      final coordinates =
+          Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
       final params = CalculationMethod.karachi.getParameters();
       params.madhab = Madhab.hanafi;
       _prayerTimes = PrayerTimes.today(coordinates, params);
@@ -95,8 +96,11 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedTime = DateFormat('hh:mm a').format(_currentTime);
+    List<String> timeParts = formattedTime.split(' ');
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16).copyWith(bottom: 20),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16)
+          .copyWith(bottom: 20),
       child: Stack(
         children: [
           Center(
@@ -104,12 +108,26 @@ class _TimeDisplayState extends State<TimeDisplay> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  DateFormat('HH:mm a').format(_currentTime),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: timeParts[0], // Time part (e.g., 06:52)
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' ${timeParts[1]}', // AM/PM part
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 if (_prayerTimes != null) ...[
@@ -138,9 +156,11 @@ class _TimeDisplayState extends State<TimeDisplay> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (_prayerTimes != null) ...[
-                    _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise', _formatTime(_prayerTimes!.sunrise)),
+                    _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise',
+                        _formatTime(_prayerTimes!.sunrise)),
                     const SizedBox(height: 8),
-                    _buildSunTimeInfo(Icons.nightlight_round, 'Sunset', _formatTime(_prayerTimes!.maghrib)),
+                    _buildSunTimeInfo(Icons.nightlight_round, 'Sunset',
+                        _formatTime(_prayerTimes!.maghrib)),
                   ],
                 ],
               ),
@@ -189,4 +209,3 @@ class _TimeDisplayState extends State<TimeDisplay> {
     );
   }
 }
-

@@ -45,71 +45,82 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_prayerTimes == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    final prayers = [
-      {'name': 'Fajr', 'time': _prayerTimes!.fajr, 'icon': Icons.wb_twilight},
-      {'name': 'Dhuhr', 'time': _prayerTimes!.dhuhr, 'icon': Icons.wb_sunny},
-      {'name': 'Asr', 'time': _prayerTimes!.asr, 'icon': Icons.wb_cloudy},
-      {
-        'name': 'Maghrib',
-        'time': _prayerTimes!.maghrib,
-        'icon': Icons.nights_stay
-      },
-      {'name': 'Isha', 'time': _prayerTimes!.isha, 'icon': Icons.star},
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.all(0),
+  Widget _buildPrayerTimeCard(String time, String name, IconData icon) {
+    // Builds a prayer time card
+    return Container(
+      width: 80,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: prayers.map((prayer) {
-              return Container(
-                width: 80,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(prayer['icon'] as IconData,
-                        color: Colors.white, size: 28),
-                    const SizedBox(height: 8),
-                    Text(
-                      prayer['name'] as String,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      DateFormat('HH:mm a').format(prayer['time'] as DateTime),
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+          Icon(icon, color: Colors.white, size: 28),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            time,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Display loading indicators or prayer times
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildPrayerTimeCard(
+            _prayerTimes?.fajr != null
+                ? DateFormat('hh:mm a').format(_prayerTimes!.fajr)
+                : '--:--',
+            'Fajr',
+            Icons.wb_twilight),
+        _buildPrayerTimeCard(
+            _prayerTimes?.dhuhr != null
+                ? DateFormat('hh:mm a').format(_prayerTimes!.dhuhr)
+                : '--:--',
+            'Dhuhr',
+            Icons.wb_sunny),
+        _buildPrayerTimeCard(
+            _prayerTimes?.asr != null
+                ? DateFormat('hh:mm a').format(_prayerTimes!.asr)
+                : '--:--',
+            'Asr',
+            Icons.wb_cloudy),
+        _buildPrayerTimeCard(
+            _prayerTimes?.maghrib != null
+                ? DateFormat('hh:mm a').format(_prayerTimes!.maghrib)
+                : '--:--',
+            'Maghrib',
+            Icons.nights_stay),
+        _buildPrayerTimeCard(
+            _prayerTimes?.isha != null
+                ? DateFormat('hh:mm a').format(_prayerTimes!.isha)
+                : '--:--',
+            'Isha',
+            Icons.star),
+      ],
     );
   }
 }
