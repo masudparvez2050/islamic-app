@@ -124,7 +124,6 @@ class _TimeDisplayState extends State<TimeDisplay> {
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 25,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
