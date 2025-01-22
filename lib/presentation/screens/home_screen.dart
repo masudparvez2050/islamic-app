@@ -11,7 +11,7 @@ import 'package:islam_app/presentation/widgets/ngaji_section.dart';
 import 'package:islam_app/presentation/widgets/bottom_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const PrayerTimes(),
+                const PrayerTimesWidget(),
               ],
             ),
             const RamadanInfo(),

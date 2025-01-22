@@ -63,14 +63,14 @@ class Header extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.location_on,
-                            color: Colors.white70,
+                            color: Color.fromARGB(255, 255, 255, 255),
                             size: 14,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             snapshot.data ?? 'Loading...',
                             style: const TextStyle(
-                              color: Colors.white70,
+                              color: Color.fromARGB(255, 255, 255, 255),
                               fontSize: 12,
                             ),
                           ),
@@ -93,51 +93,51 @@ class Header extends StatelessWidget {
                   color: Colors.white,
                   size: 24,
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: 'BN',
-                      icon: const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                      dropdownColor: const Color(0xFF00BFA5),
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'BN',
-                          child: Text(
-                            'BN',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 'EN',
-                          child: Text(
-                            'EN',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                      onChanged: (String? value) {
-                        // Handle language change
-                      },
-                    ),
-                  ),
-                ),
+                // const SizedBox(width: 8),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: Colors.white.withOpacity(0.1),
+                //     borderRadius: BorderRadius.circular(4),
+                //   ),
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                //   child: DropdownButtonHideUnderline(
+                //     child: DropdownButton<String>(
+                //       value: 'BN',
+                //       icon: const Icon(
+                //         Icons.arrow_drop_down,
+                //         color: Colors.white,
+                //         size: 18,
+                //       ),
+                //       dropdownColor: const Color(0xFF00BFA5),
+                //       items: const [
+                //         DropdownMenuItem(
+                //           value: 'BN',
+                //           child: Text(
+                //             'BN',
+                //             style: TextStyle(
+                //               color: Colors.white,
+                //               fontSize: 12,
+                //             ),
+                //           ),
+                //         ),
+                //         DropdownMenuItem(
+                //           value: 'EN',
+                //           child: Text(
+                //             'EN',
+                //             style: TextStyle(
+                //               color: Colors.white,
+                //               fontSize: 12,
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //       onChanged: (String? value) {
+                //         // Handle language change
+                //       },
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -254,7 +254,7 @@ class Header extends StatelessWidget {
         .map((digit) => banglaNumbers[int.parse(digit)])
         .join('');
 
-    return '$banglaDayString ${banglaMonths[banglaMonth]} $banglaYearString বঙ্গাব্দ';
+    return '$banglaDayString ${banglaMonths[banglaMonth]} $banglaYearString';
   }
 
   String _getHijriDate() {
@@ -286,7 +286,7 @@ class Header extends StatelessWidget {
         .map((digit) => banglaNumbers[int.parse(digit)])
         .join('');
 
-    return '$hijriDayString ${hijriMonths[hijri.hMonth - 1]} $hijriYearString হিজরি';
+    return '$hijriDayString ${hijriMonths[hijri.hMonth - 1]} $hijriYearString';
   }
 
   Future<String> _getCurrentLocation() async {

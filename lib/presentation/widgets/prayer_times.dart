@@ -1,16 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:adhan/adhan.dart';
+import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
 
-class PrayerTimes extends StatelessWidget {
-  const PrayerTimes({Key? key}) : super(key: key);
+class PrayerTimesWidget extends StatefulWidget {
+  const PrayerTimesWidget({Key? key}) : super(key: key);
+
+  @override
+  _PrayerTimesWidgetState createState() => _PrayerTimesWidgetState();
+}
+
+class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
+  PrayerTimes? _prayerTimes;
+  Position? _currentPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() {
+        _currentPosition = position;
+        _updatePrayerTimes();
+      });
+    } catch (e) {
+      print("Error getting location: $e");
+    }
+  }
+
+  void _updatePrayerTimes() {
+    if (_currentPosition != null) {
+      final coordinates =
+          Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
+      final params = CalculationMethod.karachi.getParameters();
+      params.madhab = Madhab.hanafi;
+      _prayerTimes = PrayerTimes.today(coordinates, params);
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_prayerTimes == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     final prayers = [
-      {'name': 'Fajr', 'time': '04:41', 'icon': Icons.wb_twilight},
-      {'name': 'Dzuhr', 'time': '12:00', 'icon': Icons.wb_sunny},
-      {'name': 'Asr', 'time': '15:14', 'icon': Icons.wb_cloudy},
-      {'name': 'Maghrib', 'time': '18:02', 'icon': Icons.nights_stay},
-      {'name': 'Isha', 'time': '19:11', 'icon': Icons.star},
+      {'name': 'Fajr', 'time': _prayerTimes!.fajr, 'icon': Icons.wb_twilight},
+      {'name': 'Dhuhr', 'time': _prayerTimes!.dhuhr, 'icon': Icons.wb_sunny},
+      {'name': 'Asr', 'time': _prayerTimes!.asr, 'icon': Icons.wb_cloudy},
+      {
+        'name': 'Maghrib',
+        'time': _prayerTimes!.maghrib,
+        'icon': Icons.nights_stay
+      },
+      {'name': 'Isha', 'time': _prayerTimes!.isha, 'icon': Icons.star},
     ];
 
     return Padding(
@@ -46,7 +96,7 @@ class PrayerTimes extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      prayer['time'] as String,
+                      DateFormat('HH:mm a').format(prayer['time'] as DateTime),
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 12,

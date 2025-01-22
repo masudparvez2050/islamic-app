@@ -26,7 +26,7 @@ class RamadanInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildTimeInfo('সেহরি', '04:15 AM', 'শুরু'),
+              _buildTimeInfo('সেহরি', '04:15 AM', 'শেষ'),
               _buildTimeInfo('ইফতার', '06:32 PM', 'শুরু'),
             ],
           ),
