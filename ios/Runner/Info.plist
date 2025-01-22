@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Add location permissions -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to provide prayer times and Qibla direction.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app requires location access to update prayer times in the background.</string>
 </dict>
 </plist>
