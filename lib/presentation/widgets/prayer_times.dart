@@ -79,10 +79,12 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
     if (now.isBefore(_prayerTimes!.fajr)) return _prayerTimes!.fajr;
     if (now.isBefore(_prayerTimes!.sunrise)) return _prayerTimes!.sunrise;
+    if (now.isBefore(_getIshraqTime())) return _getIshraqTime();
     if (now.isBefore(_prayerTimes!.dhuhr)) return _prayerTimes!.dhuhr;
     if (now.isBefore(_prayerTimes!.asr)) return _prayerTimes!.asr;
     if (now.isBefore(_prayerTimes!.maghrib)) return _prayerTimes!.maghrib;
     if (now.isBefore(_prayerTimes!.isha)) return _prayerTimes!.isha;
+    if (now.isBefore(_getTahajjudTime())) return _getTahajjudTime();
 
     // If past isha, calculate tomorrow's fajr
     if (_currentPosition != null) {
@@ -102,11 +104,13 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     final now = DateTime.now();
 
     if (now.isBefore(_prayerTimes!.sunrise)) return 'Fajr';
-    if (now.isBefore(_prayerTimes!.dhuhr)) return 'Sunrise';
+    if (now.isBefore(_getIshraqTime())) return 'Sunrise';
+    if (now.isBefore(_prayerTimes!.dhuhr)) return 'Ishraq';
     if (now.isBefore(_prayerTimes!.asr)) return 'Dhuhr';
     if (now.isBefore(_prayerTimes!.maghrib)) return 'Asr';
     if (now.isBefore(_prayerTimes!.isha)) return 'Maghrib';
-    return 'Isha';
+    if (now.isBefore(_getTahajjudTime())) return 'Isha';
+    return 'Tahajjud';
   }
 
   DateTime _getPrayerEndTime(String prayer) {
@@ -115,6 +119,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     switch (prayer) {
       case 'Fajr':
         return _prayerTimes!.sunrise;
+      case 'Ishraq':
+        return _prayerTimes!.dhuhr;
       case 'Dhuhr':
         return _prayerTimes!.asr;
       case 'Asr':
@@ -122,6 +128,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
       case 'Maghrib':
         return _prayerTimes!.isha;
       case 'Isha':
+        return _getTahajjudTime();
+      case 'Tahajjud':
         // Next day's fajr
         if (_currentPosition != null) {
           final coordinates = Coordinates(
@@ -138,6 +146,20 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     }
   }
 
+  DateTime _getTahajjudTime() {
+    if (_prayerTimes == null) return DateTime.now();
+
+    final isha = _prayerTimes!.isha;
+    final fajr = _prayerTimes!.fajr.add(const Duration(days: 1));
+    final midpoint = isha.add(fajr.difference(isha) ~/ 2);
+    return midpoint;
+  }
+
+  DateTime _getIshraqTime() {
+    if (_prayerTimes == null) return DateTime.now();
+    return _prayerTimes!.sunrise.add(const Duration(minutes: 15));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -152,6 +174,18 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                     : '--:--',
                 'Fajr',
                 Icons.wb_twilight),
+            // _buildPrayerTimeCard(
+            //     _prayerTimes?.sunrise != null
+            //         ? DateFormat('hh:mm a').format(_prayerTimes!.sunrise)
+            //         : '--:--',
+            //     'Sunrise',
+            //     Icons.wb_sunny),
+            // _buildPrayerTimeCard(
+            //     _prayerTimes != null
+            //         ? DateFormat('hh:mm a').format(_getIshraqTime())
+            //         : '--:--',
+            //     'Ishraq',
+            //     Icons.wb_sunny),
             _buildPrayerTimeCard(
                 _prayerTimes?.dhuhr != null
                     ? DateFormat('hh:mm a').format(_prayerTimes!.dhuhr)
@@ -176,6 +210,12 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                     : '--:--',
                 'Isha',
                 Icons.star),
+            // _buildPrayerTimeCard(
+            //     _prayerTimes != null
+            //         ? DateFormat('hh:mm a').format(_getTahajjudTime())
+            //         : '--:--',
+            //     'Tahajjud',
+            //     Icons.nightlight_round),
           ],
         ),
 
@@ -186,7 +226,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
-            fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
         ),
@@ -202,8 +241,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           child: Text(
             '${_getCurrentPrayer()} | ${DateFormat('hh:mm a').format(_prayerTimes!.fajr)} - '
             '${DateFormat('hh:mm a').format(_getPrayerEndTime(_getCurrentPrayer()))}',
-            style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontSize: 20),
             textAlign: TextAlign.center,
           ),
         ),
@@ -220,30 +258,30 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
         // Schedule header
         // const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'স্থায়ী সময়সূচী',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'পরবর্তী ওয়াক্ত',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 20),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text(
+        //         'All Schedule',
+        //         style: TextStyle(
+        //           color: Colors.white,
+        //           fontSize: 16,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //       Text(
+        //         'Next Waqt',
+        //         style: TextStyle(
+        //           color: Colors.white,
+        //           fontSize: 16,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }
