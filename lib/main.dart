@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:hijri/hijri_calendar.dart';
-import 'package:islam_app/widgets/book_library.dart';
-import 'package:islam_app/widgets/carousel_buttons.dart';
-import 'package:islam_app/widgets/donation_carousel.dart';
-import 'package:islam_app/widgets/video_gallery.dart';
+import 'package:islam_app/presentation/widgets/book_library.dart';
+import 'package:islam_app/presentation/widgets/donation_carousel.dart';
+import 'package:islam_app/presentation/widgets/video_gallery.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
