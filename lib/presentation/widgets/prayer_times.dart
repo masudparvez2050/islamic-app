@@ -102,14 +102,14 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     if (_prayerTimes == null) return '';
     final now = DateTime.now();
 
-    if (now.isBefore(_prayerTimes!.sunrise)) return 'Fajr';
-    if (now.isBefore(_getIshraqTime())) return 'Sunrise';
-    if (now.isBefore(_prayerTimes!.dhuhr)) return 'Ishraq';
-    if (now.isBefore(_prayerTimes!.asr)) return 'Dhuhr';
-    if (now.isBefore(_prayerTimes!.maghrib)) return 'Asr';
-    if (now.isBefore(_prayerTimes!.isha)) return 'Maghrib';
-    if (now.isBefore(_getTahajjudTime())) return 'Isha';
-    return 'Tahajjud';
+    if (now.isBefore(_prayerTimes!.sunrise)) return 'ফজর';
+    if (now.isBefore(_getIshraqTime())) return 'সূর্যোদয়';
+    if (now.isBefore(_prayerTimes!.dhuhr)) return 'ইশরাক';
+    if (now.isBefore(_prayerTimes!.asr)) return 'জোহর';
+    if (now.isBefore(_prayerTimes!.maghrib)) return 'আসর';
+    if (now.isBefore(_prayerTimes!.isha)) return 'মাগরিব';
+    if (now.isBefore(_getTahajjudTime())) return 'ইশা';
+    return 'তাহাজ্জুদ';
   }
 
   DateTime _getPrayerEndTime(String prayer) {
@@ -171,7 +171,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 _prayerTimes?.fajr != null
                     ? DateFormat('hh:mm a').format(_prayerTimes!.fajr)
                     : '--:--',
-                'Fajr',
+                'ফজর',
                 Icons.wb_twilight),
             // _buildPrayerTimeCard(
             //     _prayerTimes?.sunrise != null
@@ -189,25 +189,25 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 _prayerTimes?.dhuhr != null
                     ? DateFormat('hh:mm a').format(_prayerTimes!.dhuhr)
                     : '--:--',
-                'Dhuhr',
+                'জোহর',
                 Icons.wb_sunny),
             _buildPrayerTimeCard(
                 _prayerTimes?.asr != null
                     ? DateFormat('hh:mm a').format(_prayerTimes!.asr)
                     : '--:--',
-                'Asr',
+                'আসর',
                 Icons.wb_cloudy),
             _buildPrayerTimeCard(
                 _prayerTimes?.maghrib != null
                     ? DateFormat('hh:mm a').format(_prayerTimes!.maghrib)
                     : '--:--',
-                'Maghrib',
+                'মাগরিব',
                 Icons.nights_stay),
             _buildPrayerTimeCard(
                 _prayerTimes?.isha != null
                     ? DateFormat('hh:mm a').format(_prayerTimes!.isha)
                     : '--:--',
-                'Isha',
+                'ইশা',
                 Icons.star),
             // _buildPrayerTimeCard(
             //     _prayerTimes != null

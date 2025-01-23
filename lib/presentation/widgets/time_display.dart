@@ -155,10 +155,10 @@ class _TimeDisplayState extends State<TimeDisplay> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (_prayerTimes != null) ...[
-                    _buildSunTimeInfo(Icons.wb_sunny_outlined, 'Sunrise',
+                    _buildSunTimeInfo(Icons.wb_sunny_outlined, 'সূর্যোদয়',
                         _formatTime(_prayerTimes!.sunrise)),
                     const SizedBox(height: 3),
-                    _buildSunTimeInfo(Icons.nightlight_round, 'Sunset',
+                    _buildSunTimeInfo(Icons.nightlight_round, 'সূর্যাস্ত',
                         _formatTime(_prayerTimes!.maghrib)),
                   ],
                 ],
