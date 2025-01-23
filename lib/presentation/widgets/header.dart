@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'dart:async';
 
 class Header extends StatelessWidget {
   const Header({Key? key}) : super(key: key);
@@ -10,8 +11,8 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final englishDate = DateFormat('d MMMM yyyy').format(now);
-    final banglaDate = _getBanglaDate(now);
+    final englishDate = DateFormat('EEEE, d MMMM yyyy').format(now);
+    final banglaDate = _getBanglaDateWithDay(now);
     final hijriDate = _getHijriDate();
 
     return Padding(
@@ -93,51 +94,6 @@ class Header extends StatelessWidget {
                   color: Colors.white,
                   size: 24,
                 ),
-                // const SizedBox(width: 8),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     color: Colors.white.withOpacity(0.1),
-                //     borderRadius: BorderRadius.circular(4),
-                //   ),
-                //   padding:
-                //       const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                //   child: DropdownButtonHideUnderline(
-                //     child: DropdownButton<String>(
-                //       value: 'BN',
-                //       icon: const Icon(
-                //         Icons.arrow_drop_down,
-                //         color: Colors.white,
-                //         size: 18,
-                //       ),
-                //       dropdownColor: const Color(0xFF00BFA5),
-                //       items: const [
-                //         DropdownMenuItem(
-                //           value: 'BN',
-                //           child: Text(
-                //             'BN',
-                //             style: TextStyle(
-                //               color: Colors.white,
-                //               fontSize: 12,
-                //             ),
-                //           ),
-                //         ),
-                //         DropdownMenuItem(
-                //           value: 'EN',
-                //           child: Text(
-                //             'EN',
-                //             style: TextStyle(
-                //               color: Colors.white,
-                //               fontSize: 12,
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //       onChanged: (String? value) {
-                //         // Handle language change
-                //       },
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -146,7 +102,17 @@ class Header extends StatelessWidget {
     );
   }
 
-  String _getBanglaDate(DateTime date) {
+  String _getBanglaDateWithDay(DateTime date) {
+    final banglaDays = [
+      'শনিবার',
+      'রবিবার',
+      'সোমবার',
+      'মঙ্গলবার',
+      'বুধবার',
+      'বৃহস্পতিবার',
+      'শুক্রবার'
+    ];
+
     final banglaMonths = [
       'বৈশাখ',
       'জ্যৈষ্ঠ',
@@ -164,6 +130,7 @@ class Header extends StatelessWidget {
 
     final banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
 
+    final dayName = banglaDays[date.weekday % 7]; // Map to Bangla day name
     int banglaYear = date.year - 593;
     if (date.month < 4 || (date.month == 4 && date.day < 14)) {
       banglaYear -= 1;

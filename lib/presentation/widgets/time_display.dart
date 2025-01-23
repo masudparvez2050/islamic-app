@@ -86,6 +86,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
     // If all prayers have passed, set next prayer to tomorrow's Fajr
     _nextPrayer = 'Fajr';
+
     final tomorrow = DateTime.now().add(const Duration(days: 1));
     final tomorrowPrayers = PrayerTimes.today(
       Coordinates(_currentPosition!.latitude, _currentPosition!.longitude),
@@ -96,11 +97,13 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final today = DateFormat('EEEE').format(now);
     String formattedTime = DateFormat('hh:mm a').format(_currentTime);
     List<String> timeParts = formattedTime.split(' ');
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16)
-          .copyWith(bottom: 10),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4)
+          .copyWith(bottom: 5),
       child: Stack(
         children: [
           Center(
@@ -129,20 +132,25 @@ class _TimeDisplayState extends State<TimeDisplay> {
                     ],
                   ),
                 ),
-                if (_prayerTimes != null) ...[
-                  Text(
-                    '$_nextPrayer Time | ${_formatTime(_prayerTimes!.timeForPrayer(Prayer.values.firstWhere((p) => p.name.toLowerCase() == _nextPrayer.toLowerCase()))!)}',
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                  // Text(
-                  //   'Time Left: ${_timeLeft.inHours}h ${_timeLeft.inMinutes % 60}m',
-                  //   style: const TextStyle(color: Colors.white70),
-                  // ),
-                ] else
-                  const Text(
-                    'Loading prayer times...',
-                    style: TextStyle(color: Colors.white70),
-                  ),
+                // Text(
+                //   today,
+                //   style: const TextStyle(color: Colors.white70),
+                // ),
+
+                // if (_prayerTimes != null) ...[
+                //   Text(
+                //     '$_nextPrayer Time | ${_formatTime(_prayerTimes!.timeForPrayer(Prayer.values.firstWhere((p) => p.name.toLowerCase() == _nextPrayer.toLowerCase()))!)}',
+                //     style: const TextStyle(color: Colors.white70),
+                //   ),
+                //   // Text(
+                //   //   'Time Left: ${_timeLeft.inHours}h ${_timeLeft.inMinutes % 60}m',
+                //   //   style: const TextStyle(color: Colors.white70),
+                //   // ),
+                // ] else
+                //   const Text(
+                //     'Loading prayer times...',
+                //     style: TextStyle(color: Colors.white70),
+                //   ),
               ],
             ),
           ),
@@ -150,7 +158,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
             bottom: 0,
             right: 0,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(right: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

@@ -15,6 +15,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
   PrayerTimes? _prayerTimes;
   Position? _currentPosition;
   Timer? _timer;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -46,18 +47,23 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
       });
     } catch (e) {
       print("Error getting location: $e");
+      _updatePrayerTimes(); // Use default location
     }
   }
 
   void _updatePrayerTimes() {
-    if (_currentPosition != null) {
-      final coordinates =
-          Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
-      final params = CalculationMethod.karachi.getParameters();
-      params.madhab = Madhab.hanafi;
-      _prayerTimes = PrayerTimes.today(coordinates, params);
-      setState(() {});
-    }
+    final coordinates = Coordinates(
+      _currentPosition?.latitude ?? 23.8103,
+      _currentPosition?.longitude ?? 90.4125,
+    );
+    final params = CalculationMethod.karachi.getParameters();
+    params.madhab = Madhab.hanafi;
+    final newPrayerTimes = PrayerTimes.today(coordinates, params);
+
+    setState(() {
+      _prayerTimes = newPrayerTimes;
+      _isLoading = false;
+    });
   }
 
   String _getTimeRemaining() {
@@ -84,26 +90,25 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     if (now.isBefore(_prayerTimes!.asr)) return _prayerTimes!.asr;
     if (now.isBefore(_prayerTimes!.maghrib)) return _prayerTimes!.maghrib;
     if (now.isBefore(_prayerTimes!.isha)) return _prayerTimes!.isha;
+    if (now.isBefore(_getTahajjudTime())) return _getTahajjudTime();
 
-    // If past isha, calculate tomorrow's fajr
-    if (_currentPosition != null) {
-      final coordinates =
-          Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
-      final params = CalculationMethod.karachi.getParameters();
-      final date =
-          DateComponents.from(DateTime.now().add(const Duration(days: 1)));
-      final tomorrowPrayers = PrayerTimes(coordinates, date, params);
-      return tomorrowPrayers.fajr;
-    }
-    return null;
+    // If past tahajjud, calculate tomorrow's fajr
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    final tomorrowPrayers = PrayerTimes.today(
+      Coordinates(_currentPosition?.latitude ?? 23.8103,
+          _currentPosition?.longitude ?? 90.4125),
+      CalculationMethod.karachi.getParameters(),
+    );
+    return tomorrowPrayers.fajr;
   }
 
   String _getCurrentPrayer() {
     if (_prayerTimes == null) return '';
     final now = DateTime.now();
 
+    if (now.isBefore(_prayerTimes!.fajr)) return 'তাহাজ্জুদ';
     if (now.isBefore(_prayerTimes!.sunrise)) return 'ফজর';
-    if (now.isBefore(_getIshraqTime())) return 'সূর্যোদয়';
+    if (now.isBefore(_getIshraqTime())) return 'সূর্যোদয়';
     if (now.isBefore(_prayerTimes!.dhuhr)) return 'ইশরাক';
     if (now.isBefore(_prayerTimes!.asr)) return 'জোহর';
     if (now.isBefore(_prayerTimes!.maghrib)) return 'আসর';
@@ -112,34 +117,51 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     return 'তাহাজ্জুদ';
   }
 
+  DateTime _getPrayerStartTime(String prayer) {
+    if (_prayerTimes == null) return DateTime.now();
+
+    switch (prayer) {
+      case 'তাহাজ্জুদ':
+        return _getTahajjudTime();
+      case 'ফজর':
+        return _prayerTimes!.fajr;
+      case 'সূর্যোদয়':
+        return _prayerTimes!.sunrise;
+      case 'ইশরাক':
+        return _getIshraqTime();
+      case 'জোহর':
+        return _prayerTimes!.dhuhr;
+      case 'আসর':
+        return _prayerTimes!.asr;
+      case 'মাগরিব':
+        return _prayerTimes!.maghrib;
+      case 'ইশা':
+        return _prayerTimes!.isha;
+      default:
+        return DateTime.now();
+    }
+  }
+
   DateTime _getPrayerEndTime(String prayer) {
     if (_prayerTimes == null) return DateTime.now();
 
     switch (prayer) {
-      case 'Fajr':
+      case 'তাহাজ্জুদ':
+        return _prayerTimes!.fajr;
+      case 'ফজর':
         return _prayerTimes!.sunrise;
-      case 'Ishraq':
+      case 'সূর্যোদয়':
+        return _getIshraqTime();
+      case 'ইশরাক':
         return _prayerTimes!.dhuhr;
-      case 'Dhuhr':
+      case 'জোহর':
         return _prayerTimes!.asr;
-      case 'Asr':
+      case 'আসর':
         return _prayerTimes!.maghrib;
-      case 'Maghrib':
+      case 'মাগরিব':
         return _prayerTimes!.isha;
-      case 'Isha':
+      case 'ইশা':
         return _getTahajjudTime();
-      case 'Tahajjud':
-        // Next day's fajr
-        if (_currentPosition != null) {
-          final coordinates = Coordinates(
-              _currentPosition!.latitude, _currentPosition!.longitude);
-          final params = CalculationMethod.karachi.getParameters();
-          final date =
-              DateComponents.from(DateTime.now().add(const Duration(days: 1)));
-          final tomorrowPrayers = PrayerTimes(coordinates, date, params);
-          return tomorrowPrayers.fajr;
-        }
-        return DateTime.now();
       default:
         return DateTime.now();
     }
@@ -156,81 +178,38 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
   DateTime _getIshraqTime() {
     if (_prayerTimes == null) return DateTime.now();
-    return _prayerTimes!.sunrise.add(const Duration(minutes: 15));
+    return _prayerTimes!.sunrise.add(const Duration(minutes: 20));
   }
 
   @override
   Widget build(BuildContext context) {
+    // if (_isLoading) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
+
     return Column(
       children: [
-        // Existing prayer time cards
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
+            _buildPrayerTimeCard(_prayerTimes?.dhuhr, 'জোহর', Icons.wb_sunny),
+            _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
             _buildPrayerTimeCard(
-                _prayerTimes?.fajr != null
-                    ? DateFormat('hh:mm a').format(_prayerTimes!.fajr)
-                    : '--:--',
-                'ফজর',
-                Icons.wb_twilight),
-            // _buildPrayerTimeCard(
-            //     _prayerTimes?.sunrise != null
-            //         ? DateFormat('hh:mm a').format(_prayerTimes!.sunrise)
-            //         : '--:--',
-            //     'Sunrise',
-            //     Icons.wb_sunny),
-            // _buildPrayerTimeCard(
-            //     _prayerTimes != null
-            //         ? DateFormat('hh:mm a').format(_getIshraqTime())
-            //         : '--:--',
-            //     'Ishraq',
-            //     Icons.wb_sunny),
-            _buildPrayerTimeCard(
-                _prayerTimes?.dhuhr != null
-                    ? DateFormat('hh:mm a').format(_prayerTimes!.dhuhr)
-                    : '--:--',
-                'জোহর',
-                Icons.wb_sunny),
-            _buildPrayerTimeCard(
-                _prayerTimes?.asr != null
-                    ? DateFormat('hh:mm a').format(_prayerTimes!.asr)
-                    : '--:--',
-                'আসর',
-                Icons.wb_cloudy),
-            _buildPrayerTimeCard(
-                _prayerTimes?.maghrib != null
-                    ? DateFormat('hh:mm a').format(_prayerTimes!.maghrib)
-                    : '--:--',
-                'মাগরিব',
-                Icons.nights_stay),
-            _buildPrayerTimeCard(
-                _prayerTimes?.isha != null
-                    ? DateFormat('hh:mm a').format(_prayerTimes!.isha)
-                    : '--:--',
-                'ইশা',
-                Icons.star),
-            // _buildPrayerTimeCard(
-            //     _prayerTimes != null
-            //         ? DateFormat('hh:mm a').format(_getTahajjudTime())
-            //         : '--:--',
-            //     'Tahajjud',
-            //     Icons.nightlight_round),
+                _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
+            _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
           ],
         ),
-
-        // New prayer status section
         const SizedBox(height: 10),
         Text(
           'এখন চলছে',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
         ),
-
-        // Current prayer time range
         Container(
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -239,89 +218,97 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            '${_getCurrentPrayer()} | ${_prayerTimes != null ? DateFormat('hh:mm a').format(_prayerTimes!.fajr) : '--:--'} - '
-            '${_prayerTimes != null ? DateFormat('hh:mm a').format(_getPrayerEndTime(_getCurrentPrayer())) : '--:--'}',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - '
+            '${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+            style: TextStyle(color: Colors.white, fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ),
-
-        // Time remaining
         Text(
-          'সময় বাকি: ${_getTimeRemaining()}',
+          'সময় বাকি: ${_getTimeRemaining()}',
           style: TextStyle(
             color: Colors.white,
             fontSize: 14,
           ),
           textAlign: TextAlign.center,
         ),
-
-        // Schedule header
-        // const SizedBox(height: 20),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 20),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Text(
-        //         'All Schedule',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //           fontSize: 16,
-        //           fontWeight: FontWeight.bold,
-        //         ),
-        //       ),
-        //       Text(
-        //         'Next Waqt',
-        //         style: TextStyle(
-        //           color: Colors.white,
-        //           fontSize: 16,
-        //           fontWeight: FontWeight.bold,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ],
     );
   }
 
-  Widget _buildPrayerTimeCard(String time, String name, IconData icon) {
-    // Builds a prayer time card
+  Widget _buildPrayerTimeCard(DateTime? time, String name, IconData icon) {
+    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    final cardWidth =
+        screenWidth / 5 - 8; // 1/5th of the width with padding adjustment
+
+    // Determine if this card represents the active prayer
+    final isActivePrayer = name == _getCurrentPrayer();
+
+    // Check if today is Friday and replace "জোহর" with "জুম'আ"
+    String displayName = name;
+    if (name == 'জোহর' && DateTime.now().weekday == DateTime.friday) {
+      displayName = "জুম'আ";
+    }
+
     return Container(
-      width: 80,
-      padding: const EdgeInsets.all(8),
+      width: cardWidth,
+      margin:
+          const EdgeInsets.symmetric(horizontal: 1), // Adjust horizontal margin
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.4),
+        color: isActivePrayer
+            ? const Color.fromARGB(255, 255, 255, 255)
+                .withOpacity(0.8) // Active card color
+            : Colors.white.withOpacity(0.2), // Default card color
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isActivePrayer
+              ? Colors.green // Highlight border for active card
+              : Colors.transparent,
+          width: isActivePrayer ? 0 : 0,
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.white, size: 28),
-          const SizedBox(height: 8),
+          Icon(
+            icon,
+            color: isActivePrayer
+                ? Color.fromARGB(255, 0, 190, 165)
+                : Colors.white,
+            size: 28,
+          ),
+          const SizedBox(height: 1),
           Text(
-            name,
-            style: const TextStyle(
-              color: Colors.white,
+            displayName,
+            style: TextStyle(
+              color: isActivePrayer
+                  ? Color.fromARGB(255, 0, 190, 165)
+                  : Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 1),
           Text(
-            time,
-            style: const TextStyle(
-              color: Colors.white,
+            _formatTime(time),
+            style: TextStyle(
+              color: isActivePrayer
+                  ? Color.fromARGB(255, 0, 190, 165)
+                  : Colors.white,
               fontSize: 12,
-              fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
         ],
       ),
     );
+  }
+
+  String _formatTime(DateTime? time) {
+    if (time == null) return '--:--';
+    return DateFormat('hh:mm a').format(time);
   }
 }

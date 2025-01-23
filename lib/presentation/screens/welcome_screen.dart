@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:islam_app/presentation/screens/home_screen.dart';
+import 'package:religion/presentation/screens/home_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});

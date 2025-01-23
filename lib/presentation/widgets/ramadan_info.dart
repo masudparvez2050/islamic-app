@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:adhan/adhan.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 class RamadanInfo extends StatefulWidget {
-  const RamadanInfo({Key? key}) : super(key: key);
+  const RamadanInfo({super.key});
 
   @override
   _RamadanInfoState createState() => _RamadanInfoState();
@@ -33,12 +34,16 @@ class _RamadanInfoState extends State<RamadanInfo> {
       });
     } catch (e) {
       print("Error getting location: $e");
+      _updatePrayerTimes(); // Use default location
     }
   }
 
   void _updatePrayerTimes() {
     if (_currentPosition != null) {
-      final coordinates = Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
+      final coordinates = Coordinates(
+        _currentPosition?.latitude ?? 23.8103,
+        _currentPosition?.longitude ?? 90.4125,
+      );
       final params = CalculationMethod.karachi.getParameters();
       params.madhab = Madhab.hanafi;
       final now = DateTime.now();
@@ -57,8 +62,8 @@ class _RamadanInfoState extends State<RamadanInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 5),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 3, 117, 121).withOpacity(0.4),
         borderRadius: BorderRadius.circular(12),
@@ -77,8 +82,8 @@ class _RamadanInfoState extends State<RamadanInfo> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildTimeInfo('সেহরি', sheriTime, 'শেষ'),
-              _buildTimeInfo('ইফতার', iftarTime, 'শুরু'),
+              _buildTimeInfo('সেহরি শেষ', sheriTime, ''),
+              _buildTimeInfo('ইফতার শুরু', iftarTime, ''),
             ],
           ),
         ],

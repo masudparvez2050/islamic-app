@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:islam_app/presentation/widgets/header.dart';
-import 'package:islam_app/presentation/widgets/time_display.dart';
-import 'package:islam_app/presentation/widgets/prayer_times.dart';
-import 'package:islam_app/presentation/widgets/ramadan_info.dart';
-import 'package:islam_app/presentation/widgets/features.dart';
-import 'package:islam_app/presentation/widgets/donation_carousel.dart';
-import 'package:islam_app/presentation/widgets/book_library.dart';
-import 'package:islam_app/presentation/widgets/video_gallery.dart';
-import 'package:islam_app/presentation/widgets/ngaji_section.dart';
-import 'package:islam_app/presentation/widgets/bottom_nav_bar.dart';
+import 'package:religion/presentation/widgets/header.dart';
+import 'package:religion/presentation/widgets/time_display.dart';
+import 'package:religion/presentation/widgets/prayer_times.dart';
+import 'package:religion/presentation/widgets/ramadan_info.dart';
+import 'package:religion/presentation/widgets/features.dart';
+import 'package:religion/presentation/widgets/donation_carousel.dart';
+import 'package:religion/presentation/widgets/book_library.dart';
+import 'package:religion/presentation/widgets/video_gallery.dart';
+import 'package:religion/presentation/widgets/ngaji_section.dart';
+import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         const RamadanInfo(),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         Expanded(
           child: Container(
             decoration: const BoxDecoration(

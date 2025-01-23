@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:islam_app/presentation/screens/welcome_screen.dart';
+import 'package:religion/presentation/screens/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('en', null);
   await initializeDateFormatting('bn_BD', null);
+
+  // debugPaintSizeEnabled = true;
 
   runApp(const MyApp());
 }

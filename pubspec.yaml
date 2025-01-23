@@ -1,5 +1,5 @@
-name: islam_app
-description: "A new Flutter project."
+name: religion
+description: "A Islamic Religion Information App"
 
 publish_to: "none" # Remove this line if you
 version: 1.0.0+1
