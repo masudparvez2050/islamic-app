@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:religion/presentation/screens/home_screen.dart';
+import 'package:religion/presentation/screens/namaz_schedule_screen.dart';
+import 'package:religion/presentation/screens/ramadan_screen.dart';
+import 'package:religion/presentation/screens/settings_screen.dart';
 import 'package:religion/presentation/widgets/features.dart'; // Import the features.dart file
 
 class BottomNavBar extends StatelessWidget {
@@ -21,26 +25,34 @@ class BottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.home, 'Home', Colors.grey),
-          _buildNavItem(Icons.calendar_today, 'Calendar', Colors.grey),
-          _buildAllFeaturesButton(context),
-          _buildNavItem(Icons.note, 'Notes', Colors.grey),
-          _buildNavItem(Icons.person_outline, 'Profile', Colors.grey),
+          _buildNavItem(context, Icons.home, 'Home', const HomeScreen()),
+          _buildNavItem(context, Icons.calendar_today, 'Namaz', const NamazScheduleScreen()),
+          _buildAllFeaturesButton(context), // Add the features button in the middle
+          _buildNavItem(context, Icons.menu_book, 'Ramadan', const RamadanScreen()),
+          _buildNavItem(context, Icons.menu, 'Settings', const SettingsScreen()),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, Color color) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color),
-        Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
-      ],
+  Widget _buildNavItem(BuildContext context, IconData icon, String label, Widget screen) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => screen),
+        );
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: const Color(0xFF00BFA5)),
+          Text(
+            label,
+            style: const TextStyle(color: Color(0xFF00BFA5), fontSize: 12),
+          ),
+        ],
+      ),
     );
   }
 
@@ -91,4 +103,3 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 }
-
