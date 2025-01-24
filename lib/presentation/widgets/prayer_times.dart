@@ -121,6 +121,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
   DateTime _getPrayerStartTime(String prayer) {
     if (_prayerTimes == null) return DateTime.now();
+    final jumma = DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর';
 
     switch (prayer) {
       case 'তাহাজ্জুদ':
@@ -131,7 +132,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         return _prayerTimes!.sunrise;
       case 'ইশরাক':
         return _getIshraqTime();
-      case 'জোহর':
+      case "জুম'আ" || 'জোহর':
         return _prayerTimes!.dhuhr;
       case 'আসর':
         return _prayerTimes!.asr;
@@ -156,7 +157,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         return _getIshraqTime();
       case 'ইশরাক':
         return _prayerTimes!.dhuhr;
-      case 'জোহর':
+      case "জুম'আ" || 'জোহর':
         return _prayerTimes!.asr;
       case 'আসর':
         return _prayerTimes!.maghrib;
@@ -195,9 +196,10 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
-            _buildPrayerTimeCard(_prayerTimes?.dhuhr, 
-       DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর'
-    , Icons.wb_sunny),
+            _buildPrayerTimeCard(
+                _prayerTimes?.dhuhr,
+                DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
+                Icons.wb_sunny),
             _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
             _buildPrayerTimeCard(
                 _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
