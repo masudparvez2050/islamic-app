@@ -1,4 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:religion/presentation/screens/quran_screen.dart';
+import 'package:religion/presentation/screens/adzan_screen.dart';
+import 'package:religion/presentation/screens/qibla_screen.dart';
+import 'package:religion/presentation/screens/donation_screen.dart';
+import 'package:religion/presentation/screens/namaz_schedule_screen.dart';
+import 'package:religion/presentation/screens/sehri_iftar_screen.dart';
+import 'package:religion/presentation/screens/ramadan_screen.dart';
+import 'package:religion/presentation/screens/tasbih_screen.dart';
+import 'package:religion/presentation/screens/hadith_screen.dart';
+import 'package:religion/presentation/screens/allah_names_screen.dart';
 
 class Features extends StatelessWidget {
   const Features({Key? key}) : super(key: key);
@@ -35,8 +45,32 @@ class Features extends StatelessWidget {
                   if (feature['name'] == 'All') {
                     _showAllFeaturesModal(context);
                   } else {
-                    // Handle other feature taps
-                    print('Tapped on ${feature['name']}');
+                    switch (feature['name']) {
+                      case 'Quran':
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const QuranScreen()));
+                        break;
+                      case 'Adzan':
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AdzanScreen()));
+                        break;
+                      case 'Qibla':
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const QiblaScreen()));
+                        break;
+                      case 'Donation':
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DonationScreen()));
+                        break;
+                    }
                   }
                 },
                 child: Column(
@@ -80,7 +114,7 @@ class Features extends StatelessWidget {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 500),
+      transitionDuration: const Duration(milliseconds: 200),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return SlideTransition(
           position: Tween<Offset>(
@@ -94,71 +128,109 @@ class Features extends StatelessWidget {
   }
 }
 
-class AllFeaturesModal extends StatelessWidget {
-  const AllFeaturesModal({super.key});
+class AllFeaturesModal extends StatefulWidget {
+  const AllFeaturesModal({Key? key}) : super(key: key);
+
+  @override
+  _AllFeaturesModalState createState() => _AllFeaturesModalState();
+}
+
+class _AllFeaturesModalState extends State<AllFeaturesModal> {
+  final allFeatures = [
+    {'name': 'Quran', 'icon': Icons.book, 'screen': QuranScreen()},
+    {'name': 'Adzan', 'icon': Icons.volume_up, 'screen': AdzanScreen()},
+    {'name': 'Qibla', 'icon': Icons.explore, 'screen': QiblaScreen()},
+    {'name': 'Donation', 'icon': Icons.favorite, 'screen': DonationScreen()},
+    {
+      'name': 'Namaz schedule',
+      'icon': Icons.schedule,
+      'screen': NamazScheduleScreen()
+    },
+    {
+      'name': 'Sehri & Iftar',
+      'icon': Icons.restaurant_menu,
+      'screen': SehriIftarScreen()
+    },
+    {
+      'name': 'Ramadan',
+      'icon': Icons.calendar_today,
+      'screen': RamadanScreen()
+    },
+    {'name': 'Tasbih', 'icon': Icons.repeat, 'screen': TasbihScreen()},
+    {'name': 'Hadith', 'icon': Icons.library_books, 'screen': HadithScreen()},
+    {
+      'name': 'Allah\'s 99 Names',
+      'icon': Icons.format_list_numbered,
+      'screen': AllahNamesScreen()
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final allFeatures = [
-      {'name': 'Quran', 'icon': Icons.book},
-      {'name': 'Adzan', 'icon': Icons.volume_up},
-      {'name': 'Qibla', 'icon': Icons.explore},
-      {'name': 'Donation', 'icon': Icons.favorite},
-      {'name': 'Namaj schedule', 'icon': Icons.schedule},
-      {'name': 'Sehri & Iftar', 'icon': Icons.restaurant_menu},
-      {'name': 'Ramadan', 'icon': Icons.calendar_today},
-      {'name': 'Tajbih', 'icon': Icons.repeat},
-      {'name': 'Hadith', 'icon': Icons.library_books},
-      {'name': 'Allah\'s 99 Name', 'icon': Icons.format_list_numbered},
-    ];
-
-    return Material(
-      color: Colors.transparent,
-      child: GestureDetector(
-        onTap: () => Navigator.of(context).pop(),
+    return GestureDetector(
+      onVerticalDragUpdate: (details) {
+        if (details.primaryDelta! > 10) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Material(
+        color: Colors.transparent,
         child: Container(
-          color: Colors.black.withOpacity(0.0),
-          child: GestureDetector(
-            onTap: () {}, // Prevents taps from closing the modal
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+          color: Colors.black.withOpacity(0.5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'All Features',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF00BFA5),
-                          ),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 5,
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2.5),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'All Features',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF00BFA5),
                         ),
                       ),
-                      Expanded(
-                        child: GridView.builder(
-                          padding: const EdgeInsets.all(16),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            childAspectRatio: 0.8,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                          ),
-                          itemCount: allFeatures.length,
-                          itemBuilder: (context, index) {
-                            final feature = allFeatures[index];
-                            return Column(
+                    ),
+                    Expanded(
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          childAspectRatio: 0.8,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                        itemCount: allFeatures.length,
+                        itemBuilder: (context, index) {
+                          final feature = allFeatures[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              _navigateToFeatureScreen(
+                                  context, feature['screen'] as Widget);
+                            },
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
@@ -184,17 +256,34 @@ class AllFeaturesModal extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                 ),
                               ],
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _navigateToFeatureScreen(BuildContext context, Widget screen) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => screen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+          return SlideTransition(position: offsetAnimation, child: child);
+        },
       ),
     );
   }

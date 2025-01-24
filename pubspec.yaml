@@ -17,6 +17,7 @@ dependencies:
   geocoding: ^3.0.0
   prayers_times: ^0.0.6
   adhan: ^2.0.0-nullsafety.2
+ 
 
 dev_dependencies:
   flutter_test:

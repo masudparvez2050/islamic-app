@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/book_library_screen.dart';
-import 'package:religion/presentation/screens/book_details_screen.dart';
+import 'package:religion/presentation/screens/recent_news_screen.dart';
+import 'package:religion/presentation/screens/news_details_screen.dart';
 
-class BookLibrary extends StatelessWidget {
-  const BookLibrary({Key? key}) : super(key: key);
+class RecentNews extends StatelessWidget {
+  const RecentNews({Key? key}) : super(key: key);
 
-  final List<Map<String, String>> books = const [
+  final List<Map<String, String>> news = const [
     {
-      'title': 'Sahih Al-Bukhari',
-      'author': 'Imam Bukhari',
-      'cover':
-          'https://e7.pngegg.com/pngimages/595/619/png-clipart-sahih-al-bukhari-sahih-muslim-quran-islam-hadith-islam-text-religion.png',
-      'category': 'Hadith'
+      'title':
+          'কিছু দুষ্টু লোক আমাদের সম্প্রীতিতে ফাটল ধরাতে চায়: মিজানুর রহমান আজহারী',
+      'date': '2025-01-18',
+      'image':
+          'https://www.rtvonline.com/assets/news_photos/2025/01/18/image-309354-1737201295.jpg',
+      'summary':
+          'কিছু দুষ্টু লোক বাংলাদেশের ধর্মীয় সম্প্রীতিতে ফাটল ধরাতে চায় বলে মন্তব্য করেছেন জনপ্রিয় ইসলামী বক্তা ড. মিজানুর রহমান আজহারী।',
     },
     {
-      'title': 'Riyadus Saliheen',
-      'author': 'Imam An-Nawawi',
-      'cover':
-          'https://darussalamstore.ae/images/thumbnails/detailed/25/darussalam-2017-11-30-15-39-06-id-461_hndk3yamfwwnde1z.webp',
-      'category': 'Hadith'
+      'title':
+          'কিছু দুষ্টু লোক আমাদের সম্প্রীতিতে ফাটল ধরাতে চায়: মিজানুর রহমান আজহারী',
+      'date': '2025-01-18',
+      'image':
+          'https://www.rtvonline.com/assets/news_photos/2025/01/18/image-309354-1737201295.jpg',
+      'summary':
+          'কিছু দুষ্টু লোক বাংলাদেশের ধর্মীয় সম্প্রীতিতে ফাটল ধরাতে চায় বলে মন্তব্য করেছেন জনপ্রিয় ইসলামী বক্তা ড. মিজানুর রহমান আজহারী।',
     },
     {
-      'title': 'The Sealed Nectar',
-      'author': 'Safiur Rahman',
-      'cover':
-          'https://darussalam.pk/images/thumbnails/detailed/17/darussalam-2017-06-13-12-54-00the-sealed-nectar-2.webp',
-      'category': 'Seerah'
-    },
-    {
-      'title': 'Fortress of the Muslim',
-      'author': 'Said Al-Qahtani',
-      'cover':
-          'https://app-uploads-cdn.fera.ai/customer_photos/images/001/002/017/920/original/IMG_5091.jpeg?1733649377',
-      'category': 'Dua'
+      'title':
+          'কিছু দুষ্টু লোক আমাদের সম্প্রীতিতে ফাটল ধরাতে চায়: মিজানুর রহমান আজহারী',
+      'date': '2025-01-18',
+      'image':
+          'https://www.rtvonline.com/assets/news_photos/2025/01/18/image-309354-1737201295.jpg',
+      'summary':
+          'কিছু দুষ্টু লোক বাংলাদেশের ধর্মীয় সম্প্রীতিতে ফাটল ধরাতে চায় বলে মন্তব্য করেছেন জনপ্রিয় ইসলামী বক্তা ড. মিজানুর রহমান আজহারী।',
     },
   ];
 
@@ -46,7 +45,7 @@ class BookLibrary extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Islamic Books',
+                'Recent News',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -59,7 +58,7 @@ class BookLibrary extends StatelessWidget {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const BookLibraryScreen(),
+                          const RecentNewsScreen(),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
                         const begin = Offset(1.0, 0.0);
@@ -87,20 +86,20 @@ class BookLibrary extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 220,
+          height: 280,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: books.length,
+            itemCount: news.length,
             itemBuilder: (context, index) {
-              final book = books[index];
+              final newsItem = news[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          const BookDetailsScreen(),
+                          NewsDetailsScreen(newsItem: newsItem),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
                         const begin = Offset(1.0, 0.0);
@@ -116,49 +115,43 @@ class BookLibrary extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  width: 140,
+                  width: 280,
                   margin: const EdgeInsets.only(right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 160,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.grey[200],
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            book['cover']!,
-                            fit: BoxFit.cover,
-                          ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          newsItem['image']!,
+                          height: 160,
+                          width: 280,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        book['title']!,
+                        newsItem['title']!,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 4),
                       Text(
-                        book['author']!,
+                        newsItem['date']!,
                         style: TextStyle(
                           color: Colors.grey[600],
-                          fontSize: 12,
+                          fontSize: 14,
                         ),
-                        maxLines: 1,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        newsItem['summary']!,
+                        style: const TextStyle(fontSize: 14),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],

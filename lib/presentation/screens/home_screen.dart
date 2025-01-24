@@ -7,7 +7,7 @@ import 'package:religion/presentation/widgets/features.dart';
 import 'package:religion/presentation/widgets/donation_carousel.dart';
 import 'package:religion/presentation/widgets/book_library.dart';
 import 'package:religion/presentation/widgets/video_gallery.dart';
-import 'package:religion/presentation/widgets/ngaji_section.dart';
+import 'package:religion/presentation/widgets/recent_news.dart';
 import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 16),
                 BookLibrary(),
                 VideoGallery(),
-                NgajiSection(),
+                RecentNews(),
               ],
             ),
           ),
@@ -132,7 +132,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 16),
                 BookLibrary(),
                 VideoGallery(),
-                NgajiSection(),
+                RecentNews(),
               ],
             ),
           ),
