@@ -110,7 +110,9 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     if (now.isBefore(_prayerTimes!.sunrise)) return 'ফজর';
     if (now.isBefore(_getIshraqTime())) return 'সূর্যোদয়';
     if (now.isBefore(_prayerTimes!.dhuhr)) return 'ইশরাক';
-    if (now.isBefore(_prayerTimes!.asr)) return 'জোহর';
+    if (now.isBefore(_prayerTimes!.asr)) {
+      return DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর';
+    }
     if (now.isBefore(_prayerTimes!.maghrib)) return 'আসর';
     if (now.isBefore(_prayerTimes!.isha)) return 'মাগরিব';
     if (now.isBefore(_getTahajjudTime())) return 'ইশা';
@@ -193,7 +195,9 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
-            _buildPrayerTimeCard(_prayerTimes?.dhuhr, 'জোহর', Icons.wb_sunny),
+            _buildPrayerTimeCard(_prayerTimes?.dhuhr, 
+       DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর'
+    , Icons.wb_sunny),
             _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
             _buildPrayerTimeCard(
                 _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
@@ -245,10 +249,10 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     final isActivePrayer = name == _getCurrentPrayer();
 
     // Check if today is Friday and replace "জোহর" with "জুম'আ"
-    String displayName = name;
-    if (name == 'জোহর' && DateTime.now().weekday == DateTime.friday) {
-      displayName = "জুম'আ";
-    }
+    // String displayName = name;
+    // if (name == 'জোহর' && DateTime.now().weekday == DateTime.friday) {
+    //   displayName = "জুম'আ";
+    // }
 
     return Container(
       width: cardWidth,
@@ -281,7 +285,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           ),
           const SizedBox(height: 1),
           Text(
-            displayName,
+            name,
             style: TextStyle(
               color: isActivePrayer
                   ? Color.fromARGB(255, 0, 190, 165)
