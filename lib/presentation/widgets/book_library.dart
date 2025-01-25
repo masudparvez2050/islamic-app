@@ -7,11 +7,11 @@ class BookLibrary extends StatelessWidget {
 
   final List<Map<String, String>> books = const [
     {
-      'title': 'Sahih Al-Bukhari',
-      'author': 'Imam Bukhari',
+      'title': 'সাহিহ আল বুখারী',
+      'author': 'ইমাম বুখারী',
       'cover':
           'https://e7.pngegg.com/pngimages/595/619/png-clipart-sahih-al-bukhari-sahih-muslim-quran-islam-hadith-islam-text-religion.png',
-      'category': 'Hadith'
+      'category': 'হাদিস'
     },
     {
       'title': 'Riyadus Saliheen',
@@ -46,7 +46,7 @@ class BookLibrary extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Islamic Books',
+                'ইসলামিক বই',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class BookLibrary extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  'View All',
+                  ' আরও দেখুন',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 14,

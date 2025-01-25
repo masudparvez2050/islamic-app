@@ -16,11 +16,11 @@ class Features extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final features = [
-      {'name': 'Quran', 'icon': Icons.book},
-      {'name': 'Adzan', 'icon': Icons.volume_up},
-      {'name': 'Qibla', 'icon': Icons.explore},
-      {'name': 'Donation', 'icon': Icons.favorite},
-      {'name': 'All', 'icon': Icons.grid_view},
+      {'name': 'নামাজ সময়সূচী', 'icon': Icons.schedule},
+      {'name': 'সেহরি ইফতার', 'icon': Icons.restaurant_menu},
+      {'name': 'রমজান', 'icon': Icons.calendar_today},
+      {'name': 'আল\'কুরান', 'icon': Icons.book},
+      {'name': 'সকল', 'icon': Icons.grid_view},
     ];
 
     return Padding(
@@ -29,7 +29,7 @@ class Features extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'All Features',
+            'ফিচার সমূহ',
             style: TextStyle(
               color: Color(0xFF00BFA5),
               fontSize: 18,
@@ -42,33 +42,35 @@ class Features extends StatelessWidget {
             children: features.map((feature) {
               return GestureDetector(
                 onTap: () {
-                  if (feature['name'] == 'All') {
+                  if (feature['name'] == 'সকল') {
                     _showAllFeaturesModal(context);
                   } else {
                     switch (feature['name']) {
-                      case 'Quran':
+                      case 'নামাজ সময়সূচী':
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const NamazScheduleScreen()));
+                        break;
+                      case 'সেহরি ইফতার':
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const SehriIftarScreen()));
+                        break;
+                      case 'রমজান':
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RamadanScreen()));
+                        break;
+                      case 'আল\'কুরান':
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const QuranScreen()));
-                        break;
-                      case 'Adzan':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AdzanScreen()));
-                        break;
-                      case 'Qibla':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const QiblaScreen()));
-                        break;
-                      case 'Donation':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const DonationScreen()));
                         break;
                     }
                   }
@@ -114,7 +116,7 @@ class Features extends StatelessWidget {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 200),
+      transitionDuration: const Duration(milliseconds: 400),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return SlideTransition(
           position: Tween<Offset>(
@@ -137,29 +139,25 @@ class AllFeaturesModal extends StatefulWidget {
 
 class _AllFeaturesModalState extends State<AllFeaturesModal> {
   final allFeatures = [
-    {'name': 'Quran', 'icon': Icons.book, 'screen': QuranScreen()},
-    {'name': 'Adzan', 'icon': Icons.volume_up, 'screen': AdzanScreen()},
-    {'name': 'Qibla', 'icon': Icons.explore, 'screen': QiblaScreen()},
-    {'name': 'Donation', 'icon': Icons.favorite, 'screen': DonationScreen()},
+    {'name': 'আল\'কুরান', 'icon': Icons.book, 'screen': QuranScreen()},
+    {'name': 'আজান', 'icon': Icons.volume_up, 'screen': AdzanScreen()},
+    {'name': 'কিবলা', 'icon': Icons.explore, 'screen': QiblaScreen()},
+    {'name': 'দান করুন', 'icon': Icons.favorite, 'screen': DonationScreen()},
     {
-      'name': 'Namaz schedule',
+      'name': 'নামাজ সময়সূচী',
       'icon': Icons.schedule,
       'screen': NamazScheduleScreen()
     },
     {
-      'name': 'Sehri & Iftar',
+      'name': 'সেহরি এবং ইফতার',
       'icon': Icons.restaurant_menu,
       'screen': SehriIftarScreen()
     },
+    {'name': 'রমজান', 'icon': Icons.calendar_today, 'screen': RamadanScreen()},
+    {'name': 'তাসবিহ', 'icon': Icons.repeat, 'screen': TasbihScreen()},
+    {'name': 'হাদিস', 'icon': Icons.library_books, 'screen': HadithScreen()},
     {
-      'name': 'Ramadan',
-      'icon': Icons.calendar_today,
-      'screen': RamadanScreen()
-    },
-    {'name': 'Tasbih', 'icon': Icons.repeat, 'screen': TasbihScreen()},
-    {'name': 'Hadith', 'icon': Icons.library_books, 'screen': HadithScreen()},
-    {
-      'name': 'Allah\'s 99 Names',
+      'name': 'আল্লাহর ৯৯ টি নাম',
       'icon': Icons.format_list_numbered,
       'screen': AllahNamesScreen()
     },
@@ -176,7 +174,7 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withOpacity(0.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -203,7 +201,7 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
                     const Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Text(
-                        'All Features',
+                        'ফিচার সমূহ',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -252,6 +250,7 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
                                   style: const TextStyle(
                                     color: Color(0xFF00BFA5),
                                     fontSize: 12,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),

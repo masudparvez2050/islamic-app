@@ -1,40 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:religion/presentation/screens/home_screen.dart';
 import 'package:religion/presentation/screens/namaz_schedule_screen.dart';
+import 'package:religion/presentation/screens/quran_screen.dart';
 import 'package:religion/presentation/screens/ramadan_screen.dart';
 import 'package:religion/presentation/screens/settings_screen.dart';
-import 'package:religion/presentation/widgets/features.dart'; // Import the features.dart file
+import 'package:religion/presentation/widgets/features.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(context, Icons.home, 'Home', const HomeScreen()),
-          _buildNavItem(context, Icons.calendar_today, 'Namaz',
-              const NamazScheduleScreen()),
-          _buildAllFeaturesButton(
-              context), // Add the features button in the middle
-          _buildNavItem(
-              context, Icons.menu_book, 'Ramadan', const RamadanScreen()),
-          _buildNavItem(
-              context, Icons.menu, 'Settings', const SettingsScreen()),
-        ],
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildNavItem(context, Icons.home, 'Home', const HomeScreen()),
+            _buildNavItem(context, Icons.calendar_today, 'Namaz',
+                const NamazScheduleScreen()),
+            _buildAllFeaturesButton(context),
+            _buildNavItem(
+                context, Icons.menu_book, 'Quran', const QuranScreen()),
+            _buildNavItem(
+                context, Icons.star, 'Ramadan', const RamadanScreen()),
+          ],
+        ),
       ),
     );
   }
@@ -43,7 +48,7 @@ class BottomNavBar extends StatelessWidget {
       BuildContext context, IconData icon, String label, Widget screen) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => screen),
         );
@@ -96,7 +101,7 @@ class BottomNavBar extends StatelessWidget {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 500),
+      transitionDuration: const Duration(milliseconds: 200),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return SlideTransition(
           position: Tween<Offset>(
