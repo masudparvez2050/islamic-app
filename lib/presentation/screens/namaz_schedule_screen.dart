@@ -41,14 +41,18 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
       ),
       body: Stack(
         children: [
-          Column(
-            children: [
-              _buildDropdownCalendar(),
-              if (_isCalendarVisible) _buildCalendar(),
-              Expanded(
-                child: _buildPrayerTimesList(),
-              ),
-            ],
+          Padding(
+            padding:
+                const EdgeInsets.only(bottom: 80.0), // Add margin at the bottom
+            child: Column(
+              children: [
+                _buildDropdownCalendar(),
+                if (_isCalendarVisible) _buildCalendar(),
+                Expanded(
+                  child: _buildPrayerTimesList(),
+                ),
+              ],
+            ),
           ),
           const BottomNavBar(),
         ],
@@ -67,7 +71,9 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           IconButton(
-            icon: Icon(_isCalendarVisible ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+            icon: Icon(_isCalendarVisible
+                ? Icons.arrow_drop_up
+                : Icons.arrow_drop_down),
             onPressed: () {
               setState(() {
                 _isCalendarVisible = !_isCalendarVisible;
@@ -112,30 +118,62 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   Widget _buildPrayerTimesList() {
     final prayerTimes = [
       {
-        'name': 'Tahajjud',
-        'time': _getTahajjudTime(),
-        'icon': Icons.nightlight_round
+        'name': 'ফজর',
+        'startTime': _prayerTimes.fajr,
+        'endTime': _prayerTimes.sunrise,
+        'icon': Icons.wb_twilight
       },
-      {'name': 'Fajr', 'time': _prayerTimes.fajr, 'icon': Icons.wb_twilight},
-      {'name': 'Sunrise', 'time': _prayerTimes.sunrise, 'icon': Icons.wb_sunny},
       {
-        'name': 'Ishraq',
-        'time': _getIshraqTime(),
+        'name': 'সূর্যোদয়',
+        'startTime': _prayerTimes.sunrise,
+        'endTime': _getIshraqTime(),
+        'icon': Icons.wb_sunny
+      },
+      {
+        'name': 'ইশরাক',
+        'startTime': _getIshraqTime(),
+        'endTime': _prayerTimes.dhuhr,
         'icon': Icons.wb_sunny_outlined
       },
-      {'name': 'Dhuhr', 'time': _prayerTimes.dhuhr, 'icon': Icons.wb_sunny},
-      {'name': 'Asr', 'time': _prayerTimes.asr, 'icon': Icons.wb_cloudy},
       {
-        'name': 'Maghrib',
-        'time': _prayerTimes.maghrib,
+        'name': 'জোহর',
+        'startTime': _prayerTimes.dhuhr,
+        'endTime': _prayerTimes.asr,
+        'icon': Icons.wb_sunny
+      },
+      {
+        'name': 'আসর',
+        'startTime': _prayerTimes.asr,
+        'endTime': _prayerTimes.maghrib,
+        'icon': Icons.wb_cloudy
+      },
+      {
+        'name': 'মাগরিব',
+        'startTime': _prayerTimes.maghrib,
+        'endTime': _prayerTimes.isha,
         'icon': Icons.nights_stay
       },
-      {'name': 'Isha', 'time': _prayerTimes.isha, 'icon': Icons.star},
+      {
+        'name': 'ইশা',
+        'startTime': _prayerTimes.isha,
+        'endTime': _getNextDayFajr(),
+        'icon': Icons.star
+      },
+      {
+        'name': 'তাহাজ্জুদ',
+        'startTime': _getTahajjudTime(),
+        'endTime': _prayerTimes.fajr,
+        'icon': Icons.nightlight_round
+      },
     ];
 
     return ListView.builder(
       itemCount: prayerTimes.length,
       itemBuilder: (context, index) {
+        final prayer = prayerTimes[index];
+        final isActivePrayer = _isActivePrayer(
+            prayer['startTime'] as DateTime, prayer['endTime'] as DateTime);
+
         return TweenAnimationBuilder<double>(
           tween: Tween(begin: 0.0, end: 1.0),
           duration: Duration(milliseconds: 500 + (index * 100)),
@@ -149,40 +187,97 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
             );
           },
           child: _buildPrayerTimeItem(
-            prayerTimes[index]['name'] as String,
-            prayerTimes[index]['time'] as DateTime,
-            prayerTimes[index]['icon'] as IconData,
+            prayer['name'] as String,
+            prayer['startTime'] as DateTime,
+            prayer['endTime'] as DateTime,
+            prayer['icon'] as IconData,
+            isActivePrayer,
           ),
         );
       },
     );
   }
 
-  Widget _buildPrayerTimeItem(String prayerName, DateTime time, IconData icon) {
+  Widget _buildPrayerTimeItem(String prayerName, DateTime startTime,
+      DateTime endTime, IconData icon, bool isActivePrayer) {
+    final timeLeft = _getTimeLeft(endTime);
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      color: isActivePrayer
+          ? const Color.fromARGB(255, 52, 151, 141)
+          : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
       child: ListTile(
-        leading: Icon(icon, color: const Color(0xFF00BFA5)),
+        leading: Icon(icon, color: const Color.fromARGB(255, 255, 255, 255)),
         title: Text(prayerName,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        trailing: Text(
-          DateFormat.jm().format(time),
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+                // fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 255, 255, 255), fontSize: 18)),
+               
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'শুরু: ${DateFormat.jm().format(startTime)}',
+              style: TextStyle(
+                fontSize: 14,
+                color: isActivePrayer
+                    ? Colors.white
+                    : const Color.fromARGB(255, 255, 255, 255),
+              ),
+            ),
+            Text(
+              'শেষ: ${DateFormat.jm().format(endTime)}',
+              style: TextStyle(
+                fontSize: 14,
+                color: isActivePrayer
+                    ? Colors.white
+                    : const Color.fromARGB(255, 255, 255, 255),
+              ),
+            ),
+            if (isActivePrayer)
+              Text(
+                'সময় বাকি: $timeLeft',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+          ],
         ),
       ),
     );
   }
 
   DateTime _getTahajjudTime() {
-    final oneThirdOfNight = _prayerTimes.maghrib.add(Duration(
-      seconds:
-          (_prayerTimes.fajr.difference(_prayerTimes.maghrib).inSeconds ~/ 3) *
-              2,
-    ));
-    return oneThirdOfNight;
+    final isha = _prayerTimes.isha;
+    final fajr = _prayerTimes.fajr.add(const Duration(days: 1));
+    final midpoint = isha.add(fajr.difference(isha) ~/ 2);
+    return midpoint;
   }
 
   DateTime _getIshraqTime() {
     return _prayerTimes.sunrise.add(const Duration(minutes: 20));
+  }
+
+  DateTime _getNextDayFajr() {
+    final tomorrow = _selectedDate.add(const Duration(days: 1));
+    final dateComponents = DateComponents.from(tomorrow);
+    final tomorrowPrayerTimes = PrayerTimes(_prayerTimes.coordinates,
+        dateComponents, _prayerTimes.calculationParameters);
+    return tomorrowPrayerTimes.fajr;
+  }
+
+  bool _isActivePrayer(DateTime startTime, DateTime endTime) {
+    final now = DateTime.now();
+    return now.isAfter(startTime) && now.isBefore(endTime);
+  }
+
+  String _getTimeLeft(DateTime endTime) {
+    final now = DateTime.now();
+    final difference = endTime.difference(now);
+    final hours = difference.inHours;
+    final minutes = difference.inMinutes % 60;
+    return '$hours hours $minutes minutes';
   }
 }
