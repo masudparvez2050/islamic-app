@@ -10,31 +10,36 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(context, Icons.home, 'Home', const HomeScreen()),
-          _buildNavItem(context, Icons.calendar_today, 'Namaz',
-              const NamazScheduleScreen()),
-          _buildAllFeaturesButton(
-              context), // Add the features button in the middle
-          _buildNavItem(
-              context, Icons.menu_book, 'Ramadan', const RamadanScreen()),
-          _buildNavItem(
-              context, Icons.menu, 'Settings', const SettingsScreen()),
-        ],
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildNavItem(context, Icons.home, 'Home', const HomeScreen()),
+            _buildNavItem(context, Icons.calendar_today, 'Namaz',
+                const NamazScheduleScreen()),
+            _buildAllFeaturesButton(
+                context), // Add the features button in the middle
+            _buildNavItem(
+                context, Icons.menu_book, 'Ramadan', const RamadanScreen()),
+            _buildNavItem(
+                context, Icons.menu, 'Settings', const SettingsScreen()),
+          ],
+        ),
       ),
     );
   }

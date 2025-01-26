@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF00BFA5),
         scaffoldBackgroundColor: const Color(0xFF00BFA5),
-        fontFamily: 'HindSiliguri',
+        fontFamily: 'TiroBangla',
       ),
       home: const WelcomeScreen(),
     );
