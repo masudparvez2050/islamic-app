@@ -15,6 +15,7 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   late DateTime _selectedDate;
   late PrayerTimes _prayerTimes;
   bool _isCalendarVisible = false;
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -167,83 +168,79 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
       },
     ];
 
-    return ListView.builder(
-      itemCount: prayerTimes.length,
-      itemBuilder: (context, index) {
+    return AnimatedList(
+      key: _listKey,
+      initialItemCount: prayerTimes.length,
+      itemBuilder: (context, index, animation) {
         final prayer = prayerTimes[index];
         final isActivePrayer = _isActivePrayer(
             prayer['startTime'] as DateTime, prayer['endTime'] as DateTime);
 
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: Duration(milliseconds: 500 + (index * 100)),
-          builder: (context, value, child) {
-            return Opacity(
-              opacity: value,
-              child: Transform.translate(
-                offset: Offset(0, 50 * (1 - value)),
-                child: child,
-              ),
-            );
-          },
-          child: _buildPrayerTimeItem(
-            prayer['name'] as String,
-            prayer['startTime'] as DateTime,
-            prayer['endTime'] as DateTime,
-            prayer['icon'] as IconData,
-            isActivePrayer,
-          ),
+        return _buildAnimatedPrayerTimeItem(
+          animation,
+          prayer['name'] as String,
+          prayer['startTime'] as DateTime,
+          prayer['endTime'] as DateTime,
+          prayer['icon'] as IconData,
+          isActivePrayer,
         );
       },
     );
   }
 
-  Widget _buildPrayerTimeItem(String prayerName, DateTime startTime,
-      DateTime endTime, IconData icon, bool isActivePrayer) {
+  Widget _buildAnimatedPrayerTimeItem(
+    Animation<double> animation,
+    String prayerName,
+    DateTime startTime,
+    DateTime endTime,
+    IconData icon,
+    bool isActivePrayer,
+  ) {
     final timeLeft = _getTimeLeft(endTime);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: isActivePrayer
-          ? const Color.fromARGB(255, 52, 151, 141)
-          : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
-      child: ListTile(
-        leading: Icon(icon, color: const Color.fromARGB(255, 255, 255, 255)),
-        title: Text(prayerName,
-            style: const TextStyle(
-                // fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 255, 255, 255), fontSize: 18)),
-               
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'শুরু: ${DateFormat.jm().format(startTime)}',
-              style: TextStyle(
-                fontSize: 14,
-                color: isActivePrayer
-                    ? Colors.white
-                    : const Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-            Text(
-              'শেষ: ${DateFormat.jm().format(endTime)}',
-              style: TextStyle(
-                fontSize: 14,
-                color: isActivePrayer
-                    ? Colors.white
-                    : const Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-            if (isActivePrayer)
+    return FadeTransition(
+      opacity: animation,
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        color: isActivePrayer
+            ? const Color.fromARGB(255, 52, 151, 141)
+            : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
+        child: ListTile(
+          leading: Icon(icon, color: const Color.fromARGB(255, 255, 255, 255)),
+          title: Text(prayerName,
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255), fontSize: 18)),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                'সময় বাকি: $timeLeft',
-                style: const TextStyle(
+                'শুরু: ${DateFormat.jm().format(startTime)}',
+                style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white,
+                  color: isActivePrayer
+                      ? Colors.white
+                      : const Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
-          ],
+              Text(
+                'শেষ: ${DateFormat.jm().format(endTime)}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isActivePrayer
+                      ? Colors.white
+                      : const Color.fromARGB(255, 255, 255, 255),
+                ),
+              ),
+              if (isActivePrayer)
+                Text(
+                  'সময় বাকি: $timeLeft',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
