@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 
 class RamadanScreen extends StatelessWidget {
   const RamadanScreen({Key? key}) : super(key: key);
@@ -6,9 +7,10 @@ class RamadanScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        title: const Text('Ramadan'),
-        backgroundColor: const Color(0xFF00BFA5),
+        title: const Text('রমজান'),
+        // backgroundColor: const Color(0xFF00BFA5),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -40,10 +42,12 @@ class RamadanScreen extends StatelessWidget {
               backgroundColor: const Color(0xFF00BFA5),
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: const Text('View Sehri & Iftar Timings', style: TextStyle(fontSize: 18)),
+            child: const Text('View Sehri & Iftar Timings', style: TextStyle(fontSize: 18, color: Colors.white)),
           ),
         ],
       ),
+       bottomNavigationBar: 
+const BottomNavBar(),
     );
   }
 
