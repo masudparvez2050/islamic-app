@@ -37,7 +37,7 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        title: const Text('Namaz Schedule'),
+        title: const Text('নামাজের সময়সূচী'),
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: Stack(

@@ -72,16 +72,25 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(DateFormat('EEEE, d MMMM yyyy').format(_selectedDate)),
-            Text(
-                '${hijriDate.hDay} ${hijriDate.longMonthName} ${hijriDate.hYear} AH',
-                style: TextStyle(fontSize: 14)),
+            Text('সেহরি ও ইফতার সময়'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  DateFormat('EEEE, d MMMM yyyy').format(_selectedDate),
+                  style: TextStyle(fontSize: 14),
+                ),
+                Text(
+                  '${hijriDate.hDay} ${hijriDate.longMonthName} ${hijriDate.hYear} AH',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
           ],
         ),
-        backgroundColor: const Color(0xFF00BFA5),
       ),
       body: Stack(
         children: [
