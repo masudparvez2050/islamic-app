@@ -1,4 +1,4 @@
-package com.example.islam_app
+package com.example.religion
 
 import io.flutter.embedding.android.FlutterActivity
 

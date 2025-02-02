@@ -1,4 +1,4 @@
-# islam_app
+# religion
 
 A new Flutter project.
 

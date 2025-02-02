@@ -1,6 +1,6 @@
 {
-    "name": "islam_app",
-    "short_name": "islam_app",
+    "name": "religion",
+    "short_name": "religion",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
