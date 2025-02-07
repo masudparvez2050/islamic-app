@@ -402,3 +402,38 @@ class Header extends StatelessWidget {
   }
 }
 
+
+
+
+ 
+    // Text(
+    //   'এখন চলছে',
+    //   style: TextStyle(
+    //     color: Colors.white,
+    //     fontSize: 14,
+    //     fontWeight: FontWeight.w500,
+    //   ),
+    //   textAlign: TextAlign.center,
+    // ),
+    // Container(
+    //   margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+    //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    //   decoration: BoxDecoration(
+    //     border: Border.all(color: Colors.white.withOpacity(0.3)),
+    //     borderRadius: BorderRadius.circular(8),
+    //   ),
+    //   child: Text(
+    //     '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - '
+    //     '${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+    //     style: TextStyle(color: Colors.white, fontSize: 16),
+    //     textAlign: TextAlign.center,
+    //   ),
+    // ),
+    // Text(
+    //   'সময় বাকি: ${_getTimeRemaining()}',
+    //   style: TextStyle(
+    //     color: Colors.white,
+    //     fontSize: 14,
+    //   ),
+    //   textAlign: TextAlign.center,
+    // ),

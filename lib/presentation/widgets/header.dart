@@ -50,7 +50,7 @@ class Header extends StatelessWidget {
               borderRadius: BorderRadius.circular(60),
             ),
             child: const Text(
-              'Religion-ধর্ম',
+              'ধর্ম-Religion',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,

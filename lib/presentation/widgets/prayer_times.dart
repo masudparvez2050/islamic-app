@@ -191,55 +191,169 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     // }
 
     return Column(
+  children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
+        _buildPrayerTimeCard(
+            _prayerTimes?.dhuhr,
+            DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
+            Icons.wb_sunny),
+        _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
+        _buildPrayerTimeCard(
+            _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
+        _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
+      ],
+    ),
+
+    // Inserted new section here
+    const SizedBox(height: 10),
+    Container(
+  width: double.infinity,
+  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+  decoration: BoxDecoration(
+    color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.3),
+    borderRadius: BorderRadius.circular(0),
+  ),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Keeps both sections evenly spaced
+    children: [
+      // Left Section - Current Prayer
+      Expanded(
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center, // Center the column contents
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center, // Center all items inside the Row
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+            children: [
+              Text(
+                'এখন চলছে',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.start, // Keep text aligned to start
+              ),
+              Text(
+                '${_getCurrentPrayer()}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              Text(
+                '${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - '
+                '${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(height: 4),
+              Text(
+                'সময় বাকি: ${_getTimeRemaining()}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+
+      // Vertical Divider
+      Container(
+        height: 80,
+        width: 1,
+        color: Colors.white.withOpacity(0.3),
+        margin: EdgeInsets.symmetric(horizontal: 20),
+      ),
+      // Right Section - Next Schedule
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
-            _buildPrayerTimeCard(
-                _prayerTimes?.dhuhr,
-                DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
-                Icons.wb_sunny),
-            _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
-            _buildPrayerTimeCard(
-                _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
-            _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
+            Text(
+              'পরবর্তী সময়সূচী',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
+            Text(
+              'সেহরি ও ইফতার',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'সেহরি শেষ : ',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  "--:--",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'ইফতার শুরু : ',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  "--:--",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-        const SizedBox(height: 10),
-        Text(
-          'এখন চলছে',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white.withOpacity(0.3)),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - '
-            '${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Text(
-          'সময় বাকি: ${_getTimeRemaining()}',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
+      ),
+    ],
+  ),
+),
+
+
+
+   
+  ],
+);
+
   }
 
   Widget _buildPrayerTimeCard(DateTime? time, String name, IconData icon) {
