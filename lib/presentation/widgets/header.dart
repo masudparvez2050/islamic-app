@@ -18,84 +18,74 @@ class Header extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16)
           .copyWith(top: 16),
-      child: Stack(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    englishDate,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        banglaDate,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 15,
-                        ),
-                      ),
-                      const Text(
-                        ' | ',
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
-                      ),
-                      Text(
-                        hijriDate,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  FutureBuilder<String>(
-                    future: _getCurrentLocation(),
-                    builder: (context, snapshot) {
-                      return Row(
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            size: 14,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            snapshot.data ?? 'Loading...',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Row(
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                  size: 24,
+                Text(
+                  englishDate,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
+                Row(
+                  children: [
+                    Text(
+                      banglaDate,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const Text(
+                      ' | ',
+                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                    ),
+                    Text(
+                      hijriDate,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                FutureBuilder<String>(
+                  future: _getCurrentLocation(),
+                  builder: (context, snapshot) {
+                    return Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          size: 14,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          snapshot.data ?? 'Loading...',
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
               ],
             ),
+          ),
+          const Icon(
+            Icons.notifications_outlined,
+            color: Colors.white,
+            size: 24,
           ),
         ],
       ),

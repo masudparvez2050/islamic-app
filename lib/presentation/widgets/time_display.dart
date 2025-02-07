@@ -101,78 +101,54 @@ class _TimeDisplayState extends State<TimeDisplay> {
     final today = DateFormat('EEEE').format(now);
     String formattedTime = DateFormat('hh:mm a').format(_currentTime);
     List<String> timeParts = formattedTime.split(' ');
+    
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4)
           .copyWith(bottom: 5),
-      child: Stack(
+      height: 100, // Explicit height for container
+      child: Row(
         children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: timeParts[0], // Time part (e.g., 06:52)
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
+          // Time display in center
+          Expanded(
+            child: Center(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: timeParts[0], // Time part (e.g., 06:52)
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
                       ),
-                      TextSpan(
-                        text: ' ${timeParts[1]}', // AM/PM part
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                        ),
+                    ),
+                    TextSpan(
+                      text: ' ${timeParts[1]}', // AM/PM part
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
                       ),
-                    ],
-                  ),
-                ),
-                // Text(
-                //   today,
-                //   style: const TextStyle(color: Colors.white70),
-                // ),
-
-                // if (_prayerTimes != null) ...[
-                //   Text(
-                //     '$_nextPrayer Time | ${_formatTime(_prayerTimes!.timeForPrayer(Prayer.values.firstWhere((p) => p.name.toLowerCase() == _nextPrayer.toLowerCase()))!)}',
-                //     style: const TextStyle(color: Colors.white70),
-                //   ),
-                //   // Text(
-                //   //   'Time Left: ${_timeLeft.inHours}h ${_timeLeft.inMinutes % 60}m',
-                //   //   style: const TextStyle(color: Colors.white70),
-                //   // ),
-                // ] else
-                //   const Text(
-                //     'Loading prayer times...',
-                //     style: TextStyle(color: Colors.white70),
-                //   ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if (_prayerTimes != null) ...[
-                    _buildSunTimeInfo(Icons.wb_sunny_outlined, 'সূর্যোদয়',
-                        _formatTime(_prayerTimes!.sunrise)),
-                    const SizedBox(height: 3),
-                    _buildSunTimeInfo(Icons.nightlight_round, 'সূর্যাস্ত',
-                        _formatTime(_prayerTimes!.maghrib)),
+                    ),
                   ],
-                ],
+                ),
               ),
             ),
           ),
+          // Sun time info on right
+          if (_prayerTimes != null) ...[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _buildSunTimeInfo(Icons.wb_sunny_outlined, 'সূর্যোদয়',
+                    _formatTime(_prayerTimes!.sunrise)),
+                const SizedBox(height: 3),
+                _buildSunTimeInfo(Icons.nightlight_round, 'সূর্যাস্ত',
+                    _formatTime(_prayerTimes!.maghrib)),
+              ],
+            ),
+            const SizedBox(width: 16),
+          ],
         ],
       ),
     );
