@@ -3,6 +3,7 @@ import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 import 'package:adhan/adhan.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
 
 class NamazScheduleScreen extends StatefulWidget {
   const NamazScheduleScreen({Key? key}) : super(key: key);
@@ -13,7 +14,8 @@ class NamazScheduleScreen extends StatefulWidget {
 
 class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   late DateTime _selectedDate;
-  late PrayerTimes _prayerTimes;
+  PrayerTimes? _prayerTimes;
+  Position? _currentPosition;
   bool _isCalendarVisible = false;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
@@ -21,15 +23,75 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   void initState() {
     super.initState();
     _selectedDate = DateTime.now();
-    _updatePrayerTimes();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      // Check location permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // Use default location if permission denied
+          _useDefaultLocation();
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        // Use default location if permission permanently denied
+        _useDefaultLocation();
+        return;
+      }
+
+      // Get current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        _currentPosition = position;
+        _updatePrayerTimes();
+      });
+    } catch (e) {
+      print('Error getting location: $e');
+      _useDefaultLocation();
+    }
+  }
+
+  void _useDefaultLocation() {
+    // Default coordinates for Dhaka, Bangladesh
+    setState(() {
+      _currentPosition = Position(
+        latitude: 23.8103,
+        longitude: 90.4125,
+        timestamp: DateTime.now(),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        altitudeAccuracy: 0,
+        headingAccuracy: 0,
+      );
+      _updatePrayerTimes();
+    });
   }
 
   void _updatePrayerTimes() {
-    final coordinates = Coordinates(23.8103, 90.4125); // Dhaka, Bangladesh
-    final params = CalculationMethod.karachi.getParameters();
-    params.madhab = Madhab.hanafi;
-    final dateComponents = DateComponents.from(_selectedDate);
-    _prayerTimes = PrayerTimes(coordinates, dateComponents, params);
+    if (_currentPosition != null) {
+      final coordinates = Coordinates(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+      );
+      final params = CalculationMethod.karachi.getParameters();
+      params.madhab = Madhab.hanafi;
+      final dateComponents = DateComponents.from(_selectedDate);
+      setState(() {
+        _prayerTimes = PrayerTimes(coordinates, dateComponents, params);
+      });
+    }
   }
 
   @override
@@ -43,14 +105,15 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
       body: Stack(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.only(bottom: 80.0), // Add margin at the bottom
+            padding: const EdgeInsets.only(bottom: 80.0), // Add margin at the bottom
             child: Column(
               children: [
                 _buildDropdownCalendar(),
                 if (_isCalendarVisible) _buildCalendar(),
                 Expanded(
-                  child: _buildPrayerTimesList(),
+                  child: _prayerTimes != null
+                      ? _buildPrayerTimesList()
+                      : const Center(child: CircularProgressIndicator()),
                 ),
               ],
             ),
@@ -72,9 +135,7 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           IconButton(
-            icon: Icon(_isCalendarVisible
-                ? Icons.arrow_drop_up
-                : Icons.arrow_drop_down),
+            icon: Icon(_isCalendarVisible ? Icons.arrow_drop_up : Icons.arrow_drop_down),
             onPressed: () {
               setState(() {
                 _isCalendarVisible = !_isCalendarVisible;
@@ -120,50 +181,50 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     final prayerTimes = [
       {
         'name': 'ফজর',
-        'startTime': _prayerTimes.fajr,
-        'endTime': _prayerTimes.sunrise,
+        'startTime': _prayerTimes!.fajr,
+        'endTime': _prayerTimes!.sunrise,
         'icon': Icons.wb_twilight
       },
       {
         'name': 'সূর্যোদয়',
-        'startTime': _prayerTimes.sunrise,
+        'startTime': _prayerTimes!.sunrise,
         'endTime': _getIshraqTime(),
         'icon': Icons.wb_sunny
       },
       {
         'name': 'ইশরাক',
         'startTime': _getIshraqTime(),
-        'endTime': _prayerTimes.dhuhr,
+        'endTime': _prayerTimes!.dhuhr,
         'icon': Icons.wb_sunny_outlined
       },
       {
-        'name': 'জোহর',
-        'startTime': _prayerTimes.dhuhr,
-        'endTime': _prayerTimes.asr,
+        'name': DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
+        'startTime': _prayerTimes!.dhuhr,
+        'endTime': _prayerTimes!.asr,
         'icon': Icons.wb_sunny
       },
       {
         'name': 'আসর',
-        'startTime': _prayerTimes.asr,
-        'endTime': _prayerTimes.maghrib,
+        'startTime': _prayerTimes!.asr,
+        'endTime': _prayerTimes!.maghrib,
         'icon': Icons.wb_cloudy
       },
       {
         'name': 'মাগরিব',
-        'startTime': _prayerTimes.maghrib,
-        'endTime': _prayerTimes.isha,
+        'startTime': _prayerTimes!.maghrib,
+        'endTime': _prayerTimes!.isha,
         'icon': Icons.nights_stay
       },
       {
         'name': 'ইশা',
-        'startTime': _prayerTimes.isha,
+        'startTime': _prayerTimes!.isha,
         'endTime': _getNextDayFajr(),
         'icon': Icons.star
       },
       {
         'name': 'তাহাজ্জুদ',
         'startTime': _getTahajjudTime(),
-        'endTime': _prayerTimes.fajr,
+        'endTime': _prayerTimes!.fajr,
         'icon': Icons.nightlight_round
       },
     ];
@@ -247,22 +308,32 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   }
 
   DateTime _getTahajjudTime() {
-    final isha = _prayerTimes.isha;
-    final fajr = _prayerTimes.fajr.add(const Duration(days: 1));
+    final isha = _prayerTimes!.isha;
+    final fajr = _prayerTimes!.fajr.add(const Duration(days: 1));
     final midpoint = isha.add(fajr.difference(isha) ~/ 2);
     return midpoint;
   }
 
   DateTime _getIshraqTime() {
-    return _prayerTimes.sunrise.add(const Duration(minutes: 20));
+    return _prayerTimes!.sunrise.add(const Duration(minutes: 20));
   }
 
   DateTime _getNextDayFajr() {
-    final tomorrow = _selectedDate.add(const Duration(days: 1));
-    final dateComponents = DateComponents.from(tomorrow);
-    final tomorrowPrayerTimes = PrayerTimes(_prayerTimes.coordinates,
-        dateComponents, _prayerTimes.calculationParameters);
-    return tomorrowPrayerTimes.fajr;
+    if (_currentPosition != null) {
+      final tomorrow = _selectedDate.add(const Duration(days: 1));
+      final dateComponents = DateComponents.from(tomorrow);
+      final coordinates = Coordinates(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+      );
+      final tomorrowPrayerTimes = PrayerTimes(
+        coordinates,
+        dateComponents,
+        _prayerTimes!.calculationParameters,
+      );
+      return tomorrowPrayerTimes.fajr;
+    }
+    return DateTime.now(); // Fallback
   }
 
   bool _isActivePrayer(DateTime startTime, DateTime endTime) {
