@@ -35,106 +35,99 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  /// Builds UI for Portrait Mode
   Widget _buildPortraitContent() {
-    return Column(
+    return Stack(
       children: [
-        const Header(),
-        const TimeDisplay(),
-        Stack(
-          clipBehavior: Clip.none,
+        /// Background Image
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Image.asset(
+              'assets/images/home_bg.png',
+              color: const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Column(
           children: [
-            Positioned(
-              top: -400,
-              left: 0,
-              right: 0,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Image.asset(
-                  'assets/images/home_bg.png',
-                  color: const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
-                  height: 1200,
-                  width: double.infinity,
+            const Header(),
+            const TimeDisplay(),
+            const PrayerTimesWidget(), 
+            const RamadanInfo(),
+            const SizedBox(height: 10),
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: const [
+                    Features(),
+                    DonationCarousel(),
+                    SizedBox(height: 16),
+                    BookLibrary(),
+                    VideoGallery(),
+                    RecentNews(),
+                  ],
                 ),
               ),
             ),
-            const PrayerTimesWidget(),
           ],
-        ),
-        const RamadanInfo(),
-        const SizedBox(height: 10),
-        Expanded(
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-            ),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: const [
-                Features(),
-                DonationCarousel(),
-                SizedBox(height: 16),
-                BookLibrary(),
-                VideoGallery(),
-                RecentNews(),
-              ],
-            ),
-          ),
         ),
       ],
     );
   }
 
+  /// Builds UI for Landscape Mode
   Widget _buildLandscapeContent() {
     return SingleChildScrollView(
-      child: Column(
+      child: Stack(
         children: [
-          const Header(),
-          const TimeDisplay(),
-          Stack(
-            clipBehavior: Clip.none,
+          /// Background Image
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Image.asset(
+                'assets/images/home_bg.png',
+                color: const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Column(
             children: [
-              Positioned(
-                top: -400,
-                left: 0,
-                right: 0,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
-                    'assets/images/home_bg.png',
-                    color:
-                        const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
-                    height: 1200,
-                    width: double.infinity,
+              const Header(),
+              const TimeDisplay(),
+              const PrayerTimesWidget(),
+              const RamadanInfo(),
+              const SizedBox(height: 20),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
                   ),
                 ),
+                child: Column(
+                  children: const [
+                    Features(),
+                    DonationCarousel(),
+                    SizedBox(height: 16),
+                    BookLibrary(),
+                    VideoGallery(),
+                    RecentNews(),
+                  ],
+                ),
               ),
-              const PrayerTimesWidget(),
             ],
-          ),
-          const RamadanInfo(),
-          const SizedBox(height: 20),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-            ),
-            child: Column(
-              children: const [
-                Features(),
-                DonationCarousel(),
-                SizedBox(height: 16),
-                BookLibrary(),
-                VideoGallery(),
-                RecentNews(),
-              ],
-            ),
           ),
         ],
       ),

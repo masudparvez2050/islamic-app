@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:religion/presentation/screens/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('en', null);
-  await initializeDateFormatting('bn_BD', null);
+  await initializeDateFormatting(); // Fix: No need to pass 'en' or 'bn_BD'
 
-  // debugPaintSizeEnabled = true;
+ // debugPaintSizeEnabled = true;
 
   runApp(const MyApp());
 }

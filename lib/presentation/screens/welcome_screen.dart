@@ -12,11 +12,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+    Future.microtask(() {
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) { // Fix: Check if the widget is still in the tree
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
+      });
     });
   }
 
@@ -52,14 +56,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   child: Image.asset(
                     'assets/images/logo.png',
-                    color: Colors.white.withOpacity(1),
+                    color: Colors.white,
                     height: 200,
                     width: double.infinity,
                   ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  '',
+                  'Welcome',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,

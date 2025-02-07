@@ -1,0 +1,7 @@
+-keep class com.example.religion.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keep class com.adhan.** { *; }
+-dontwarn com.google.android.gms.**
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
