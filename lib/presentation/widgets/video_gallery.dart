@@ -37,7 +37,7 @@ class VideoGallery extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Islamic Videos',
+                'ইসলামিক ভিডিও',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -49,7 +49,7 @@ class VideoGallery extends StatelessWidget {
                   // Handle view all
                 },
                 child: Text(
-                  'View All',
+                  'আরও দেখুন',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 14,

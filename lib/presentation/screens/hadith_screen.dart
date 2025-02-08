@@ -6,6 +6,7 @@ class HadithScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Hadith'),
         backgroundColor: const Color(0xFF00BFA5),

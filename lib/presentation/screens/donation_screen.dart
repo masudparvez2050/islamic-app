@@ -6,6 +6,7 @@ class DonationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Donation'),
         backgroundColor: const Color(0xFF00BFA5),

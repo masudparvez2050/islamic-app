@@ -16,6 +16,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
   Position? _currentPosition;
   Timer? _timer;
   bool _isLoading = true;
+ 
 
   @override
   void initState() {
@@ -119,6 +120,65 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     return 'তাহাজ্জুদ';
   }
 
+  IconData _getPrayerIcon(String prayerName) {
+    final prayerTimes = [
+      {
+        'name': 'ফজর',
+        'startTime': _prayerTimes?.fajr,
+        'endTime': _prayerTimes?.sunrise,
+        'icon': Icons.wb_twilight
+      },
+      {
+        'name': 'সূর্যোদয়',
+        'startTime': _prayerTimes?.sunrise,
+        'endTime': _getIshraqTime(),
+        'icon': Icons.wb_sunny
+      },
+      {
+        'name': 'ইশরাক',
+        'startTime': _getIshraqTime(),
+        'endTime': _prayerTimes?.dhuhr,
+        'icon': Icons.wb_sunny_outlined
+      },
+      {
+        'name': DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
+        'startTime': _prayerTimes?.dhuhr,
+        'endTime': _prayerTimes?.asr,
+        'icon': Icons.wb_sunny
+      },
+      {
+        'name': 'আসর',
+        'startTime': _prayerTimes?.asr,
+        'endTime': _prayerTimes?.maghrib,
+        'icon': Icons.wb_cloudy
+      },
+      {
+        'name': 'মাগরিব',
+        'startTime': _prayerTimes?.maghrib,
+        'endTime': _prayerTimes?.isha,
+        'icon': Icons.nights_stay
+      },
+      {
+        'name': 'ইশা',
+        'startTime': _prayerTimes?.isha,
+        'endTime': _getNextDayFajr(),
+        'icon': Icons.star
+      },
+      {
+        'name': 'তাহাজ্জুদ',
+        'startTime': _getTahajjudTime(),
+        'endTime': _prayerTimes?.fajr,
+        'icon': Icons.nightlight_round
+      },
+    ];
+
+    final prayer = prayerTimes.firstWhere(
+      (p) => p['name'] == prayerName,
+      orElse: () => {'icon': Icons.error}, // Default icon if not found
+    );
+    return prayer['icon'] as IconData;
+  }
+
   DateTime _getPrayerStartTime(String prayer) {
     if (_prayerTimes == null) return DateTime.now();
     final jumma = DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর';
@@ -184,176 +244,194 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     return _prayerTimes!.sunrise.add(const Duration(minutes: 20));
   }
 
+  DateTime _getNextDayFajr() {
+    if (_prayerTimes == null) return DateTime.now();
+
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    final tomorrowPrayers = PrayerTimes.today(
+      Coordinates(_currentPosition?.latitude ?? 23.8103,
+          _currentPosition?.longitude ?? 90.4125),
+      CalculationMethod.karachi.getParameters(),
+    );
+    return tomorrowPrayers.fajr;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // if (_isLoading) {
-    //   return const Center(child: CircularProgressIndicator());
-    // }
-
     return Column(
-  children: [
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
-        _buildPrayerTimeCard(
-            _prayerTimes?.dhuhr,
-            DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
-            Icons.wb_sunny),
-        _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
-        _buildPrayerTimeCard(
-            _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
-        _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
-      ],
-    ),
-
-    // Inserted new section here
-    const SizedBox(height: 10),
-    Container(
-  width: double.infinity,
-  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-  decoration: BoxDecoration(
-    color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.3),
-    borderRadius: BorderRadius.circular(0),
-  ),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Keeps both sections evenly spaced
-    children: [
-      // Left Section - Current Prayer
-      Expanded(
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.center, // Center the column contents
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center, // Center all items inside the Row
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // Align text to start
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
+            _buildPrayerTimeCard(
+                _prayerTimes?.dhuhr,
+                DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
+                Icons.wb_sunny),
+            _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
+            _buildPrayerTimeCard(
+                _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
+            _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.3),
+            borderRadius: BorderRadius.circular(0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment
+                .spaceEvenly, // Keeps both sections evenly spaced
             children: [
-              Text(
-                'এখন চলছে',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
+              // Left Section - Current Prayer
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Center the column contents
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center all items inside the Row
+                      children: [
+                        
+                        
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .start, // Align text to start
+                          children: [
+                            Text(
+                              'এখন চলছে',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.start, // Keep text aligned to start
+                            ),
+                            Row(
+  mainAxisAlignment: MainAxisAlignment.start, // Align to the start
+  children: [
+    Icon(
+      _getPrayerIcon(_getCurrentPrayer()),
+      color: Colors.white,
+      size: 24,
+    ),
+    
+    Text(
+      '${_getCurrentPrayer()}',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+      textAlign: TextAlign.start,
+    ),
+  ],
+),
+                            Text(
+                              '${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - '
+                              '${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              'সময় বাকি: ${_getTimeRemaining()}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.start, // Keep text aligned to start
               ),
-              Text(
-                '${_getCurrentPrayer()}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.start,
+
+              // Vertical Divider
+              Container(
+                height: 80,
+                width: 1,
+                color: Colors.white.withOpacity(0.3),
+                margin: EdgeInsets.symmetric(horizontal: 20),
               ),
-              Text(
-                '${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - '
-                '${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
+              // Right Section - Next Schedule
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'পরবর্তী সময়সূচী',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      'সেহরি ও ইফতার',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'সেহরি শেষ : ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "${_formatTime(_prayerTimes?.fajr)}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ইফতার শুরু :  ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "${_formatTime(_prayerTimes?.maghrib)}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 4),
-              Text(
-                'সময় বাকি: ${_getTimeRemaining()}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.start,
               ),
             ],
           ),
-        ],
-      ),
-    ],
-  ),
-),
-
-      // Vertical Divider
-      Container(
-        height: 80,
-        width: 1,
-        color: Colors.white.withOpacity(0.3),
-        margin: EdgeInsets.symmetric(horizontal: 20),
-      ),
-      // Right Section - Next Schedule
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'পরবর্তী সময়সূচী',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
-            ),
-            Text(
-              'সেহরি ও ইফতার',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'সেহরি শেষ : ',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  "--:--",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'ইফতার শুরু : ',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  "--:--",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ],
         ),
-      ),
-    ],
-  ),
-),
-
-
-
-   
-  ],
-);
-
+      ],
+    );
   }
 
   Widget _buildPrayerTimeCard(DateTime? time, String name, IconData icon) {
@@ -363,12 +441,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
     // Determine if this card represents the active prayer
     final isActivePrayer = name == _getCurrentPrayer();
-
-    // Check if today is Friday and replace "জোহর" with "জুম'আ"
-    // String displayName = name;
-    // if (name == 'জোহর' && DateTime.now().weekday == DateTime.friday) {
-    //   displayName = "জুম'আ";
-    // }
 
     return Container(
       width: cardWidth,
@@ -381,12 +453,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 .withOpacity(0.8) // Active card color
             : Colors.white.withOpacity(0.2), // Default card color
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isActivePrayer
-              ? Colors.green // Highlight border for active card
-              : Colors.transparent,
-          width: isActivePrayer ? 0 : 0,
-        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -397,7 +463,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
             color: isActivePrayer
                 ? Color.fromARGB(255, 0, 190, 165)
                 : Colors.white,
-            size: 28,
+            size: 24,
           ),
           const SizedBox(height: 1),
           Text(

@@ -6,8 +6,9 @@ class AdzanScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Adzan'),
+        title: const Text('আজান', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF00BFA5),
       ),
       body: Column(
@@ -18,19 +19,19 @@ class AdzanScreen extends StatelessWidget {
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Next Prayer', style: TextStyle(fontSize: 18)),
-                Text('Asr - 15:30', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text('পরবর্তী নামাজ', style: TextStyle(fontSize: 18)),
+                Text('আসর - 15:30', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
           Expanded(
             child: ListView(
               children: [
-                _buildPrayerTimeItem('Fajr', '05:30'),
-                _buildPrayerTimeItem('Dhuhr', '12:30'),
-                _buildPrayerTimeItem('Asr', '15:30'),
-                _buildPrayerTimeItem('Maghrib', '18:30'),
-                _buildPrayerTimeItem('Isha', '20:00'),
+                _buildPrayerTimeItem('ফজর', '05:30'),
+                _buildPrayerTimeItem('জোহর', '12:30'),
+                _buildPrayerTimeItem('আসর', '15:30'),
+                _buildPrayerTimeItem('মাগরিব', '18:30'),
+                _buildPrayerTimeItem('ইশা', '20:00'),
               ],
             ),
           ),

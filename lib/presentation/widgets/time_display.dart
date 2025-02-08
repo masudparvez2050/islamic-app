@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:adhan/adhan.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'dart:async';
 
 class TimeDisplay extends StatefulWidget {
-  const TimeDisplay({super.key});
+  const TimeDisplay({Key? key}) : super(key: key);
 
   @override
-  _TimeDisplayState createState() => _TimeDisplayState();
+  State<TimeDisplay> createState() => _TimeDisplayState();
 }
 
 class _TimeDisplayState extends State<TimeDisplay> {
-  late Timer _timer;
   late DateTime _currentTime;
-  PrayerTimes? _prayerTimes;
-  String _nextPrayer = '';
-  Duration _timeLeft = Duration.zero;
-  Position? _currentPosition;
+  late Timer _timer;
+  final String _location = 'Dhaka';
+  final DateTime _sunrise = DateTime(2024, 1, 1, 6, 39);
+  final DateTime _sunset = DateTime(2024, 1, 1, 17, 46);
 
   @override
   void initState() {
     super.initState();
     _currentTime = DateTime.now();
-    _getCurrentLocation();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _currentTime = DateTime.now();
-        _updateNextPrayer();
       });
     });
   }
@@ -38,157 +34,126 @@ class _TimeDisplayState extends State<TimeDisplay> {
     super.dispose();
   }
 
-  Future<void> _getCurrentLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setState(() {
-        _currentPosition = position;
-        _updatePrayerTimes();
-      });
-    } catch (e) {
-      print("Error getting location: $e");
-    }
+  String _getBengaliDate() {
+    // Simplified Bengali date (replace with proper library for accuracy)
+    return '২০ মাঘ ১৪২৯';
   }
 
-  void _updatePrayerTimes() {
-    if (_currentPosition != null) {
-      final coordinates =
-          Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
-      final params = CalculationMethod.karachi.getParameters();
-      params.madhab = Madhab.hanafi;
-      _prayerTimes = PrayerTimes.today(coordinates, params);
-      _updateNextPrayer();
-    }
-  }
-
-  void _updateNextPrayer() {
-    if (_prayerTimes == null) return;
-
-    final now = DateTime.now();
-    final prayers = [
-      {'name': 'Fajr', 'time': _prayerTimes!.fajr},
-      {'name': 'Sunrise', 'time': _prayerTimes!.sunrise},
-      {'name': 'Dhuhr', 'time': _prayerTimes!.dhuhr},
-      {'name': 'Asr', 'time': _prayerTimes!.asr},
-      {'name': 'Maghrib', 'time': _prayerTimes!.maghrib},
-      {'name': 'Isha', 'time': _prayerTimes!.isha},
-    ];
-
-    for (var prayer in prayers) {
-      if ((prayer['time'] as DateTime).isAfter(now)) {
-        _nextPrayer = prayer['name'] as String;
-        _timeLeft = (prayer['time'] as DateTime).difference(now);
-        return;
-      }
-    }
-
-    // If all prayers have passed, set next prayer to tomorrow's Fajr
-    _nextPrayer = 'Fajr';
-
-    final tomorrow = DateTime.now().add(const Duration(days: 1));
-    final tomorrowPrayers = PrayerTimes.today(
-      Coordinates(_currentPosition!.latitude, _currentPosition!.longitude),
-      CalculationMethod.karachi.getParameters(),
-    );
-    _timeLeft = tomorrowPrayers.fajr.difference(now);
+  String _getArabicDate() {
+    // Simplified Arabic date (replace with proper library for accuracy)
+    return '৩ শাবান ১৪৪৬';
   }
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final today = DateFormat('EEEE').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(_currentTime);
-    List<String> timeParts = formattedTime.split(' ');
-    
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4)
-          .copyWith(bottom: 5),
-      height: 100, // Explicit height for container
+      width: double.infinity,
+      padding: const EdgeInsets.all(8), // Reduced padding
+      decoration: BoxDecoration(
+        color: Color(0xFF00BFA5),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Time display in center
-          Expanded(
-            child: Center(
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: timeParts[0], // Time part (e.g., 06:52)
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' ${timeParts[1]}', // AM/PM part
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                      ),
-                    ),
-                  ],
-                ),
+          // Left: Dates
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+               Text(
+                DateFormat('EEEE').format(_currentTime),
+                style: TextStyle(color: Colors.white, fontSize: 12),
               ),
-            ),
+              Text(
+                DateFormat('d MMMM yyyy').format(_currentTime),
+                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                _getBengaliDate(),
+                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 12),
+              ),
+              Text(
+                _getArabicDate(),
+                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 10),
+              ),
+            ],
           ),
-          // Sun time info on right
-          if (_prayerTimes != null) ...[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildSunTimeInfo(Icons.wb_sunny_outlined, 'সূর্যোদয়',
-                    _formatTime(_prayerTimes!.sunrise)),
-                const SizedBox(height: 3),
-                _buildSunTimeInfo(Icons.nightlight_round, 'সূর্যাস্ত',
-                    _formatTime(_prayerTimes!.maghrib)),
-              ],
-            ),
-            const SizedBox(width: 16),
-          ],
+
+          // Middle: Time and Location
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                DateFormat('hh:mm a').format(_currentTime),
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.location_on, color: Colors.white, size: 12),
+                  SizedBox(width: 2),
+                  Text(
+                    _location,
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Right: Sunrise and Sunset
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.wb_sunny_outlined, color: Colors.white, size: 18),
+                  SizedBox(width: 2),
+                  Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'সূর্যোদয়',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                      Text(
+                        DateFormat('hh:mm a').format(_sunrise),
+                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.nightlight_round, color: Colors.white, size: 18),
+                  SizedBox(width: 2),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'সূর্যাস্ত',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                      Text(
+                        DateFormat('hh:mm a').format(_sunset),
+                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )
+                  
+                ],
+              ),
+            ],
+          ),
         ],
       ),
-    );
-  }
-
-  String _formatTime(DateTime time) {
-    return DateFormat('hh:mm a').format(time);
-  }
-
-  Widget _buildSunTimeInfo(IconData icon, String label, String time) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          color: Colors.white70,
-          size: 16,
-        ),
-        const SizedBox(width: 4),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 10,
-              ),
-            ),
-            Text(
-              time,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
