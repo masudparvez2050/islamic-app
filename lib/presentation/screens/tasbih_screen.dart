@@ -27,6 +27,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Tasbih'),
         backgroundColor: const Color(0xFF00BFA5),

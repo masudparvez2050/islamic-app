@@ -48,10 +48,13 @@ class HomeScreen extends StatelessWidget {
         return Container(
           width: constraints.maxWidth,
           height: constraints.maxHeight,
+          
           decoration: BoxDecoration(
+            
             image: DecorationImage(
               image: AssetImage('assets/images/home_bg.png'),
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
+              
               colorFilter: ColorFilter.mode(
                 const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
                 BlendMode.srcIn,
@@ -107,6 +110,7 @@ class HomeScreen extends StatelessWidget {
             image: DecorationImage(
               image: AssetImage('assets/images/home_bg.png'),
               fit: BoxFit.cover,
+              alignment: Alignment.topCenter, // Move the image to the top
               colorFilter: ColorFilter.mode(
                 const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
                 BlendMode.srcIn,

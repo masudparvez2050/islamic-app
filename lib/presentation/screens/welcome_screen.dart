@@ -48,28 +48,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 150,
-                  height: 150,
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 5, 207, 140),
-                    borderRadius: BorderRadius.circular(100),
+                    color: const Color.fromARGB(255, 5, 207, 140).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(50),
                   ),
                   child: Image.asset(
-                    'assets/images/logo.png',
+                    'assets/images/screen_logo.png',
                     color: Colors.white,
-                    height: 200,
+                    height: 50,
                     width: double.infinity,
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Welcome',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                // const SizedBox(height: 20),
+                // const Text(
+                //   'Welcome',
+                //   style: TextStyle(
+                //     color: Colors.white,
+                //     fontSize: 32,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
               ],
             ),
           ),
