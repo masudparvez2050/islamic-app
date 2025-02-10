@@ -9,7 +9,7 @@ class Header extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.teal.withOpacity(0.9),
+        color: Colors.white.withOpacity(0.1),
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(20),
           bottomRight: Radius.circular(20),
@@ -19,7 +19,7 @@ class Header extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white, size: 30),
+            icon: const Icon(Icons.menu, color: Colors.white),
             onPressed: () {
               // Navigate to the SettingsScreen with a right-to-left slide animation
               Navigator.push(
@@ -46,13 +46,13 @@ class Header extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.teal.withOpacity(0.5),
               borderRadius: BorderRadius.circular(60),
             ),
             child: const Text(
               'ধর্ম-Religion',
               style: TextStyle(
-                color: Colors.teal,
+                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),

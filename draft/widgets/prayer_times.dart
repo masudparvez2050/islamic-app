@@ -3,7 +3,6 @@ import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
-import 'dart:math' as math;
 
 class PrayerTimesWidget extends StatefulWidget {
   const PrayerTimesWidget({Key? key}) : super(key: key);
@@ -12,22 +11,18 @@ class PrayerTimesWidget extends StatefulWidget {
   _PrayerTimesWidgetState createState() => _PrayerTimesWidgetState();
 }
 
-class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTickerProviderStateMixin {
+class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
   PrayerTimes? _prayerTimes;
   Position? _currentPosition;
   Timer? _timer;
   bool _isLoading = true;
-  late AnimationController _controller;
+ 
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
     _startTimer();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    )..repeat();
   }
 
   void _startTimer() {
@@ -38,7 +33,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
 
   @override
   void dispose() {
-    _controller.dispose();
     _timer?.cancel();
     super.dispose();
   }
@@ -266,97 +260,164 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-          foregroundPainter: GlowingBorderPainter(
-            progress: _controller.value,
-            glowColors: [
-              // Use a list of colors for the gradient
-              const Color(0xFF26A69A).withOpacity(0.8),
-              // Darker Turquoise
-              const Color(0xFF4DB6AC).withOpacity(0.8),
-              // Medium Turquoise
-              const Color(0xFF80CBC4).withOpacity(0.8),
-              // Lighter Turquoise
-              Colors.white.withOpacity(0.9),
-              // Soft White
-              const Color(0xFF80CBC4).withOpacity(0.8),
-              // Lighter Turquoise
-              const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
-            ],
-            borderRadius: 100,
+       Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.3),
+            borderRadius: BorderRadius.circular(0),
           ),
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.all(4),
-            // Margin for glow effect
-            padding:
-                const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Current Prayer Status
-                 Text(
-            'এখন চলছে',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
-              fontSize: 18,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment
+                .spaceEvenly, // Keeps both sections evenly spaced
+            children: [
+              // Left Section - Current Prayer
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Center the column contents
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center all items inside the Row
+                      children: [
+                        
+                        
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .start, // Align text to start
+                          children: [
+                            Text(
+                              'এখন চলছে',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.start, // Keep text aligned to start
+                            ),
+                            Row(
+  mainAxisAlignment: MainAxisAlignment.start, // Align to the start
+  children: [
+    Icon(
+      _getPrayerIcon(_getCurrentPrayer()),
+      color: Colors.white,
+      size: 24,
+    ),
+    
+    Text(
+      '${_getCurrentPrayer()}',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+      textAlign: TextAlign.start,
+    ),
+  ],
+),
+                            Text(
+                              '${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - '
+                              '${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              'সময় বাকি: ${_getTimeRemaining()}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                // Prayer Name and Time
-                Text(
-            '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-                ),
-                const SizedBox(height: 4),
-                // Remaining Time
-                Text(
-            'সময় বাকি: ${_getTimeRemaining()}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
-                ),
+              ),
 
-                // Separator Line
-                Container(
-            width: MediaQuery.of(context).size.width * 0.55,
-            // 50% of screen width
-            height: 1,
-            color: Colors.white.withOpacity(0.3),
-            margin: const EdgeInsets.symmetric(vertical: 4),
+              // Vertical Divider
+              Container(
+                height: 80,
+                width: 1,
+                color: Colors.white.withOpacity(0.3),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+              ),
+              // Right Section - Next Schedule
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'পরবর্তী সময়সূচী',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      'সেহরি ও ইফতার',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'সেহরি শেষ : ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "${_formatTime(_prayerTimes?.fajr)}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ইফতার শুরু :  ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "${_formatTime(_prayerTimes?.maghrib)}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                // Bottom Times
-                Text(
-            'সেহরি শেষ : ${_formatTime(_getNextDayFajr())} | ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-                ),
-              ],
-            ),
-          ),
-              );
-            },
+              ),
+            ],
           ),
         ),
-        
-        const SizedBox(height: 10),
+
+const SizedBox(height: 10),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -371,6 +432,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
             _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
           ],
         ),
+        
+ 
       ],
     );
   }
@@ -399,13 +462,13 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Icon(
-          //   icon,
-          //   color: isActivePrayer
-          //       ? Color.fromARGB(255, 0, 190, 165)
-          //       : Colors.white,
-          //   size: 24,
-          // ),
+          Icon(
+            icon,
+            color: isActivePrayer
+                ? Color.fromARGB(255, 0, 190, 165)
+                : Colors.white,
+            size: 24,
+          ),
           const SizedBox(height: 1),
           Text(
             name,
@@ -437,46 +500,5 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
   String _formatTime(DateTime? time) {
     if (time == null) return '--:--';
     return DateFormat('hh:mm a').format(time);
-  }
-}
-
-class GlowingBorderPainter extends CustomPainter {
-  final double progress;
-  final List<Color> glowColors; // Use a list of colors
-  final double borderRadius;
-
-  GlowingBorderPainter({
-    required this.progress,
-    required this.glowColors,
-    required this.borderRadius,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final rrect = RRect.fromRectAndRadius(
-      rect,
-      Radius.circular(borderRadius),
-    );
-
-    // Create gradient for glow effect
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
-      ..shader = SweepGradient(
-        colors: glowColors, // Use the list of colors
-        stops: [0.0, 0.16, 0.33, 0.5, 0.66, 0.83], // Adjust stops for each color
-        startAngle: 0,
-        endAngle: math.pi * 2,
-        transform: GradientRotation(progress * math.pi * 2),
-      ).createShader(rect);
-
-    // Draw the glowing border
-    canvas.drawRRect(rrect, paint);
-  }
-
-  @override
-  bool shouldRepaint(GlowingBorderPainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.glowColors != glowColors;
   }
 }
