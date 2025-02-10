@@ -82,8 +82,9 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
 
     final difference = nextPrayerTime.difference(now);
     final hours = difference.inHours;
+    final hourString = hours > 0 ? '$hours ঘণ্টা ' : '';
     final minutes = difference.inMinutes % 60;
-    return '$hours ঘণ্টা $minutes মিনিট';
+    return '$hourString$minutes মিনিট';
   }
 
   DateTime? _getNextPrayerTime() {

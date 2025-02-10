@@ -51,5 +51,13 @@
 	<string>This app needs access to your location to provide prayer times and Qibla direction.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app requires location access to update prayer times in the background.</string>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>http</string>
+		<string>https</string>
+		<string>tel</string>
+		<string>mailto</string>
+	</array>
 </dict>
 </plist>

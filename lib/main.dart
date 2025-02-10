@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:religion/presentation/screens/welcome_screen.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting(); // Fix: No need to pass 'en' or 'bn_BD'
+  // MobileAds.instance.initialize(); // Initialize Mobile Ads
 
  // debugPaintSizeEnabled = true;
 
