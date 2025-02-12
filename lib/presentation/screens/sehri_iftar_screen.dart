@@ -60,9 +60,9 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
         });
 
         // Add items to the AnimatedList
-        for (int i = 0; i < _prayerTimesList.length; i++) {
-          _listKey.currentState?.insertItem(i);
-        }
+        // for (int i = 0; i < _prayerTimesList.length; i++) {
+        //   _listKey.currentState?.insertItem(i);
+        // }
       });
     }
   }
@@ -188,7 +188,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
           isIftarActive,
           sehriTimeLeft,
           iftarTimeLeft,
-          '${hijriDate.hDay} ${hijriDate.longMonthName} ${hijriDate.hYear} AH',
+          _getBanglaHijriDate(hijriDate), // Use the function to get Bangla Hijri date
           index == 0, // Pass a flag to indicate if it's the first card
         );
       },
@@ -235,7 +235,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
                   Text(
                     hijriDate,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                   ),
@@ -287,5 +287,35 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
     final minutes = difference.inMinutes % 60;
     return '$hours ঘণ্টা $minutes মিনিট';
   }
-}
 
+  String _getBanglaHijriDate(HijriCalendar hijriDate) {
+    final banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    final hijriMonths = [
+      'মুহাররম',
+      'সফর',
+      'রবিউল আউয়াল',
+      'রবিউস সানি',
+      'জমাদিউল আউয়াল',
+      'জমাদিউস সানি',
+      'রজব',
+      'শাবান',
+      'রমজান',
+      'শাওয়াল',
+      'জিলক্বদ',
+      'জিলহজ্জ'
+    ];
+
+    String banglaDay = hijriDate.hDay
+        .toString()
+        .split('')
+        .map((digit) => banglaNumbers[int.parse(digit)])
+        .join('');
+    String banglaYear = hijriDate.hYear
+        .toString()
+        .split('')
+        .map((digit) => banglaNumbers[int.parse(digit)])
+        .join('');
+
+    return '$banglaDay ${hijriMonths[hijriDate.hMonth - 1]} $banglaYear';
+  }
+}

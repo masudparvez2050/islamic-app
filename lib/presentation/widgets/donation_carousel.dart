@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:religion/presentation/screens/donation_screen.dart';
 
 class DonationCarousel extends StatefulWidget {
   const DonationCarousel({Key? key}) : super(key: key);
@@ -80,7 +81,12 @@ class _DonationCarouselState extends State<DonationCarousel> {
                     const SizedBox(width: 16),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle donation
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DonationScreen(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF00BFA5),
@@ -93,7 +99,7 @@ class _DonationCarouselState extends State<DonationCarousel> {
                         ),
                       ),
                       child: const Text(
-                        'DONATE',
+                        'অনুদান দিন',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

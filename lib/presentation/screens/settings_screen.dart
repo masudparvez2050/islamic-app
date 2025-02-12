@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:religion/presentation/screens/home_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -10,9 +11,16 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('সেটিংস', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF00BFA5),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: ListView(
         children: [
+          _buildSettingItem(context, 'হোম', Icons.home, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }),
           _buildSettingItem(context, 'লগইন / প্রোফাইল', Icons.person, () {
             // TODO: Implement login/profile functionality
           }),
@@ -60,4 +68,3 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
-
