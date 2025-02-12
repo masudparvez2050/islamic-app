@@ -9,6 +9,7 @@ import 'package:religion/presentation/screens/ramadan_screen.dart';
 import 'package:religion/presentation/screens/tasbih_screen.dart';
 import 'package:religion/presentation/screens/hadith_screen.dart';
 import 'package:religion/presentation/screens/allah_names_screen.dart';
+import 'package:religion/presentation/screens/recent_news_screen.dart';
 
 class Features extends StatelessWidget {
   const Features({Key? key}) : super(key: key);
@@ -28,6 +29,10 @@ class Features extends StatelessWidget {
     {
       'name': 'আল্লাহর ৯৯ টি নাম',
       'icon': Icons.format_list_numbered
+    },
+    {
+      'name': 'সাম্প্রতিক খবর',
+      'icon': Icons.newspaper
     },
     ];
 
@@ -84,6 +89,48 @@ class Features extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const QuranScreen()));
+                      break;
+                    case 'আজান':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AdzanScreen()));
+                      break;
+                    case 'কিবলা':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const QiblaScreen()));
+                      break;
+                    case 'দান করুন':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const DonationScreen()));
+                      break;
+                    case 'তাসবিহ':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const TasbihScreen()));
+                      break;
+                    case 'হাদিস':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HadithScreen()));
+                      break;
+                    case 'আল্লাহর ৯৯ টি নাম':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AllahNamesScreen()));
+                      break;
+                    case 'সাম্প্রতিক খবর':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RecentNewsScreen()));
                       break;
                   }
                 });
@@ -180,6 +227,11 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
       'name': 'আল্লাহর ৯৯ টি নাম',
       'icon': Icons.format_list_numbered,
       'screen': AllahNamesScreen()
+    },
+    {
+      'name': 'সাম্প্রতিক খবর',
+      'icon': Icons.newspaper,
+      'screen': const RecentNewsScreen()
     },
   ];
 
