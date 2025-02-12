@@ -5,6 +5,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
+import 'package:religion/presentation/widgets/add_2.dart';
 
 class SehriIftarScreen extends StatefulWidget {
   const SehriIftarScreen({Key? key}) : super(key: key);
@@ -52,7 +53,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
       params.madhab = Madhab.hanafi;
 
       setState(() {
-        _prayerTimesList = List.generate(10, (index) {
+        _prayerTimesList = List.generate(7, (index) {
           final date = _selectedDate.add(Duration(days: index));
           final dateComponents = DateComponents.from(date);
           return PrayerTimes(coordinates, dateComponents, params);
@@ -72,22 +73,14 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF00BFA5), // Project color
+        iconTheme: const IconThemeData(color: Colors.white), // Back icon color
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('সেহরি ও ইফতার সময়'),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  DateFormat('EEEE, d MMMM yyyy').format(_selectedDate),
-                  style: TextStyle(fontSize: 14),
-                ),
-                Text(
-                  '${hijriDate.hDay} ${hijriDate.longMonthName} ${hijriDate.hYear} AH',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ],
+            const Text(
+              'সেহরি ও ইফতার সময়',
+              style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold), // Text color
             ),
           ],
         ),
@@ -95,8 +88,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
       body: Stack(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.only(bottom: 80.0), // Add margin at the bottom
+            padding: const EdgeInsets.only(bottom: 50.0), // Add margin at the bottom
             child: Column(
               children: [
                 _buildDropdownCalendar(),
@@ -107,7 +99,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
               ],
             ),
           ),
-          const BottomNavBar(),
+          const Advertisement2(),
         ],
       ),
     );
@@ -120,13 +112,11 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            DateFormat('EEEE, d MMMM yyyy').format(_selectedDate),
+            DateFormat('EEEE, d MMMM yyyy', 'bn').format(_selectedDate),
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           IconButton(
-            icon: Icon(_isCalendarVisible
-                ? Icons.arrow_drop_up
-                : Icons.arrow_drop_down),
+            icon: Icon(_isCalendarVisible ? Icons.arrow_drop_up : Icons.arrow_drop_down),
             onPressed: () {
               setState(() {
                 _isCalendarVisible = !_isCalendarVisible;
@@ -187,13 +177,11 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
         final sehriTimeLeft = _getTimeLeft(sehriTime);
         final iftarTimeLeft = _getTimeLeft(iftarTime);
 
-        final hijriDate =
-            HijriCalendar.fromDate(_selectedDate.add(Duration(days: index)));
+        final hijriDate = HijriCalendar.fromDate(_selectedDate.add(Duration(days: index)));
 
         return _buildAnimatedTimeCard(
           animation,
-          DateFormat('EEEE, d MMMM yyyy')
-              .format(_selectedDate.add(Duration(days: index))),
+          DateFormat('EEEE, d MMMM yyyy', 'bn').format(_selectedDate.add(Duration(days: index))),
           sehriTime,
           iftarTime,
           isSehriActive,
@@ -201,6 +189,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
           sehriTimeLeft,
           iftarTimeLeft,
           '${hijriDate.hDay} ${hijriDate.longMonthName} ${hijriDate.hYear} AH',
+          index == 0, // Pass a flag to indicate if it's the first card
         );
       },
     );
@@ -216,6 +205,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
     String sehriTimeLeft,
     String iftarTimeLeft,
     String hijriDate,
+    bool isFirstCard, // Add a flag to indicate if it's the first card
   ) {
     return FadeTransition(
       opacity: animation,
@@ -225,39 +215,43 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
           side: BorderSide(color: const Color(0xFF00BFA5), width: 1),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: ListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                date,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF00BFA5),
-                ),
-              ),
-              Text(
-                hijriDate,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-          subtitle: Column(
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    date,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color(0xFF00BFA5),
+                    ),
+                  ),
+                  Text(
+                    hijriDate,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
               Text(
-                'Sehri: ${DateFormat.jm().format(sehriTime)}',
+                'সেহরি: ${DateFormat.jm('bn').format(sehriTime)}',
                 style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.grey,
+                  color: Colors.black87,
                 ),
               ),
-              if (isSehriActive)
+              if (isFirstCard && isSehriActive)
                 Text(
-                  'Time left: $sehriTimeLeft',
+                  'সময় বাকি: $sehriTimeLeft',
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.red,
@@ -265,15 +259,15 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
                 ),
               const SizedBox(height: 8),
               Text(
-                'Iftar: ${DateFormat.jm().format(iftarTime)}',
+                'ইফতার: ${DateFormat.jm('bn').format(iftarTime)}',
                 style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.grey,
+                  color: Colors.black87,
                 ),
               ),
-              if (isIftarActive)
+              if (isFirstCard && isIftarActive)
                 Text(
-                  'Time left: $iftarTimeLeft',
+                  'সময় বাকি: $iftarTimeLeft',
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.red,
@@ -291,6 +285,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
     final difference = endTime.difference(now);
     final hours = difference.inHours;
     final minutes = difference.inMinutes % 60;
-    return '$hours hours $minutes minutes';
+    return '$hours ঘণ্টা $minutes মিনিট';
   }
 }
+

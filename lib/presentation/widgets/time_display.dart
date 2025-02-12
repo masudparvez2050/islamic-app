@@ -61,11 +61,11 @@ class _TimeDisplayState extends State<TimeDisplay> {
             mainAxisSize: MainAxisSize.min,
             children: [
                Text(
-                DateFormat('EEEE').format(_currentTime),
+                DateFormat('EEEE', 'bn').format(_currentTime),
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
               Text(
-                DateFormat('d MMMM yyyy').format(_currentTime),
+                DateFormat('d MMMM yyyy', 'bn').format(_currentTime),
                 style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
               ),
               Text(
@@ -85,8 +85,8 @@ class _TimeDisplayState extends State<TimeDisplay> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                DateFormat('hh:mm a').format(_currentTime),
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                DateFormat('hh:mm a', 'bn').format(_currentTime),
+                style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -138,7 +138,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                       Text(
-                        DateFormat('hh:mm a').format(_sunrise),
+                        DateFormat('hh:mm a', 'bn').format(_sunrise),
                         style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -159,7 +159,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                       Text(
-                        DateFormat('hh:mm a').format(_sunset),
+                        DateFormat('hh:mm a', 'bn').format(_sunset),
                         style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ],

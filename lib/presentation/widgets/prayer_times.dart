@@ -437,7 +437,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
 
   String _formatTime(DateTime? time) {
     if (time == null) return '--:--';
-    return DateFormat('hh:mm a').format(time);
+    return DateFormat('hh:mm a','bn' ).format(time);
   }
 }
 
