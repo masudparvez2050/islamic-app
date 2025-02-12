@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
-class Advertisement1 extends StatefulWidget {
+class Advertisement2 extends StatefulWidget {
   static const List<String> defaultImageUrls = [
     'https://api.alhudabd.com/images/courses/2ad86b26-8dad-414d-ae95-ced499db048d.png',
     'https://api.alhudabd.com/images/courses/f58eb1e9-f2ae-4c6d-90b7-bd4bdc40336f.png',
@@ -21,7 +21,7 @@ class Advertisement1 extends StatefulWidget {
   final List<String> links;
   // final String adUnitId; // Google AdMob unit ID
 
-  const Advertisement1({
+  const Advertisement2({
     Key? key,
     this.imageUrls = defaultImageUrls,
     this.links = defaultLinks,
@@ -29,10 +29,10 @@ class Advertisement1 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<Advertisement1> createState() => _Advertisement1State();
+  State<Advertisement2> createState() => _Advertisement2State();
 }
 
-class _Advertisement1State extends State<Advertisement1> {
+class _Advertisement2State extends State<Advertisement2> {
   int _currentIndex = 0;
   // BannerAd? _bannerAd;
   bool _isAdLoaded = false;
@@ -87,58 +87,78 @@ Future<void> _launchURL(String url) async {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      alignment: Alignment.bottomCenter,
       children: [
+      
+      Positioned(
+        left: 0,
+        right: 0,
+        bottom: 0,
+        child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 0),
+        decoration: BoxDecoration(
+          // color: Colors.white,
+          boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+          ],
+        ),
+        child: Column(
+        children: [
         // Custom Banner Carousel
         Container(
           width: double.infinity,
           height: 50, // Adjust height as needed
           child: CarouselSlider(
-            options: CarouselOptions(
-              autoPlay: true,
-              autoPlayInterval: Duration(seconds: 6),
-              autoPlayAnimationDuration: Duration(milliseconds: 1200),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              viewportFraction: 1.0,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-            ),
-            items: widget.imageUrls.asMap().entries.map((entry) {
-              int index = entry.key;
-              String imageUrl = entry.value;
-              return Builder(
-                builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () => _launchURL(widget.links[index]),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.symmetric(horizontal: 5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+          options: CarouselOptions(
+            autoPlay: true,
+            autoPlayInterval: Duration(seconds: 6),
+            autoPlayAnimationDuration: Duration(milliseconds: 1200),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            viewportFraction: 1.0,
+            onPageChanged: (index, reason) {
+            setState(() {
+              _currentIndex = index;
+            });
+            },
+          ),
+          items: widget.imageUrls.asMap().entries.map((entry) {
+            int index = entry.key;
+            String imageUrl = entry.value;
+            return Builder(
+            builder: (BuildContext context) {
+              return GestureDetector(
+              onTap: () => _launchURL(widget.links[index]),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: Offset(0, 2),
+                  ),
+                ],
+                ),
+                child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                ),
+                ),
+              ),
               );
-            }).toList(),
+            },
+            );
+          }).toList(),
           ),
         ),
         // Dots Indicator
@@ -166,6 +186,10 @@ Future<void> _launchURL(String url) async {
         //     height: _bannerAd!.size.height.toDouble(),
         //     child: AdWidget(ad: _bannerAd!),
         //   ),
+        ],
+      ),
+        ),
+      ),
       ],
     );
   }

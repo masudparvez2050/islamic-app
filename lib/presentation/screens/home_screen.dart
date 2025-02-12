@@ -7,6 +7,7 @@ import 'package:religion/presentation/widgets/top_features.dart';
 import 'package:religion/presentation/widgets/donation_carousel.dart';
 import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 import 'package:religion/presentation/widgets/add_1.dart';
+import 'package:religion/presentation/widgets/add_2.dart';
 import 'package:religion/presentation/widgets/text_slide.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -35,6 +36,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           // const BottomNavBar(),
+          Advertisement2(),
         ],
       ),
     );
@@ -67,17 +69,7 @@ class HomeScreen extends StatelessWidget {
               const PrayerTimesWidget(), 
               const SizedBox(height: 10),
               const Advertisement1(
-  imageUrls: [
-    'https://api.alhudabd.com/images/courses/2ad86b26-8dad-414d-ae95-ced499db048d.png', // Your banner image
-    'https://api.alhudabd.com/images/courses/f58eb1e9-f2ae-4c6d-90b7-bd4bdc40336f.png',
-    'https://api.alhudabd.com/images/courses/54f5b533-2cff-495c-83be-08840fa32199.png',
-  ],
-  links: [
-    'https://alhudabd.com/courses/1/#courses',
-    'https://alhudabd.com/courses/2/#courses',
-    'https://alhudabd.com/courses/3/#courses',
-  ],
-  // adUnitId: '', // Your AdMob unit ID
+
 ),
               const SizedBox(height: 10),
               Expanded(
@@ -137,17 +129,7 @@ class HomeScreen extends StatelessWidget {
                 const PrayerTimesWidget(),
                 const SizedBox(height: 10),
               const Advertisement1(
-  imageUrls: [
-    'https://api.alhudabd.com/images/courses/2ad86b26-8dad-414d-ae95-ced499db048d.png', // Your banner image
-    'https://api.alhudabd.com/images/courses/f58eb1e9-f2ae-4c6d-90b7-bd4bdc40336f.png',
-    'https://api.alhudabd.com/images/courses/54f5b533-2cff-495c-83be-08840fa32199.png',
-  ],
-  links: [
-    'https://alhudabd.com/courses/1/#courses',
-    'https://alhudabd.com/courses/2/#courses',
-    'https://alhudabd.com/courses/3/#courses',
-  ],
-  // adUnitId: '', // Your AdMob unit ID
+  
 ),
                 
                 const SizedBox(height: 20),
