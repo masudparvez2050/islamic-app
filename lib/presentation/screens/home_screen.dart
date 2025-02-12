@@ -6,6 +6,7 @@ import 'package:religion/presentation/widgets/features.dart';
 import 'package:religion/presentation/widgets/donation_carousel.dart';
 import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 import 'package:religion/presentation/widgets/add_1.dart';
+import 'package:religion/presentation/widgets/text_slide.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -89,9 +90,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: ListView(
                     padding: EdgeInsets.zero,
-                    children: const [
+                    children: [
+
+                      // Use the TextSlide widget
+                      TextSlide(),
                       Features(),
-                      
                       SizedBox(height: 16),
                       DonationCarousel(),
                       SizedBox(height: 70), // Add padding for bottom nav bar
@@ -156,9 +159,9 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   child: Column(
-                    children: const [
+                    children: [
+                      TextSlide(),
                       Features(),
-                      
                       SizedBox(height: 16),
                       DonationCarousel(),
                       SizedBox(height: 70), // Add padding for bottom nav bar
