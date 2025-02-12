@@ -84,10 +84,20 @@ class _TimeDisplayState extends State<TimeDisplay> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                DateFormat('hh:mm a', 'bn').format(_currentTime),
-                style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
-              ),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                  DateFormat('hh:mm', 'bn').format(_currentTime),
+                  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 4), // Add some spacing between time and AM/PM
+                  Text(
+                  DateFormat('a').format(_currentTime),
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+                ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
