@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shimmer/shimmer.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
@@ -36,11 +37,21 @@ class _Advertisement2State extends State<Advertisement2> {
   int _currentIndex = 0;
   // BannerAd? _bannerAd;
   bool _isAdLoaded = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     // _loadBannerAd();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    // Simulate loading data
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   // void _loadBannerAd() {
@@ -113,7 +124,7 @@ Future<void> _launchURL(String url) async {
         Container(
           width: double.infinity,
           height: 50, // Adjust height as needed
-          child: CarouselSlider(
+          child: _isLoading ? _buildShimmer() : CarouselSlider(
           options: CarouselOptions(
             autoPlay: true,
             autoPlayInterval: Duration(seconds: 6),
@@ -191,6 +202,21 @@ Future<void> _launchURL(String url) async {
         ),
       ),
       ],
+    );
+  }
+
+  Widget _buildShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 5.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.grey[300],
+        ),
+      ),
     );
   }
 }

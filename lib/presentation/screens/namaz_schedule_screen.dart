@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
+import 'package:religion/presentation/widgets/add_2.dart';
 import 'package:adhan/adhan.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
@@ -99,13 +99,17 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        title: const Text('নামাজের সময়সূচী'),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        title: const Text(
+          'নামাজের সময়সূচী',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF00BFA5), // Project color
+        iconTheme: const IconThemeData(color: Colors.white), // Back arrow button color
       ),
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 80.0), // Add margin at the bottom
+            padding: const EdgeInsets.only(bottom: 50.0), // Add margin at the bottom
             child: Column(
               children: [
                 _buildDropdownCalendar(),
@@ -118,7 +122,7 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
               ],
             ),
           ),
-          const BottomNavBar(),
+          const Advertisement2(),
         ],
       ),
     );
@@ -130,10 +134,10 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            DateFormat('EEEE, d MMMM yyyy').format(_selectedDate),
+            Text(
+            DateFormat('EEEE, d MMMM yyyy', 'bn').format(_selectedDate),
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
+            ),
           IconButton(
             icon: Icon(_isCalendarVisible ? Icons.arrow_drop_up : Icons.arrow_drop_down),
             onPressed: () {
@@ -262,45 +266,44 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     return FadeTransition(
       opacity: animation,
       child: Card(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
         color: isActivePrayer
-            ? const Color.fromARGB(255, 52, 151, 141)
-            : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
+        ? const Color.fromARGB(255, 52, 151, 141)
+        : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
         child: ListTile(
           leading: Icon(icon, color: const Color.fromARGB(255, 255, 255, 255)),
-          title: Text(prayerName,
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255), fontSize: 18)),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            prayerName,
+            style: const TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                'শুরু: ${DateFormat.jm().format(startTime)}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: isActivePrayer
-                      ? Colors.white
-                      : const Color.fromARGB(255, 255, 255, 255),
-                ),
-              ),
-              Text(
-                'শেষ: ${DateFormat.jm().format(endTime)}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: isActivePrayer
-                      ? Colors.white
-                      : const Color.fromARGB(255, 255, 255, 255),
-                ),
-              ),
-              if (isActivePrayer)
-                Text(
-                  'সময় বাকি: $timeLeft',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
-                ),
+          Text(
+            'শুরু: ${DateFormat.jm().format(startTime)}',
+            style: TextStyle(
+              fontSize: 14,
+              color: isActivePrayer
+              ? Colors.white
+              : const Color.fromARGB(255, 255, 255, 255),
+            ),
+          ),
+          Text(
+            'শেষ: ${DateFormat.jm().format(endTime)}',
+            style: TextStyle(
+              fontSize: 14,
+              color: isActivePrayer
+              ? Colors.white
+              : const Color.fromARGB(255, 255, 255, 255),
+            ),
+          ),
             ],
+          ),
+        ],
           ),
         ),
       ),
