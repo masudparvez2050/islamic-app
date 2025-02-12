@@ -4,9 +4,6 @@ import 'package:religion/presentation/widgets/time_display.dart';
 import 'package:religion/presentation/widgets/prayer_times.dart';
 import 'package:religion/presentation/widgets/features.dart';
 import 'package:religion/presentation/widgets/donation_carousel.dart';
-import 'package:religion/presentation/widgets/book_library.dart';
-import 'package:religion/presentation/widgets/video_gallery.dart';
-import 'package:religion/presentation/widgets/recent_news.dart';
 import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 import 'package:religion/presentation/widgets/add_1.dart';
 
@@ -96,9 +93,6 @@ class HomeScreen extends StatelessWidget {
                       Features(),
                       
                       SizedBox(height: 16),
-                      BookLibrary(),
-                      VideoGallery(),
-                      RecentNews(),
                       DonationCarousel(),
                       SizedBox(height: 70), // Add padding for bottom nav bar
                     ],
@@ -137,6 +131,20 @@ class HomeScreen extends StatelessWidget {
                 const TimeDisplay(),
  
                 const PrayerTimesWidget(),
+                const SizedBox(height: 10),
+              const Advertisement1(
+  imageUrls: [
+    'https://api.alhudabd.com/images/courses/2ad86b26-8dad-414d-ae95-ced499db048d.png', // Your banner image
+    'https://api.alhudabd.com/images/courses/f58eb1e9-f2ae-4c6d-90b7-bd4bdc40336f.png',
+    'https://api.alhudabd.com/images/courses/54f5b533-2cff-495c-83be-08840fa32199.png',
+  ],
+  links: [
+    'https://alhudabd.com/courses/1/#courses',
+    'https://alhudabd.com/courses/2/#courses',
+    'https://alhudabd.com/courses/3/#courses',
+  ],
+  // adUnitId: '', // Your AdMob unit ID
+),
                 
                 const SizedBox(height: 20),
                 Container(
@@ -152,9 +160,6 @@ class HomeScreen extends StatelessWidget {
                       Features(),
                       
                       SizedBox(height: 16),
-                      BookLibrary(),
-                      VideoGallery(),
-                      RecentNews(),
                       DonationCarousel(),
                       SizedBox(height: 70), // Add padding for bottom nav bar
                     ],

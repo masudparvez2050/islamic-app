@@ -20,7 +20,15 @@ class Features extends StatelessWidget {
       {'name': 'সেহরি ইফতার', 'icon': Icons.restaurant_menu},
       {'name': 'রমজান', 'icon': Icons.calendar_today},
       {'name': 'আল\'কুরান', 'icon': Icons.book},
-      {'name': 'সকল', 'icon': Icons.grid_view},
+      {'name': 'আজান', 'icon': Icons.volume_up},
+    {'name': 'কিবলা', 'icon': Icons.explore},
+    {'name': 'দান করুন', 'icon': Icons.favorite},
+    {'name': 'তাসবিহ', 'icon': Icons.repeat},
+    {'name': 'হাদিস', 'icon': Icons.library_books},
+    {
+      'name': 'আল্লাহর ৯৯ টি নাম',
+      'icon': Icons.format_list_numbered
+    },
     ];
 
     return Padding(
@@ -28,78 +36,90 @@ class Features extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'ফিচার সমূহ',
-            style: TextStyle(
-              color: Color(0xFF00BFA5),
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          const SizedBox(height: 4),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              childAspectRatio: 0.8,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 0,
+            ),
+            itemCount: features.length + 1, // +1 for the "সকল" item
+            itemBuilder: (context, index) {
+              if (index == features.length) {
+                // "সকল" item
+                return _buildFeatureItem(
+                  context,
+                  {'name': 'সকল', 'icon': Icons.grid_view},
+                  () => _showAllFeaturesModal(context),
+                );
+              } else {
+                final feature = features[index];
+                return _buildFeatureItem(context, feature, () {
+                  switch (feature['name']) {
+                    case 'নামাজ সময়সূচী':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const NamazScheduleScreen()));
+                      break;
+                    case 'সেহরি ইফতার':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const SehriIftarScreen()));
+                      break;
+                    case 'রমজান':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RamadanScreen()));
+                      break;
+                    case 'আল\'কুরান':
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const QuranScreen()));
+                      break;
+                  }
+                });
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeatureItem(
+      BuildContext context, Map<String, dynamic> feature, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF00BFA5).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              feature['icon'] as IconData,
+              color: const Color(0xFF00BFA5),
+              size: 32,
             ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: features.map((feature) {
-              return GestureDetector(
-                onTap: () {
-                  if (feature['name'] == 'সকল') {
-                    _showAllFeaturesModal(context);
-                  } else {
-                    switch (feature['name']) {
-                      case 'নামাজ সময়সূচী':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const NamazScheduleScreen()));
-                        break;
-                      case 'সেহরি ইফতার':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SehriIftarScreen()));
-                        break;
-                      case 'রমজান':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const RamadanScreen()));
-                        break;
-                      case 'আল\'কুরান':
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const QuranScreen()));
-                        break;
-                    }
-                  }
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF00BFA5).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        feature['icon'] as IconData,
-                        color: const Color(0xFF00BFA5),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      feature['name'] as String,
-                      style: const TextStyle(
-                        color: Color(0xFF00BFA5),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+          const SizedBox(height: 8),
+          Text(
+            feature['name'] as String,
+            style: const TextStyle(
+              color: Color(0xFF00BFA5),
+              fontSize: 12,
+            ),
           ),
         ],
       ),
