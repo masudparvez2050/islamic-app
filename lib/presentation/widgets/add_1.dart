@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shimmer/shimmer.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
@@ -11,7 +12,7 @@ class Advertisement1 extends StatefulWidget {
     'https://api.alhudabd.com/images/courses/54f5b533-2cff-495c-83be-08840fa32199.png',
   ];
 
-   static const List<String> defaultLinks = [
+  static const List<String> defaultLinks = [
     'https://alhudabd.com/courses/1/#courses',
     'https://alhudabd.com/courses/2/#courses',
     'https://alhudabd.com/courses/3/#courses',
@@ -62,22 +63,22 @@ class _Advertisement1State extends State<Advertisement1> {
   //   _bannerAd?.load();
   // }
 
-Future<void> _launchURL(String url) async {
-  final Uri uri = Uri.parse(url);
-  try {
-    final bool canLaunch = await canLaunchUrl(uri);
-    if (canLaunch) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
-    } else {
-      throw 'Could not launch $url';
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    try {
+      final bool canLaunch = await canLaunchUrl(uri);
+      if (canLaunch) {
+        await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        throw 'Could not launch $url';
+      }
+    } catch (e) {
+      print('Error launching URL: $e');
     }
-  } catch (e) {
-    print('Error launching URL: $e');
   }
-}
 
   @override
   void dispose() {
@@ -87,6 +88,9 @@ Future<void> _launchURL(String url) async {
 
   @override
   Widget build(BuildContext context) {
+    final Color baseShimmerColor = Theme.of(context).primaryColor.withOpacity(0.3);
+    final Color highlightShimmerColor = Theme.of(context).primaryColor.withOpacity(0.1);
+
     return Column(
       children: [
         // Custom Banner Carousel
@@ -132,6 +136,28 @@ Future<void> _launchURL(String url) async {
                         child: Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Shimmer.fromColors(
+                                baseColor: baseShimmerColor,
+                                highlightColor: highlightShimmerColor,
+                                child: Container(
+                                  color: Colors.white,
+                                ),
+                              );
+                            }
+                          },
+                          errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                            return Shimmer.fromColors(
+                              baseColor: baseShimmerColor,
+                              highlightColor: highlightShimmerColor,
+                              child: Container(
+                                color: Colors.white,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
