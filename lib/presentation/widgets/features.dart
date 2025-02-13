@@ -22,34 +22,33 @@ class Features extends StatelessWidget {
       {'name': 'রমজান', 'icon': Icons.calendar_today},
       {'name': 'আল\'কুরান', 'icon': Icons.book},
       {'name': 'আজান', 'icon': Icons.volume_up},
-    {'name': 'কিবলা', 'icon': Icons.explore},
-    {'name': 'দান করুন', 'icon': Icons.favorite},
-    {'name': 'তাসবিহ', 'icon': Icons.repeat},
-    {'name': 'হাদিস', 'icon': Icons.library_books},
-    {
-      'name': 'আল্লাহর ৯৯ টি নাম',
-      'icon': Icons.format_list_numbered
-    },
-    {
-      'name': 'সাম্প্রতিক খবর',
-      'icon': Icons.newspaper
-    },
+      {'name': 'কিবলা', 'icon': Icons.explore},
+      {'name': 'দান করুন', 'icon': Icons.favorite},
+      {'name': 'তাসবিহ', 'icon': Icons.repeat},
+      {'name': 'হাদিস', 'icon': Icons.library_books},
+      {'name': 'আল্লাহর ৯৯ টি নাম', 'icon': Icons.format_list_numbered},
+      {'name': 'সাম্প্রতিক খবর', 'icon': Icons.newspaper},
     ];
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final itemWidth = screenWidth / 4 - 16;
+    final itemHeight = itemWidth * 1.3;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 4),
+          SizedBox(height: screenHeight * 0.01),
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              childAspectRatio: 0.8,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 0,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount:4 ,
+              childAspectRatio: itemWidth / itemHeight,
+              crossAxisSpacing: screenWidth * 0.04,
+              mainAxisSpacing: screenHeight * 0.01,
             ),
             itemCount: features.length + 1, // +1 for the "সকল" item
             itemBuilder: (context, index) {
@@ -59,6 +58,8 @@ class Features extends StatelessWidget {
                   context,
                   {'name': 'সকল', 'icon': Icons.grid_view},
                   () => _showAllFeaturesModal(context),
+                  itemWidth,
+                  itemHeight,
                 );
               } else {
                 final feature = features[index];
@@ -133,7 +134,7 @@ class Features extends StatelessWidget {
                               builder: (context) => const RecentNewsScreen()));
                       break;
                   }
-                });
+                }, itemWidth, itemHeight);
               }
             },
           ),
@@ -142,30 +143,30 @@ class Features extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(
-      BuildContext context, Map<String, dynamic> feature, VoidCallback onTap) {
+  Widget _buildFeatureItem(BuildContext context, Map<String, dynamic> feature,
+      VoidCallback onTap, double itemWidth, double itemHeight) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(itemWidth * 0.2),
             decoration: BoxDecoration(
               color: const Color(0xFF00BFA5).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(itemWidth * 0.2),
             ),
             child: Icon(
               feature['icon'] as IconData,
               color: const Color(0xFF00BFA5),
-              size: 32,
+              size: itemWidth * 0.4,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: itemHeight * 0.1),
           Text(
             feature['name'] as String,
-            style: const TextStyle(
-              color: Color(0xFF00BFA5),
-              fontSize: 12,
+            style: TextStyle(
+              color: const Color(0xFF00BFA5),
+              fontSize: itemWidth * 0.14,
             ),
           ),
         ],
@@ -210,33 +211,22 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
     {'name': 'আজান', 'icon': Icons.volume_up, 'screen': AdzanScreen()},
     {'name': 'কিবলা', 'icon': Icons.explore, 'screen': QiblaScreen()},
     {'name': 'দান করুন', 'icon': Icons.favorite, 'screen': DonationScreen()},
-    {
-      'name': 'নামাজ সময়সূচী',
-      'icon': Icons.schedule,
-      'screen': NamazScheduleScreen()
-    },
-    {
-      'name': 'সেহরি এবং ইফতার',
-      'icon': Icons.restaurant_menu,
-      'screen': SehriIftarScreen()
-    },
+    {'name': 'নামাজ সময়সূচী', 'icon': Icons.schedule, 'screen': NamazScheduleScreen()},
+    {'name': 'সেহরি এবং ইফতার', 'icon': Icons.restaurant_menu, 'screen': SehriIftarScreen()},
     {'name': 'রমজান', 'icon': Icons.calendar_today, 'screen': RamadanScreen()},
     {'name': 'তাসবিহ', 'icon': Icons.repeat, 'screen': TasbihScreen()},
     {'name': 'হাদিস', 'icon': Icons.library_books, 'screen': HadithScreen()},
-    {
-      'name': 'আল্লাহর ৯৯ টি নাম',
-      'icon': Icons.format_list_numbered,
-      'screen': AllahNamesScreen()
-    },
-    {
-      'name': 'সাম্প্রতিক খবর',
-      'icon': Icons.newspaper,
-      'screen': const RecentNewsScreen()
-    },
+    {'name': 'আল্লাহর ৯৯ টি নাম', 'icon': Icons.format_list_numbered, 'screen': AllahNamesScreen()},
+    {'name': 'সাম্প্রতিক খবর', 'icon': Icons.newspaper, 'screen': const RecentNewsScreen()},
   ];
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final itemWidth = screenWidth / 4 - 16;
+    final itemHeight = itemWidth * 1.2;
+
     return GestureDetector(
       onVerticalDragUpdate: (details) {
         if (details.primaryDelta! > 10) {
@@ -251,7 +241,7 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.8,
+                height: screenHeight * 0.8,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -262,34 +252,33 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
                 child: Column(
                   children: [
                     Container(
-                      width: 40,
-                      height: 5,
-                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      width: screenWidth * 0.1,
+                      height: screenHeight * 0.005,
+                      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2.5),
+                        borderRadius: BorderRadius.circular(screenHeight * 0.0025),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
+                    Padding(
+                      padding: EdgeInsets.all(screenWidth * 0.04),
                       child: Text(
                         'ফিচার সমূহ',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF00BFA5),
+                          color: const Color(0xFF00BFA5),
                         ),
                       ),
                     ),
                     Expanded(
                       child: GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        padding: EdgeInsets.all(screenWidth * 0.04),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
-                          childAspectRatio: 0.8,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
+                          childAspectRatio: itemWidth / itemHeight,
+                          crossAxisSpacing: screenWidth * 0.04,
+                          mainAxisSpacing: screenHeight * 0.01,
                         ),
                         itemCount: allFeatures.length,
                         itemBuilder: (context, index) {
@@ -304,24 +293,23 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(16),
+                                  padding: EdgeInsets.all(itemWidth * 0.2),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF00BFA5)
-                                        .withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(12),
+                                    color: const Color(0xFF00BFA5).withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(itemWidth * 0.2),
                                   ),
                                   child: Icon(
                                     feature['icon'] as IconData,
                                     color: const Color(0xFF00BFA5),
-                                    size: 32,
+                                    size: itemWidth * 0.4,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: itemHeight * 0.1),
                                 Text(
                                   feature['name'] as String,
-                                  style: const TextStyle(
-                                    color: Color(0xFF00BFA5),
-                                    fontSize: 12,
+                                  style: TextStyle(
+                                    color: const Color(0xFF00BFA5),
+                                    fontSize: itemWidth * 0.14,
                                     fontWeight: FontWeight.w600,
                                   ),
                                   textAlign: TextAlign.center,

@@ -5,18 +5,20 @@ import 'package:religion/presentation/widgets/prayer_times.dart';
 import 'package:religion/presentation/widgets/features.dart';
 import 'package:religion/presentation/widgets/top_features.dart';
 import 'package:religion/presentation/widgets/donation_carousel.dart';
-import 'package:religion/presentation/widgets/bottom_nav_bar.dart';
 import 'package:religion/presentation/widgets/add_1.dart';
 import 'package:religion/presentation/widgets/add_2.dart';
 import 'package:religion/presentation/widgets/text_slide.dart';
 
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  
-
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -27,15 +29,14 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: orientation == Orientation.portrait
-                          ? _buildPortraitContent()
-                          : _buildLandscapeContent(),
+                          ? _buildPortraitContent(width, height)
+                          : _buildLandscapeContent(width, height),
                     ),
                   ],
                 );
               },
             ),
           ),
-          // const BottomNavBar(),
           Advertisement2(),
         ],
       ),
@@ -43,19 +44,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   /// Builds UI for Portrait Mode
-  Widget _buildPortraitContent() {
+  Widget _buildPortraitContent(double width, double height) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
           width: constraints.maxWidth,
           height: constraints.maxHeight,
-          
           decoration: BoxDecoration(
-            
             image: DecorationImage(
               image: AssetImage('assets/images/home_bg.png'),
               fit: BoxFit.contain,
-              
               colorFilter: ColorFilter.mode(
                 const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
                 BlendMode.srcIn,
@@ -66,12 +64,10 @@ class HomeScreen extends StatelessWidget {
             children: [
               const Header(),
               const TimeDisplay(),
-              const PrayerTimesWidget(), 
-              const SizedBox(height: 10),
-              const Advertisement1(
-
-),
-              const SizedBox(height: 10),
+              const PrayerTimesWidget(),
+              SizedBox(height: height * 0.01),
+              const Advertisement1(),
+              SizedBox(height: height * 0.01),
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -86,11 +82,11 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       TextSlide(),
                       TopFeatures(),
-                      SizedBox(height: 16),
+                      SizedBox(height: height * 0.02),
                       Features(),
-                      SizedBox(height: 16),
+                      SizedBox(height: height * 0.02),
                       DonationCarousel(),
-                      SizedBox(height: 70), // Add padding for bottom nav bar
+                      SizedBox(height: height * 0.07), // Add padding for bottom nav bar
                     ],
                   ),
                 ),
@@ -98,12 +94,12 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         );
-      }
+      },
     );
   }
 
   /// Builds UI for Landscape Mode
-  Widget _buildLandscapeContent() {
+  Widget _buildLandscapeContent(double width, double height) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
@@ -125,14 +121,10 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const Header(),
                 const TimeDisplay(),
- 
                 const PrayerTimesWidget(),
-                const SizedBox(height: 10),
-              const Advertisement1(
-  
-),
-                
-                const SizedBox(height: 20),
+                SizedBox(height: height * 0.01),
+                const Advertisement1(),
+                SizedBox(height: height * 0.02),
                 Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -145,11 +137,11 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       TextSlide(),
                       TopFeatures(),
-                      SizedBox(height: 16),
+                      SizedBox(height: height * 0.02),
                       Features(),
-                      SizedBox(height: 16),
+                      SizedBox(height: height * 0.02),
                       DonationCarousel(),
-                      SizedBox(height: 70), // Add padding for bottom nav bar
+                      SizedBox(height: height * 0.07), // Add padding for bottom nav bar
                     ],
                   ),
                 ),
@@ -157,7 +149,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }

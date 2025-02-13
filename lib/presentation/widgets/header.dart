@@ -6,20 +6,22 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02, vertical: screenHeight * 0.002),
       decoration: BoxDecoration(
         color: Colors.teal.withOpacity(0.9),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(screenWidth * 0.05),
+          bottomRight: Radius.circular(screenWidth * 0.05),
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white, size: 30),
+            icon: Icon(Icons.menu, color: Colors.white, size: screenWidth * 0.075),
             onPressed: () {
               // Navigate to the SettingsScreen with a right-to-left slide animation
               Navigator.push(
@@ -43,27 +45,32 @@ class Header extends StatelessWidget {
               );
             },
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(60),
-            ),
-            child: const Text(
-              'ধর্ম-Religion',
-              style: TextStyle(
-                color: Colors.teal,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+          Spacer(),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035, vertical: screenHeight * 0.005),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(screenWidth * 0.15),
+              ),
+              child: Text(
+                'ধর্ম-Religion',
+                style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: screenWidth * 0.05,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
+          Spacer(),
           CircleAvatar(
-            radius: 16,
+            radius: screenWidth * 0.05,
             backgroundColor: Colors.white24,
             backgroundImage: _getUserAvatar(),
             child: _getUserAvatar() == null
-                ? const Icon(Icons.person, color: Colors.white)
+                ? Icon(Icons.person, color: Colors.white, size: screenWidth * 0.07)
                 : null,
           ),
         ],

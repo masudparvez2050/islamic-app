@@ -14,7 +14,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.initState();
     Future.microtask(() {
       Future.delayed(const Duration(seconds: 3), () {
-        if (mounted) { // Fix: Check if the widget is still in the tree
+        if (mounted) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -26,18 +26,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
     return Scaffold(
       backgroundColor: const Color(0xFF00BFA5),
       body: Stack(
         children: [
           Positioned(
-            bottom: -200,
+            bottom: -height * 0.25,
             left: 0,
             right: 0,
             child: Image.asset(
               'assets/images/home_bg.png',
               color: const Color.fromARGB(255, 3, 70, 44).withOpacity(0.1),
-              height: 600,
+              height: height * 0.75,
               width: double.infinity,
               fit: BoxFit.cover,
               alignment: Alignment.bottomCenter,
@@ -48,25 +52,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: width * 0.25,
+                  height: width * 0.25,
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 5, 207, 140).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(width * 0.125),
                   ),
                   child: Image.asset(
                     'assets/images/screen_logo.png',
                     color: Colors.white,
-                    height: 50,
+                    height: width * 0.125,
                     width: double.infinity,
                   ),
                 ),
                 // const SizedBox(height: 20),
-                // const Text(
+                // Text(
                 //   'Welcome',
                 //   style: TextStyle(
                 //     color: Colors.white,
-                //     fontSize: 32,
+                //     fontSize: width * 0.08,
                 //     fontWeight: FontWeight.bold,
                 //   ),
                 // ),

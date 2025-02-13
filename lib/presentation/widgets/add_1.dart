@@ -90,13 +90,15 @@ class _Advertisement1State extends State<Advertisement1> {
   Widget build(BuildContext context) {
     final Color baseShimmerColor = Theme.of(context).primaryColor.withOpacity(0.3);
     final Color highlightShimmerColor = Theme.of(context).primaryColor.withOpacity(0.1);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return Column(
       children: [
         // Custom Banner Carousel
         Container(
           width: double.infinity,
-          height: 50, // Adjust height as needed
+          height: screenHeight * 0.06, // Adjust height as needed
           child: CarouselSlider(
             options: CarouselOptions(
               autoPlay: true,
@@ -118,10 +120,10 @@ class _Advertisement1State extends State<Advertisement1> {
                   return GestureDetector(
                     onTap: () => _launchURL(widget.links[index]),
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      width: screenWidth,
+                      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(screenWidth * 0.02),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
@@ -132,7 +134,7 @@ class _Advertisement1State extends State<Advertisement1> {
                         ],
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(screenWidth * 0.02),
                         child: Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
@@ -172,9 +174,9 @@ class _Advertisement1State extends State<Advertisement1> {
         //   mainAxisAlignment: MainAxisAlignment.center,
         //   children: widget.imageUrls.asMap().entries.map((entry) {
         //     return Container(
-        //       width: 8.0,
-        //       height: 8.0,
-        //       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+        //       width: screenWidth * 0.02,
+        //       height: screenWidth * 0.02,
+        //       margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.01),
         //       decoration: BoxDecoration(
         //         shape: BoxShape.circle,
         //         color: Colors.black.withOpacity(

@@ -29,10 +29,13 @@ class _DonationCarouselState extends State<DonationCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Container(
-          height: 120,
+          height: screenHeight * 0.138,
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: (int page) {
@@ -43,15 +46,18 @@ class _DonationCarouselState extends State<DonationCarousel> {
             itemCount: _slides.length,
             itemBuilder: (context, index) {
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
+                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: const Color(0xFF00BFA5).withOpacity(0.3),
-                    width: 1,
+                    width: screenWidth * 0.0025,
                   ),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(screenWidth * 0.02),
                 ),
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.04,
+                  vertical: screenHeight * 0.02,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -61,24 +67,24 @@ class _DonationCarouselState extends State<DonationCarousel> {
                         children: [
                           Text(
                             _slides[index]['text']!,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.045,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF00BFA5),
+                              color: const Color(0xFF00BFA5),
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: screenHeight * 0.01),
                           Text(
                             _slides[index]['subText']!,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: screenWidth * 0.0360,
                               color: Colors.grey[600],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: screenWidth * 0.04),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -91,18 +97,19 @@ class _DonationCarouselState extends State<DonationCarousel> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF00BFA5),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(screenWidth * 0.02),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.06,
+                          vertical: screenHeight * 0.015,
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'অনুদান দিন',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
+                          fontSize: screenWidth * 0.037,
                         ),
                       ),
                     ),
@@ -112,15 +119,15 @@ class _DonationCarouselState extends State<DonationCarousel> {
             },
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: screenHeight * 0.01),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
             _slides.length,
             (index) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: 8,
-              height: 8,
+              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
+              width: screenWidth * 0.02,
+              height: screenWidth * 0.02,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _currentPage == index

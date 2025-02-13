@@ -13,6 +13,7 @@ class PrayerTimesWidget extends StatefulWidget {
 }
 
 class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTickerProviderStateMixin {
+  double get screenHeight => MediaQuery.of(context).size.height;
   PrayerTimes? _prayerTimes;
   Position? _currentPosition;
   Timer? _timer;
@@ -265,99 +266,102 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // 4% of screen width
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
               return CustomPaint(
-          foregroundPainter: GlowingBorderPainter(
-            progress: _controller.value,
-            glowColors: [
-              // Use a list of colors for the gradient
-              const Color(0xFF26A69A).withOpacity(0.8),
-              // Darker Turquoise
-              const Color(0xFF4DB6AC).withOpacity(0.8),
-              // Medium Turquoise
-              const Color(0xFF80CBC4).withOpacity(0.8),
-              // Lighter Turquoise
-              Colors.white.withOpacity(0.9),
-              // Soft White
-              const Color(0xFF80CBC4).withOpacity(0.8),
-              // Lighter Turquoise
-              const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
-            ],
-            borderRadius: 100,
-          ),
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.all(4),
-            // Margin for glow effect
-            padding:
-                const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Current Prayer Status
-                 Text(
-            'এখন চলছে',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
-              fontSize: 18,
-            ),
+                foregroundPainter: GlowingBorderPainter(
+                  progress: _controller.value,
+                  glowColors: [
+                    // Use a list of colors for the gradient
+                    const Color(0xFF26A69A).withOpacity(0.8),
+                    // Darker Turquoise
+                    const Color(0xFF4DB6AC).withOpacity(0.8),
+                    // Medium Turquoise
+                    const Color(0xFF80CBC4).withOpacity(0.8),
+                    // Lighter Turquoise
+                    Colors.white.withOpacity(0.9),
+                    // Soft White
+                    const Color(0xFF80CBC4).withOpacity(0.8),
+                    // Lighter Turquoise
+                    const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
+                  ],
+                  borderRadius: screenWidth * 1, // 10% of screen width
                 ),
-                const SizedBox(height: 4),
-                // Prayer Name and Time
-                Text(
-            '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-                ),
-                const SizedBox(height: 4),
-                // Remaining Time
-                Text(
-            'সময় বাকি: ${_getTimeRemaining()}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
-                ),
+                child: Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.all(screenWidth * 0.01), // 1% of screen width
+                  padding: EdgeInsets.symmetric(
+                    vertical: screenHeight * 0.01, // 1% of screen height
+                    horizontal: screenWidth * 0.06, // 6% of screen width
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(screenWidth * 1), // 10% of screen width
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Current Prayer Status
+                      Text(
+                        'এখন চলছে',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: screenWidth * 0.045, // 4.5% of screen width
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
+                      // Prayer Name and Time
+                      Text(
+                        '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenWidth * 0.05, // 5% of screen width
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
+                      // Remaining Time
+                      Text(
+                        'সময় বাকি: ${_getTimeRemaining()}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenWidth * 0.045, // 4.5% of screen width
+                        ),
+                      ),
 
-                // Separator Line
-                Container(
-            width: MediaQuery.of(context).size.width * 0.55,
-            // 50% of screen width
-            height: 1,
-            color: Colors.white.withOpacity(0.3),
-            margin: const EdgeInsets.symmetric(vertical: 4),
+                      // Separator Line
+                      Container(
+                        width: screenWidth * 0.55, // 55% of screen width
+                        height: 1,
+                        color: Colors.white.withOpacity(0.3),
+                        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // 0.5% of screen height
+                      ),
+                      // Bottom Times
+                      Text(
+                        'সেহরি শেষ : ${_formatTime(_getNextDayFajr())} | ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: screenWidth * 0.03, // 3% of screen width
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                // Bottom Times
-                Text(
-            'সেহরি শেষ : ${_formatTime(_getNextDayFajr())} | ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-                ),
-              ],
-            ),
-          ),
               );
             },
           ),
         ),
         
-        const SizedBox(height: 10),
+        SizedBox(height: screenHeight * 0.01), // 1% of screen height
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -379,22 +383,21 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
   Widget _buildPrayerTimeCard(DateTime? time, String name, IconData icon) {
     final screenWidth = MediaQuery.of(context).size.width; // Get screen width
     final cardWidth =
-        screenWidth / 5 - 8; // 1/5th of the width with padding adjustment
+        screenWidth / 5 - screenWidth * 0.02; // 1/5th of the width with padding adjustment
 
     // Determine if this card represents the active prayer
     final isActivePrayer = name == _getCurrentPrayer();
 
     return Container(
       width: cardWidth,
-      margin:
-          const EdgeInsets.symmetric(horizontal: 1), // Adjust horizontal margin
-      padding: const EdgeInsets.all(4),
+      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.005), // Adjust horizontal margin
+      padding: EdgeInsets.all(screenWidth * 0.01), // 1% of screen width
       decoration: BoxDecoration(
         color: isActivePrayer
             ? const Color.fromARGB(255, 255, 255, 255)
                 .withOpacity(0.8) // Active card color
             : Colors.white.withOpacity(0.2), // Default card color
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(screenWidth * 0.03), // 3% of screen width
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -403,30 +406,30 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
           // Icon(
           //   icon,
           //   color: isActivePrayer
-          //       ? Color.fromARGB(255, 0, 190, 165)
+          //       ? const Color.fromARGB(255, 0, 190, 165)
           //       : Colors.white,
-          //   size: 24,
+          //   size: screenWidth * 0.06, // 6% of screen width
           // ),
-          const SizedBox(height: 1),
+          // SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
           Text(
             name,
             style: TextStyle(
               color: isActivePrayer
-                  ? Color.fromARGB(255, 0, 190, 165)
+                  ? const Color.fromARGB(255, 0, 190, 165)
                   : Colors.white,
-              fontSize: 14,
+              fontSize: screenWidth * 0.035, // 3.5% of screen width
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 1),
+          SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
           Text(
             _formatTime(time),
             style: TextStyle(
               color: isActivePrayer
-                  ? Color.fromARGB(255, 0, 190, 165)
+                  ? const Color.fromARGB(255, 0, 190, 165)
                   : Colors.white,
-              fontSize: 12,
+              fontSize: screenWidth * 0.03, // 3% of screen width
             ),
             textAlign: TextAlign.center,
           ),

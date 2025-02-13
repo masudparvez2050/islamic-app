@@ -19,7 +19,6 @@ class _TimeDisplayState extends State<TimeDisplay> {
   PrayerTimes? _prayerTimes;
   final DateTime _sunrise = DateTime(2024, 1, 1, 6, 39);
   final DateTime _sunset = DateTime(2024, 1, 1, 17, 46);
- 
 
   @override
   void initState() {
@@ -38,19 +37,20 @@ class _TimeDisplayState extends State<TimeDisplay> {
     super.dispose();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-  final now = DateTime.now();
-  final banglaDate = _getBanglaDateWithDay(now);
-  final hijriDate = _getHijriDate();
+    final now = DateTime.now();
+    final banglaDate = _getBanglaDateWithDay(now);
+    final hijriDate = _getHijriDate();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(8), // Reduced padding
+      padding: EdgeInsets.all(screenWidth * 0.02), // 2% of screen width
       decoration: BoxDecoration(
         color: Color(0xFF00BFA5),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(screenWidth * 0.02), // 2% of screen width
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,21 +60,21 @@ class _TimeDisplayState extends State<TimeDisplay> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-               Text(
-                DateFormat('EEEE', 'bn').format(_currentTime),
-                style: TextStyle(color: Colors.white, fontSize: 12),
+              Text(
+                DateFormat('EEEE,', 'bn').format(_currentTime),
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03), // 3% of screen width
               ),
               Text(
                 DateFormat('d MMMM yyyy', 'bn').format(_currentTime),
-                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03, fontWeight: FontWeight.bold), // 3% of screen width
               ),
               Text(
-               banglaDate,
-                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 12),
+                banglaDate,
+                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: screenWidth * 0.03), // 3% of screen width
               ),
               Text(
                 hijriDate,
-                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 10),
+                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: screenWidth * 0.025), // 2.5% of screen width
               ),
             ],
           ),
@@ -84,47 +84,45 @@ class _TimeDisplayState extends State<TimeDisplay> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-                Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                  DateFormat('hh:mm', 'bn').format(_currentTime),
-                  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                    DateFormat('hh:mm', 'bn').format(_currentTime),
+                    style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.08, fontWeight: FontWeight.bold), // 8% of screen width
                   ),
-                  SizedBox(width: 4), // Add some spacing between time and AM/PM
+                  SizedBox(width: screenWidth * 0.01), // 1% of screen width
                   Text(
-                  DateFormat('a').format(_currentTime),
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                    DateFormat('a').format(_currentTime),
+                    style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold), // 5% of screen width
                   ),
                 ],
-                ),
+              ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                
-                  
                   FutureBuilder<String>(
-                  future: _getCurrentLocation(),
-                  builder: (context, snapshot) {
-                    return Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          size: 12,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          snapshot.data ?? 'Loading...',
-                          style: const TextStyle(
+                    future: _getCurrentLocation(),
+                    builder: (context, snapshot) {
+                      return Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
                             color: Color.fromARGB(255, 255, 255, 255),
-                            fontSize: 12,
+                            size: screenWidth * 0.03, // 3% of screen width
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                          SizedBox(width: screenWidth * 0.01), // 1% of screen width
+                          Text(
+                            snapshot.data ?? 'Loading...',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              fontSize: screenWidth * 0.03, // 3% of screen width
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ],
               ),
             ],
@@ -138,43 +136,41 @@ class _TimeDisplayState extends State<TimeDisplay> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.wb_sunny_outlined, color: Colors.white, size: 18),
-                  SizedBox(width: 2),
+                  Icon(Icons.wb_sunny_outlined, color: Colors.white, size: screenWidth * 0.05), // 5% of screen width
+                  SizedBox(width: screenWidth * 0.01), // 1% of screen width
                   Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'সূর্যোদয়',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03), // 3% of screen width
                       ),
                       Text(
                         DateFormat('hh:mm a', 'bn').format(_sunrise),
-                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03, fontWeight: FontWeight.bold), // 3% of screen width
                       ),
                     ],
                   ),
-                  
                 ],
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.nightlight_round, color: Colors.white, size: 18),
-                  SizedBox(width: 2),
+                  Icon(Icons.nightlight_round, color: Colors.white, size: screenWidth * 0.05), // 5% of screen width
+                  SizedBox(width: screenWidth * 0.01), // 1% of screen width
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'সূর্যাস্ত',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03), // 3% of screen width
                       ),
                       Text(
                         DateFormat('hh:mm a', 'bn').format(_sunset),
-                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03, fontWeight: FontWeight.bold), // 3% of screen width
                       ),
                     ],
-                  )
-                  
+                  ),
                 ],
               ),
             ],
@@ -184,7 +180,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
     );
   }
 
-    String _getBanglaDateWithDay(DateTime date) {
+  String _getBanglaDateWithDay(DateTime date) {
     final banglaDays = [
       'শনিবার',
       'রবিবার',
@@ -337,8 +333,6 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
     return '$hijriDayString ${hijriMonths[hijri.hMonth - 1]} $hijriYearString';
   }
-
- 
 
   Future<String> _getCurrentLocation() async {
     bool serviceEnabled;

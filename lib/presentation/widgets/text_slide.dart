@@ -105,8 +105,12 @@ class _TextSlideState extends State<TextSlide> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final fontSize = screenWidth * 0.04; // 4% of screen width
+
     return Container(
-      height: 50,
+      height: screenHeight * 0.07, // 7% of screen height
       color: widget.backgroundColor,
       child: SingleChildScrollView(
         controller: _scrollController,
@@ -119,12 +123,12 @@ class _TextSlideState extends State<TextSlide> with SingleTickerProviderStateMix
               return InkWell(
                 onTap: () => _launchURL(item.url),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // 4% of screen width
                   child: Text(
                     item.text,
-                    style: widget.textStyle ?? const TextStyle(
-                      color: Color(0xFF00BFA5),
-                      fontSize: 16,
+                    style: widget.textStyle ?? TextStyle(
+                      color: const Color(0xFF00BFA5),
+                      fontSize: fontSize,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -136,12 +140,12 @@ class _TextSlideState extends State<TextSlide> with SingleTickerProviderStateMix
               return InkWell(
                 onTap: () => _launchURL(item.url),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // 4% of screen width
                   child: Text(
                     item.text,
-                    style: widget.textStyle ?? const TextStyle(
-                      color: Color(0xFF00BFA5),
-                      fontSize: 16,
+                    style: widget.textStyle ?? TextStyle(
+                      color: const Color(0xFF00BFA5),
+                      fontSize: fontSize,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
