@@ -340,19 +340,19 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return 'Location services are disabled.';
+      return 'Dhaka';
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return 'Location permissions are denied';
+        return 'Dhaka';
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return 'Location permissions are permanently denied.';
+      return 'Dhaka';
     }
 
     try {
@@ -364,9 +364,9 @@ class _TimeDisplayState extends State<TimeDisplay> {
         return '${place.locality}';
       }
     } catch (e) {
-      return 'Error getting location';
+      return 'Dhaka';
     }
 
-    return 'Unknown location';
+    return 'Dhaka';
   }
 }

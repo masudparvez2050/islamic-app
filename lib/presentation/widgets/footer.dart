@@ -44,10 +44,14 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
     return Container(
       width: double.infinity,
       color: Colors.teal,
-      padding: EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.symmetric(vertical: height * 0.02),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -55,49 +59,49 @@ class Footer extends StatelessWidget {
             'Created & Directed By',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12,
+              fontSize: width * 0.03,
               fontWeight: FontWeight.w400,
             ),
           ),
-          SizedBox(height: 12),
+          SizedBox(height: height * 0.015),
           // Logo
-            Container(
-            width: 50,
-            height: 50,
+          Container(
+            width: width * 0.12,
+            height: width * 0.12,
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
             ),
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(width * 0.02),
             child: Image.asset(
               'assets/images/alhuda_logo.png',
               fit: BoxFit.contain,
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: height * 0.01),
           Text(
             'AL HUDA ACADEMY',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: width * 0.06,
               fontWeight: FontWeight.w900,
               letterSpacing: 2,
             ),
           ),
-          SizedBox(height: 12),
+          SizedBox(height: height * 0.015),
           // Social Icons
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildSocialIcon(FontAwesomeIcons.globe, 
-                () => _launchURL('https://alhudabd.com')),
+                () => _launchURL('https://alhudabd.com'), width),
               _buildSocialIcon(FontAwesomeIcons.facebook, 
-                () => _launchURL('https://facebook.com/alhudabdhttps://www.facebook.com/profile.php?id=100091305081988&mibextid=ZbWKwL')),
+                () => _launchURL('https://facebook.com/alhudabdhttps://www.facebook.com/profile.php?id=100091305081988&mibextid=ZbWKwL'), width),
               _buildSocialIcon(FontAwesomeIcons.youtube, 
-                () => _launchURL('https://www.youtube.com/@alhudaacademy1123')),
-              _buildSocialIcon(FontAwesomeIcons.envelope, _launchEmail),
-              _buildSocialIcon(FontAwesomeIcons.whatsapp, _launchWhatsApp),
-              _buildSocialIcon(FontAwesomeIcons.phone, _launchPhone),
+                () => _launchURL('https://www.youtube.com/@alhudaacademy1123'), width),
+              _buildSocialIcon(FontAwesomeIcons.envelope, _launchEmail, width),
+              _buildSocialIcon(FontAwesomeIcons.whatsapp, _launchWhatsApp, width),
+              _buildSocialIcon(FontAwesomeIcons.phone, _launchPhone, width),
             ],
           ),
         ],
@@ -105,18 +109,17 @@ class Footer extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialIcon(IconData icon, VoidCallback onTap) {
+  Widget _buildSocialIcon(IconData icon, VoidCallback onTap, double width) {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5),
+        padding: EdgeInsets.symmetric(horizontal: width * 0.02),
         child: Icon(
           icon,
           color: Colors.white,
-          size: 12,
+          size: width * 0.03,
         ),
       ),
     );
   }
 }
-

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:religion/presentation/screens/quran_screen.dart';
 import 'package:religion/presentation/screens/adzan_screen.dart';
 import 'package:religion/presentation/screens/qibla_screen.dart';
@@ -17,17 +18,17 @@ class Features extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final features = [
-      {'name': 'নামাজ সময়সূচী', 'icon': Icons.schedule},
-      {'name': 'সেহরি ইফতার', 'icon': Icons.restaurant_menu},
-      {'name': 'রমজান', 'icon': Icons.calendar_today},
-      {'name': 'আল\'কুরান', 'icon': Icons.book},
-      {'name': 'আজান', 'icon': Icons.volume_up},
-      {'name': 'কিবলা', 'icon': Icons.explore},
-      {'name': 'দান করুন', 'icon': Icons.favorite},
-      {'name': 'তাসবিহ', 'icon': Icons.repeat},
-      {'name': 'হাদিস', 'icon': Icons.library_books},
-      {'name': 'আল্লাহর ৯৯ নাম', 'icon': Icons.format_list_numbered},
-      {'name': 'সাম্প্রতিক খবর', 'icon': Icons.newspaper},
+      {'name': 'নামাজ সময়সূচী', 'icon': FontAwesomeIcons.clock},
+      {'name': 'সেহরি ইফতার', 'icon': FontAwesomeIcons.utensils},
+      {'name': 'রমজান', 'icon': FontAwesomeIcons.calendarAlt},
+      {'name': 'আল\'কুরান', 'icon': FontAwesomeIcons.bookOpen},
+      {'name': 'আজান', 'icon': FontAwesomeIcons.volumeUp},
+      {'name': 'কিবলা', 'icon': FontAwesomeIcons.compass},
+      {'name': 'দান করুন', 'icon': FontAwesomeIcons.handHoldingHeart},
+      {'name': 'তাসবিহ', 'icon': FontAwesomeIcons.pray},
+      {'name': 'হাদিস', 'icon': FontAwesomeIcons.book},
+      {'name': 'আল্লাহর ৯৯ নাম', 'icon': FontAwesomeIcons.listOl},
+      {'name': 'সাম্প্রতিক খবর', 'icon': FontAwesomeIcons.newspaper},
     ];
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -45,7 +46,7 @@ class Features extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:4 ,
+              crossAxisCount: 4,
               childAspectRatio: itemWidth / itemHeight,
               crossAxisSpacing: screenWidth * 0.04,
               mainAxisSpacing: screenHeight * 0.01,
@@ -56,7 +57,7 @@ class Features extends StatelessWidget {
                 // "সকল" item
                 return _buildFeatureItem(
                   context,
-                  {'name': 'সকল', 'icon': Icons.grid_view},
+                  {'name': 'সকল', 'icon': FontAwesomeIcons.thLarge},
                   () => _showAllFeaturesModal(context),
                   itemWidth,
                   itemHeight,
@@ -207,17 +208,17 @@ class AllFeaturesModal extends StatefulWidget {
 
 class _AllFeaturesModalState extends State<AllFeaturesModal> {
   final allFeatures = [
-    {'name': 'আল\'কুরান', 'icon': Icons.book, 'screen': QuranScreen()},
-    {'name': 'আজান', 'icon': Icons.volume_up, 'screen': AdzanScreen()},
-    {'name': 'কিবলা', 'icon': Icons.explore, 'screen': QiblaScreen()},
-    {'name': 'দান করুন', 'icon': Icons.favorite, 'screen': DonationScreen()},
-    {'name': 'নামাজ সময়সূচী', 'icon': Icons.schedule, 'screen': NamazScheduleScreen()},
-    {'name': 'সেহরি এবং ইফতার', 'icon': Icons.restaurant_menu, 'screen': SehriIftarScreen()},
-    {'name': 'রমজান', 'icon': Icons.calendar_today, 'screen': RamadanScreen()},
-    {'name': 'তাসবিহ', 'icon': Icons.repeat, 'screen': TasbihScreen()},
-    {'name': 'হাদিস', 'icon': Icons.library_books, 'screen': HadithScreen()},
-    {'name': 'আল্লাহর ৯৯ টি নাম', 'icon': Icons.format_list_numbered, 'screen': AllahNamesScreen()},
-    {'name': 'সাম্প্রতিক খবর', 'icon': Icons.newspaper, 'screen': const RecentNewsScreen()},
+    {'name': 'আল\'কুরান', 'icon': FontAwesomeIcons.bookOpen, 'screen': QuranScreen()},
+    {'name': 'আজান', 'icon': FontAwesomeIcons.volumeUp, 'screen': AdzanScreen()},
+    {'name': 'কিবলা', 'icon': FontAwesomeIcons.compass, 'screen': QiblaScreen()},
+    {'name': 'দান করুন', 'icon': FontAwesomeIcons.handHoldingHeart, 'screen': DonationScreen()},
+    {'name': 'নামাজ সময়সূচী', 'icon': FontAwesomeIcons.clock, 'screen': NamazScheduleScreen()},
+    {'name': 'সেহরি এবং ইফতার', 'icon': FontAwesomeIcons.utensils, 'screen': SehriIftarScreen()},
+    {'name': 'রমজান', 'icon': FontAwesomeIcons.calendarAlt, 'screen': RamadanScreen()},
+    {'name': 'তাসবিহ', 'icon': FontAwesomeIcons.pray, 'screen': TasbihScreen()},
+    {'name': 'হাদিস', 'icon': FontAwesomeIcons.book, 'screen': HadithScreen()},
+    {'name': 'আল্লাহর ৯৯ টি নাম', 'icon': FontAwesomeIcons.listOl, 'screen': AllahNamesScreen()},
+    {'name': 'সাম্প্রতিক খবর', 'icon': FontAwesomeIcons.newspaper, 'screen': const RecentNewsScreen()},
   ];
 
   @override
