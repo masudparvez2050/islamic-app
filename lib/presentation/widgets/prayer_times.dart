@@ -83,9 +83,25 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
 
     final difference = nextPrayerTime.difference(now);
     final hours = difference.inHours;
-    final hourString = hours > 0 ? '$hours ঘণ্টা ' : '';
+    final hourString = hours > 0 ? '${_convertToBanglaNumber(hours)} ঘণ্টা ' : '';
     final minutes = difference.inMinutes % 60;
-    return '$hourString$minutes মিনিট';
+    return '$hourString${_convertToBanglaNumber(minutes)} মিনিট';
+  }
+
+  String _convertToBanglaNumber(int number) {
+    const englishToBanglaDigits = {
+      '0': '০',
+      '1': '১',
+      '2': '২',
+      '3': '৩',
+      '4': '৪',
+      '5': '৫',
+      '6': '৬',
+      '7': '৭',
+      '8': '৮',
+      '9': '৯',
+    };
+    return number.toString().split('').map((digit) => englishToBanglaDigits[digit]!).join('');
   }
 
   DateTime? _getNextPrayerTime() {
@@ -292,18 +308,27 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
                     const Color(0xFF80CBC4).withOpacity(0.8),
                     // Lighter Turquoise
                     const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
-                  ],
+      ],
+                    // glowColors: [
+                    // const Color(0xFF26A69A).withOpacity(0.8), // Turquoise
+                    // const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
+                    // const Color(0xFF80CBC4).withOpacity(0.8), // Light Turquoise
+                    // Colors.white.withOpacity(0.9), // Soft White
+                    // const Color(0xFF80CBC4).withOpacity(0.8), // Light Turquoise
+                    // const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
+                    // const Color(0xFF26A69A).withOpacity(0.8), // Turquoise
+                    // ],
                   borderRadius: screenWidth * 1, // 10% of screen width
                 ),
                 child: Container(
                   width: double.infinity,
                   margin: EdgeInsets.all(screenWidth * 0.01), // 1% of screen width
                   padding: EdgeInsets.symmetric(
-                    vertical: screenHeight * 0.01, // 1% of screen height
+                    vertical: screenHeight * 0.005, // 0.5% of screen height
                     horizontal: screenWidth * 0.06, // 6% of screen width
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.teal.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(screenWidth * 1), // 10% of screen width
                   ),
                   child: Column(
@@ -314,26 +339,26 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
                         'এখন চলছে',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.8),
-                          fontSize: screenWidth * 0.045, // 4.5% of screen width
+                          fontSize: screenWidth * 0.040, // 4.5% of screen width
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
+                      SizedBox(height: screenHeight * 0.001), // 0.1% of screen height
                       // Prayer Name and Time
                       Text(
                         '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: screenWidth * 0.05, // 5% of screen width
+                          fontSize: screenWidth * 0.040, // 5% of screen width
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
+                      SizedBox(height: screenHeight * 0.001), // 0.5% of screen height
                       // Remaining Time
                       Text(
                         'সময় বাকি: ${_getTimeRemaining()}',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: screenWidth * 0.045, // 4.5% of screen width
+                          fontSize: screenWidth * 0.040, // 4.5% of screen width
                         ),
                       ),
 
@@ -348,8 +373,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
                       Text(
                         'সেহরি শেষ : ${_formatTime(_getNextDayFajr())} | ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: screenWidth * 0.03, // 3% of screen width
+                          color: Colors.yellow.withOpacity(0.8),
+                          fontSize: screenWidth * 0.027, // 3% of screen width
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -429,7 +454,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
               color: isActivePrayer
                   ? const Color.fromARGB(255, 0, 190, 165)
                   : Colors.white,
-              fontSize: screenWidth * 0.03, // 3% of screen width
+              fontSize: screenWidth * 0.027, // 3% of screen width
             ),
             textAlign: TextAlign.center,
           ),

@@ -35,7 +35,7 @@ class _DonationCarouselState extends State<DonationCarousel> {
     return Column(
       children: [
         Container(
-          height: screenHeight * 0.138,
+          height: screenHeight * 0.17,
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: (int page) {
@@ -68,7 +68,7 @@ class _DonationCarouselState extends State<DonationCarousel> {
                           Text(
                             _slides[index]['text']!,
                             style: TextStyle(
-                              fontSize: screenWidth * 0.045,
+                              fontSize: screenWidth * 0.038,
                               fontWeight: FontWeight.w500,
                               color: const Color(0xFF00BFA5),
                             ),
@@ -77,7 +77,7 @@ class _DonationCarouselState extends State<DonationCarousel> {
                           Text(
                             _slides[index]['subText']!,
                             style: TextStyle(
-                              fontSize: screenWidth * 0.0360,
+                              fontSize: screenWidth * 0.0330,
                               color: Colors.grey[600],
                             ),
                           ),

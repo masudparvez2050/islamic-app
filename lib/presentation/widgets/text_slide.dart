@@ -110,7 +110,7 @@ class _TextSlideState extends State<TextSlide> with SingleTickerProviderStateMix
     final fontSize = screenWidth * 0.04; // 4% of screen width
 
     return Container(
-      height: screenHeight * 0.07, // 7% of screen height
+      height: screenHeight * 0.04, // 4% of screen height
       color: widget.backgroundColor,
       child: SingleChildScrollView(
         controller: _scrollController,

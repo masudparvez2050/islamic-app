@@ -26,7 +26,7 @@ class Features extends StatelessWidget {
       {'name': 'দান করুন', 'icon': Icons.favorite},
       {'name': 'তাসবিহ', 'icon': Icons.repeat},
       {'name': 'হাদিস', 'icon': Icons.library_books},
-      {'name': 'আল্লাহর ৯৯ টি নাম', 'icon': Icons.format_list_numbered},
+      {'name': 'আল্লাহর ৯৯ নাম', 'icon': Icons.format_list_numbered},
       {'name': 'সাম্প্রতিক খবর', 'icon': Icons.newspaper},
     ];
 
@@ -121,7 +121,7 @@ class Features extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => const HadithScreen()));
                       break;
-                    case 'আল্লাহর ৯৯ টি নাম':
+                    case 'আল্লাহর ৯৯ নাম':
                       Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -23,7 +23,7 @@ class TopFeatures extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: screenHeight * 0.01),
+          SizedBox(height: screenHeight * 0.005),
           Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +63,7 @@ class TopFeatures extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(iconSize * 0.33),
+              padding: EdgeInsets.all(iconSize * 0.30),
               decoration: BoxDecoration(
                 color: const Color(0xFF00BFA5).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(iconSize * 0.33),
