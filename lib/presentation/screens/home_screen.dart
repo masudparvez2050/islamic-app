@@ -8,6 +8,8 @@ import 'package:religion/presentation/widgets/donation_carousel.dart';
 import 'package:religion/presentation/widgets/add_1.dart';
 import 'package:religion/presentation/widgets/add_2.dart';
 import 'package:religion/presentation/widgets/text_slide.dart';
+import 'package:religion/presentation/widgets/footer.dart';
+import 'package:religion/presentation/widgets/powered_by.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -86,6 +88,8 @@ class HomeScreen extends StatelessWidget {
                       Features(),
                       SizedBox(height: height * 0.02),
                       // DonationCarousel(),
+                      PoweredBy(),
+                      Footer(),
                       SizedBox(height: height * 0.07), // Add padding for bottom nav bar
                     ],
                   ),
@@ -141,6 +145,8 @@ class HomeScreen extends StatelessWidget {
                       Features(),
                       SizedBox(height: height * 0.02),
                       // DonationCarousel(),
+                      PoweredBy(),
+                      Footer(),
                       SizedBox(height: height * 0.07), // Add padding for bottom nav bar
                     ],
                   ),
