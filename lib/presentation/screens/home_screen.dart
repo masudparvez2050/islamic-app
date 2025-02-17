@@ -85,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(height: height * 0.02),
                       Features(),
                       SizedBox(height: height * 0.02),
-                      DonationCarousel(),
+                      // DonationCarousel(),
                       SizedBox(height: height * 0.07), // Add padding for bottom nav bar
                     ],
                   ),
@@ -140,7 +140,7 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(height: height * 0.02),
                       Features(),
                       SizedBox(height: height * 0.02),
-                      DonationCarousel(),
+                      // DonationCarousel(),
                       SizedBox(height: height * 0.07), // Add padding for bottom nav bar
                     ],
                   ),

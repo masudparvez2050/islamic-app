@@ -100,6 +100,8 @@ class _Advertisement2State extends State<Advertisement2> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final Color baseShimmerColor = Colors.grey[300]!;
+    final Color highlightShimmerColor = Colors.grey[100]!;
 
     return Stack(
       alignment: Alignment.bottomCenter,
@@ -168,6 +170,28 @@ class _Advertisement2State extends State<Advertisement2> {
                                       child: Image.network(
                                         imageUrl,
                                         fit: BoxFit.cover,
+                                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          } else {
+                                            return Shimmer.fromColors(
+                                              baseColor: baseShimmerColor,
+                                              highlightColor: highlightShimmerColor,
+                                              child: Container(
+                                                color: Colors.white,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                                          return Shimmer.fromColors(
+                                            baseColor: baseShimmerColor,
+                                            highlightColor: highlightShimmerColor,
+                                            child: Container(
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),

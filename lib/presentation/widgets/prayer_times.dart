@@ -296,19 +296,13 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
                 foregroundPainter: GlowingBorderPainter(
                   progress: _controller.value,
                   glowColors: [
-                    // Use a list of colors for the gradient
-                    const Color(0xFF26A69A).withOpacity(0.8),
-                    // Darker Turquoise
-                    const Color(0xFF4DB6AC).withOpacity(0.8),
-                    // Medium Turquoise
-                    const Color(0xFF80CBC4).withOpacity(0.8),
-                    // Lighter Turquoise
-                    Colors.white.withOpacity(0.9),
-                    // Soft White
-                    const Color(0xFF80CBC4).withOpacity(0.8),
-                    // Lighter Turquoise
-                    const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
-      ],
+  const Color(0xFF00B4DB).withOpacity(0.5), // Cyan
+  const Color(0xFF0083B0).withOpacity(0.5), // Deep Blue
+  const Color(0xFF6A11CB).withOpacity(0.5), // Purple
+  const Color(0xFFAC58FE).withOpacity(0.7), // Soft Violet
+  const Color(0xFFFD6585).withOpacity(0.5), // Pink
+  Colors.white.withOpacity(0.5),            // Soft White
+],
                     // glowColors: [
                     // const Color(0xFF26A69A).withOpacity(0.8), // Turquoise
                     // const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
@@ -336,47 +330,69 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
                     children: [
                       // Current Prayer Status
                       Text(
-                        'এখন চলছে',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: screenWidth * 0.040, // 4.5% of screen width
-                        ),
+                      'এখন চলছে',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: screenWidth * 0.040, // 4.5% of screen width
+                      ),
                       ),
                       SizedBox(height: screenHeight * 0.001), // 0.1% of screen height
                       // Prayer Name and Time
                       Text(
-                        '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: screenWidth * 0.040, // 5% of screen width
-                          fontWeight: FontWeight.bold,
-                        ),
+                      '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.045, // 5% of screen width
+                        fontWeight: FontWeight.bold,
+                      ),
                       ),
                       SizedBox(height: screenHeight * 0.001), // 0.5% of screen height
                       // Remaining Time
                       Text(
-                        'সময় বাকি: ${_getTimeRemaining()}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: screenWidth * 0.040, // 4.5% of screen width
-                        ),
+                      'সময় বাকি: ${_getTimeRemaining()}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.045, // 4.5% of screen width
+                      ),
                       ),
 
                       // Separator Line
                       Container(
-                        width: screenWidth * 0.55, // 55% of screen width
-                        height: 1,
-                        color: Colors.white.withOpacity(0.3),
-                        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // 0.5% of screen height
+                      width: screenWidth * 0.55, // 55% of screen width
+                      height: 1,
+                      color: Colors.white.withOpacity(0.3),
+                      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // 0.5% of screen height
                       ),
                       // Bottom Times
-                      Text(
-                        'সেহরি শেষ : ${_formatTime(_getNextDayFajr())} | ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
-                        style: TextStyle(
+                      Text.rich(
+                      TextSpan(
+                        children: [
+                        TextSpan(
+                          text: 'সেহরি শেষ : ${_formatTime(_getNextDayFajr())}',
+                          style: TextStyle(
                           color: Colors.yellow.withOpacity(0.8),
-                          fontSize: screenWidth * 0.027, // 3% of screen width
+                          fontSize: screenWidth * 0.027, // 2.7% of screen width
                           fontWeight: FontWeight.bold,
+                          ),
                         ),
+                        TextSpan(
+                          text: ' | ',
+                          style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenWidth * 0.027, // 2.7% of screen width
+                          fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
+                          style: TextStyle(
+                          color: Colors.yellow.withOpacity(0.8),
+                          fontSize: screenWidth * 0.027, // 2.7% of screen width
+                          fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        ],
+                      ),
                       ),
                     ],
                   ),
@@ -421,7 +437,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
         color: isActivePrayer
             ? const Color.fromARGB(255, 255, 255, 255)
                 .withOpacity(0.8) // Active card color
-            : Colors.white.withOpacity(0.2), // Default card color
+            : Colors.teal.withOpacity(0.5), // Default card color
         borderRadius: BorderRadius.circular(screenWidth * 0.03), // 3% of screen width
       ),
       child: Column(
@@ -447,13 +463,13 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
+          // SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
           Text(
             _formatTime(time),
             style: TextStyle(
               color: isActivePrayer
-                  ? const Color.fromARGB(255, 0, 190, 165)
-                  : Colors.white,
+                    ? Colors.black
+                  : Colors.black,
               fontSize: screenWidth * 0.027, // 3% of screen width
             ),
             textAlign: TextAlign.center,
@@ -494,7 +510,16 @@ class GlowingBorderPainter extends CustomPainter {
       ..strokeWidth = 2.0
       ..shader = SweepGradient(
         colors: glowColors, // Use the list of colors
-        stops: [0.0, 0.16, 0.33, 0.5, 0.66, 0.83], // Adjust stops for each color
+        stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0], // Adjust stops for smooth spinning
+//                 stops: [
+//   0.0,  // Cyan
+//   0.25, // Deep Blue
+//   0.5,  // Purple
+//   0.65, // Soft Violet
+//   0.85,   // Pink
+// 1
+
+// ],
         startAngle: 0,
         endAngle: math.pi * 2,
         transform: GradientRotation(progress * math.pi * 2),

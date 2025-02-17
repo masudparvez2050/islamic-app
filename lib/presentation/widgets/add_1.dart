@@ -98,11 +98,11 @@ class _Advertisement1State extends State<Advertisement1> {
         // Custom Banner Carousel
         Container(
           width: double.infinity,
-          height: screenHeight * 0.06, // Adjust height as needed
+          height: screenHeight * 0.08, // Adjust height as needed
           child: CarouselSlider(
             options: CarouselOptions(
               autoPlay: true,
-              autoPlayInterval: Duration(seconds: 6),
+              autoPlayInterval: Duration(seconds: 24),
               autoPlayAnimationDuration: Duration(milliseconds: 1200),
               autoPlayCurve: Curves.fastOutSlowIn,
               viewportFraction: 1.0,
