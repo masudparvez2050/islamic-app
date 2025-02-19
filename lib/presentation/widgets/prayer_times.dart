@@ -295,14 +295,15 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
               return CustomPaint(
                 foregroundPainter: GlowingBorderPainter(
                   progress: _controller.value,
-                  glowColors: [
-  const Color(0xFF00B4DB).withOpacity(0.5), // Cyan
-  const Color(0xFF0083B0).withOpacity(0.5), // Deep Blue
-  const Color(0xFF6A11CB).withOpacity(0.5), // Purple
-  const Color(0xFFAC58FE).withOpacity(0.7), // Soft Violet
-  const Color(0xFFFD6585).withOpacity(0.5), // Pink
-  Colors.white.withOpacity(0.5),            // Soft White
-],
+                    glowColors: [
+                    Colors.red.withOpacity(0.8),
+                    Colors.orange.withOpacity(0.8),
+                    Colors.yellow.withOpacity(0.8),
+                    Colors.green.withOpacity(0.8),
+                    Colors.blue.withOpacity(0.8),
+                    Colors.indigo.withOpacity(0.8),
+                    Colors.purple.withOpacity(0.8),
+                    ],
                     // glowColors: [
                     // const Color(0xFF26A69A).withOpacity(0.8), // Turquoise
                     // const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
@@ -468,8 +469,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
             _formatTime(time),
             style: TextStyle(
               color: isActivePrayer
-                    ? Colors.black
-                  : Colors.black,
+                    ? Colors.teal
+                  : Colors.white,
               fontSize: screenWidth * 0.027, // 3% of screen width
             ),
             textAlign: TextAlign.center,
@@ -510,21 +511,11 @@ class GlowingBorderPainter extends CustomPainter {
       ..strokeWidth = 2.0
       ..shader = SweepGradient(
         colors: glowColors, // Use the list of colors
-        stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0], // Adjust stops for smooth spinning
-//                 stops: [
-//   0.0,  // Cyan
-//   0.25, // Deep Blue
-//   0.5,  // Purple
-//   0.65, // Soft Violet
-//   0.85,   // Pink
-// 1
-
-// ],
+        stops: List.generate(glowColors.length, (index) => index / (glowColors.length - 1)), // Smooth stops
         startAngle: 0,
         endAngle: math.pi * 2,
         transform: GradientRotation(progress * math.pi * 2),
       ).createShader(rect);
-
     // Draw the glowing border
     canvas.drawRRect(rrect, paint);
   }

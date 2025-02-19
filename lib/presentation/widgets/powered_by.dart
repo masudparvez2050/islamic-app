@@ -39,22 +39,22 @@ class PoweredBy extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Powered by text
-          Text(
-            'পাওয়ার বাই Al Huda Academy',
-            style: TextStyle(
-              color: Colors.teal,
-              fontSize: width * 0.05,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
+          // Text(
+          //   'পাওয়ার বাই Al Huda Academy',
+          //   style: TextStyle(
+          //     color: Colors.teal,
+          //     fontSize: width * 0.05,
+          //     fontWeight: FontWeight.w800,
+          //   ),
+          // ),
           // Separator line
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: height * 0.01, horizontal: width * 0.1),
-            child: Container(
-              height: height * 0.001,
-              color: Colors.teal.withOpacity(0.5),
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.symmetric(vertical: height * 0.01, horizontal: width * 0.1),
+          //   child: Container(
+          //     height: height * 0.001,
+          //     color: Colors.teal.withOpacity(0.5),
+          //   ),
+          // ),
           // Feedback text
           Padding(
             padding: EdgeInsets.symmetric(vertical: height * 0.015),

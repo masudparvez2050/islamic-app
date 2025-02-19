@@ -4,7 +4,6 @@ import 'package:religion/presentation/widgets/time_display.dart';
 import 'package:religion/presentation/widgets/prayer_times.dart';
 import 'package:religion/presentation/widgets/features.dart';
 import 'package:religion/presentation/widgets/top_features.dart';
-import 'package:religion/presentation/widgets/donation_carousel.dart';
 import 'package:religion/presentation/widgets/add_1.dart';
 import 'package:religion/presentation/widgets/add_2.dart';
 import 'package:religion/presentation/widgets/text_slide.dart';
@@ -86,8 +85,7 @@ class HomeScreen extends StatelessWidget {
                       TopFeatures(),
                       SizedBox(height: height * 0.02),
                       Features(),
-                      SizedBox(height: height * 0.02),
-                      // DonationCarousel(),
+                      
                       PoweredBy(),
                       Footer(),
                       SizedBox(height: height * 0.07), // Add padding for bottom nav bar
@@ -143,8 +141,6 @@ class HomeScreen extends StatelessWidget {
                       TopFeatures(),
                       SizedBox(height: height * 0.02),
                       Features(),
-                      SizedBox(height: height * 0.02),
-                      // DonationCarousel(),
                       PoweredBy(),
                       Footer(),
                       SizedBox(height: height * 0.07), // Add padding for bottom nav bar
