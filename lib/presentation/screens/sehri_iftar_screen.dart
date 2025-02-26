@@ -110,7 +110,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: screenHeight * 0.07), // Responsive bottom padding
+            padding: EdgeInsets.only(bottom: screenHeight * 0.07), // Responsive bottom paddingr
             child: Column(
               children: [
                 ResponsiveHeader(
@@ -207,28 +207,43 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
   }
 
   Widget _buildTimeCard(
-    String date,
-    DateTime sehriTime,
-    DateTime iftarTime,
-    bool isSehriActive,
-    bool isIftarActive,
-    String sehriTimeLeft,
-    String iftarTimeLeft,
-    String hijriDate,
-    bool isCurrentDay,
-  ) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+  String date,
+  DateTime sehriTime,
+  DateTime iftarTime,
+  bool isSehriActive,
+  bool isIftarActive,
+  String sehriTimeLeft,
+  String iftarTimeLeft,
+  String hijriDate,
+  bool isCurrentDay,
+) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final screenHeight = MediaQuery.of(context).size.height;
 
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.04),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: const Color(0xFF00BFA5), width: 1),
+  return Card(
+    margin: EdgeInsets.symmetric(
+      vertical: screenHeight * 0.006, // Reduced vertical margin
+      horizontal: screenWidth * 0.03, // Reduced horizontal margin
+    ),
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: const Color(0xFF00BFA5).withOpacity(0.7), width: 1),
+      borderRadius: BorderRadius.circular(screenWidth * 0.03),
+    ),
+    elevation: 2,
+    child: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white,
+            Colors.white.withOpacity(0.9),
+          ],
+        ),
         borderRadius: BorderRadius.circular(screenWidth * 0.03),
       ),
-      elevation: 2,
       child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04),
+        padding: EdgeInsets.all(screenWidth * 0.035), // Reduced padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -239,57 +254,97 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
                   date,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: screenWidth * 0.045,
+                    fontSize: screenWidth * 0.04, // Slightly reduced font size
                     color: const Color(0xFF00BFA5),
                   ),
                 ),
                 Text(
                   hijriDate,
                   style: TextStyle(
-                    fontSize: screenWidth * 0.035,
-                    color: Colors.grey,
+                    fontSize: screenWidth * 0.03, // Reduced font size
+                    color: Colors.grey[600],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: screenHeight * 0.01),
+            SizedBox(height: screenHeight * 0.008), // Reduced spacing
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'সেহরি: ${DateFormat.jm('bn').format(sehriTime)}',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.04,
-                    color: Colors.black87,
-                  ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.wb_sunny_outlined, // Sunrise icon for Sehri
+                      color: const Color(0xFF00BFA5),
+                      size: screenWidth * 0.04,
+                    ),
+                    SizedBox(width: screenWidth * 0.02),
+                    Text(
+                      'সেহরি: ${DateFormat.jm('bn').format(sehriTime)}',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.035, // Reduced font size
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
                 ),
                 if (isCurrentDay && isSehriActive)
-                  Text(
-                    'বাকি: $sehriTimeLeft',
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.035,
-                      color: Colors.red,
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.015,
+                      vertical: screenHeight * 0.002,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                    ),
+                    child: Text(
+                      'বাকি: $sehriTimeLeft',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.03, // Reduced font size
+                        color: Colors.red,
+                      ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: screenHeight * 0.01),
+            SizedBox(height: screenHeight * 0.008), // Reduced spacing
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'ইফতার: ${DateFormat.jm('bn').format(iftarTime)}',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.04,
-                    color: Colors.black87,
-                  ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.nights_stay, // Sunset icon for Iftar
+                      color: const Color(0xFF00BFA5),
+                      size: screenWidth * 0.04,
+                    ),
+                    SizedBox(width: screenWidth * 0.02),
+                    Text(
+                      'ইফতার: ${DateFormat.jm('bn').format(iftarTime)}',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.035, // Reduced font size
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
                 ),
                 if (isCurrentDay && isIftarActive)
-                  Text(
-                    'বাকি: $iftarTimeLeft',
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.035,
-                      color: Colors.red,
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.015,
+                      vertical: screenHeight * 0.002,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                    ),
+                    child: Text(
+                      'বাকি: $iftarTimeLeft',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.03, // Reduced font size
+                        color: Colors.red,
+                      ),
                     ),
                   ),
               ],
@@ -297,8 +352,9 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   String _getTimeLeft(DateTime endTime) {
     final now = DateTime.now();

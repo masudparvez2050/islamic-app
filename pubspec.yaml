@@ -27,8 +27,7 @@ dependencies:
   http: ^0.13.3
   video_player: ^2.9.3
   youtube_player_flutter: ^9.1.1
-  
-  
+  audioplayers: ^6.2.0
 
   # google_mobile_ads: ^5.3.1
 
