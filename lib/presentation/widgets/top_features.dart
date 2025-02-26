@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:religion/presentation/screens/quran_screen.dart';
 import 'package:religion/presentation/screens/book_library_screen.dart';
+import 'package:religion/presentation/screens/video_library_screen.dart';
 
 class TopFeatures extends StatelessWidget {
   const TopFeatures({Key? key}) : super(key: key);
@@ -42,7 +43,7 @@ class TopFeatures extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const BookLibraryScreen()));
+                                  const VideoLibraryScreen()));
                       break;
                   }
                 });

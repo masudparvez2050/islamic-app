@@ -1,59 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/book_details_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
+import 'package:religion/presentation/screens/book_details_screen.dart';
 import 'package:religion/presentation/widgets/add_2.dart';
 
-class BookLibraryScreen extends StatelessWidget {
+class BookLibraryScreen extends StatefulWidget {
   const BookLibraryScreen({Key? key}) : super(key: key);
 
-  final List<Map<String, String>> books = const [
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    {
-      'title': 'সহীহ আল-বুখারী',
-      'author': 'ইমাম বুখারী',
-      'imageUrl': 'https://www.ruhamashop.com/wp-content/uploads/2021/06/sahih-bukhari-sharif-bangla.jpg'
-    },
-    // Add more books here
-  ];
+  @override
+  _BookLibraryScreenState createState() => _BookLibraryScreenState();
+}
+
+class _BookLibraryScreenState extends State<BookLibraryScreen> {
+  List<Map<String, dynamic>> books = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBooks();
+  }
+
+  Future<void> fetchBooks() async {
+    final response = await http.get(Uri.parse('https://api.alhudabd.com/library/buybook/api'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        books = data.map((book) {
+          return {
+            'title': book['title'],
+            'imageUrl': 'https://api.alhudabd.com/${book['image']}',
+            'link': book['link'],
+            'author': book['author'] ?? 'অজানা',
+          };
+        }).toList();
+        isLoading = false;
+      });
+    } else {
+      throw Exception('Failed to load books');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,36 +55,40 @@ class BookLibraryScreen extends StatelessWidget {
           'ইসলামিক বইসমূহ',
           style: TextStyle(
             color: Colors.white,
-            fontSize: screenWidth * 0.06, // Adjust font size based on screen width
+            fontSize: screenWidth * 0.06,
             fontWeight: FontWeight.bold,
           ),
         ),
         iconTheme: IconThemeData(
-          color: Colors.white, // Set the back button color to white
+          color: Colors.white,
         ),
         backgroundColor: const Color(0xFF00BFA5),
       ),
       body: Column(
         children: [
           Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.all(screenWidth * 0.04),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.65,
-                crossAxisSpacing: screenWidth * 0.04,
-                mainAxisSpacing: screenWidth * 0.04,
-              ),
-              itemCount: books.length,
-              itemBuilder: (context, index) {
-                return _buildBookCard(context, index, screenWidth, screenHeight);
-              },
-            ),
+            child: isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : GridView.builder(
+                    padding: EdgeInsets.all(screenWidth * 0.04),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.55, // Adjusted for more content space
+                      crossAxisSpacing: screenWidth * 0.04,
+                      mainAxisSpacing: screenWidth * 0.04,
+                    ),
+                    itemCount: books.length,
+                    itemBuilder: (context, index) {
+                      return _buildBookCard(context, index, screenWidth, screenHeight);
+                    },
+                  ),
           ),
           SizedBox(
-            height: screenHeight * 0.05, // Adjust the height as needed
+            height: screenHeight * 0.05,
             child: Advertisement2(),
-          ), // Add the Advertisement2 widget here
+          ),
         ],
       ),
     );
@@ -110,7 +102,12 @@ class BookLibraryScreen extends StatelessWidget {
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const BookDetailsScreen(),
+                 BookDetailsScreen(
+              title: book['title'],
+              imageUrl: book['imageUrl'],
+              author: book['author'],
+              link: book['link'],
+            ),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
@@ -125,27 +122,26 @@ class BookLibraryScreen extends StatelessWidget {
         );
       },
       child: Card(
-        color: Colors.teal, // Set background color to teal
+        color: Colors.teal,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(screenWidth * 0.02)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius:
-              BorderRadius.vertical(top: Radius.circular(screenWidth * 0.02)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(screenWidth * 0.02)),
               child: Image.network(
                 book['imageUrl']!,
-                height: screenHeight * 0.25,
+                height: screenHeight * 0.3, // Slightly reduced height
                 width: double.infinity,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
                     child: Container(
-                      height: screenHeight * 0.25,
+                      height: screenHeight * 0.3,
                       width: double.infinity,
                       color: Colors.white,
                     ),
@@ -156,7 +152,7 @@ class BookLibraryScreen extends StatelessWidget {
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
                     child: Container(
-                      height: screenHeight * 0.25,
+                      height: screenHeight * 0.3,
                       width: double.infinity,
                       color: Colors.white,
                     ),
@@ -164,27 +160,36 @@ class BookLibraryScreen extends StatelessWidget {
                 },
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(screenWidth * 0.02),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${book['title']} ${index + 1}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: screenWidth * 0.04,
-                      color: Colors.white,
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(screenWidth * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        book['title']!,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: screenWidth * 0.035,
+                          color: Colors.white,
+                          height: 1.2,
+                        ),
+                        overflow: TextOverflow.fade,
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  Text(
-                    book['author']!,
-                    style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: screenWidth * 0.035),
-                  ),
-                ],
+                    SizedBox(height: screenHeight * 0.005),
+                    Text(
+                       'লেখক: ${book['author'] ?? 'অজানা'}',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: screenWidth * 0.03,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -193,3 +198,4 @@ class BookLibraryScreen extends StatelessWidget {
     );
   }
 }
+

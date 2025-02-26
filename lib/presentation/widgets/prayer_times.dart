@@ -111,17 +111,18 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
     if (now.isBefore(_prayerTimes!.fajr)) return _prayerTimes!.fajr;
     if (now.isBefore(_prayerTimes!.sunrise)) return _prayerTimes!.sunrise;
     if (now.isBefore(_getIshraqTime())) return _getIshraqTime();
+    if (now.isBefore(_getChashtStartTime())) return _getChashtStartTime();
+    if (now.isBefore(_getZawalStartTime())) return _prayerTimes!.dhuhr;
     if (now.isBefore(_prayerTimes!.dhuhr)) return _prayerTimes!.dhuhr;
     if (now.isBefore(_prayerTimes!.asr)) return _prayerTimes!.asr;
+    if (now.isBefore(_getSunsetForbiddenStart())) return _prayerTimes!.maghrib;
     if (now.isBefore(_prayerTimes!.maghrib)) return _prayerTimes!.maghrib;
     if (now.isBefore(_prayerTimes!.isha)) return _prayerTimes!.isha;
     if (now.isBefore(_getTahajjudTime())) return _getTahajjudTime();
 
-    // If past tahajjud, calculate tomorrow's fajr
     final tomorrow = DateTime.now().add(const Duration(days: 1));
     final tomorrowPrayers = PrayerTimes.today(
-      Coordinates(_currentPosition?.latitude ?? 23.8103,
-          _currentPosition?.longitude ?? 90.4125),
+      Coordinates(_currentPosition?.latitude ?? 23.8103, _currentPosition?.longitude ?? 90.4125),
       CalculationMethod.karachi.getParameters(),
     );
     return tomorrowPrayers.fajr;
@@ -133,97 +134,47 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
 
     if (now.isBefore(_prayerTimes!.fajr)) return 'তাহাজ্জুদ';
     if (now.isBefore(_prayerTimes!.sunrise)) return 'ফজর';
-    if (now.isBefore(_getIshraqTime())) return 'সূর্যোদয়';
-    if (now.isBefore(_prayerTimes!.dhuhr)) return 'ইশরাক';
+    if (now.isBefore(_getIshraqTime())) return 'নিষিদ্ধ সময়';
+    if (now.isBefore(_getChashtStartTime())) return 'ইশরাক';
+    if (now.isBefore(_getZawalStartTime())) return 'চাশত';
+    if (now.isBefore(_prayerTimes!.dhuhr)) return 'নিষিদ্ধ সময়';
     if (now.isBefore(_prayerTimes!.asr)) {
       return DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর';
     }
-    if (now.isBefore(_prayerTimes!.maghrib)) return 'আসর';
+    if (now.isBefore(_getSunsetForbiddenStart())) return 'আসর';
+    if (now.isBefore(_prayerTimes!.maghrib)) return 'নিষিদ্ধ সময় ';
     if (now.isBefore(_prayerTimes!.isha)) return 'মাগরিব';
     if (now.isBefore(_getTahajjudTime())) return 'ইশা';
     return 'তাহাজ্জুদ';
   }
 
-  IconData _getPrayerIcon(String prayerName) {
-    final prayerTimes = [
-      {
-        'name': 'ফজর',
-        'startTime': _prayerTimes?.fajr,
-        'endTime': _prayerTimes?.sunrise,
-        'icon': Icons.wb_twilight
-      },
-      {
-        'name': 'সূর্যোদয়',
-        'startTime': _prayerTimes?.sunrise,
-        'endTime': _getIshraqTime(),
-        'icon': Icons.wb_sunny
-      },
-      {
-        'name': 'ইশরাক',
-        'startTime': _getIshraqTime(),
-        'endTime': _prayerTimes?.dhuhr,
-        'icon': Icons.wb_sunny_outlined
-      },
-      {
-        'name': DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
-        'startTime': _prayerTimes?.dhuhr,
-        'endTime': _prayerTimes?.asr,
-        'icon': Icons.wb_sunny
-      },
-      {
-        'name': 'আসর',
-        'startTime': _prayerTimes?.asr,
-        'endTime': _prayerTimes?.maghrib,
-        'icon': Icons.wb_cloudy
-      },
-      {
-        'name': 'মাগরিব',
-        'startTime': _prayerTimes?.maghrib,
-        'endTime': _prayerTimes?.isha,
-        'icon': Icons.nights_stay
-      },
-      {
-        'name': 'ইশা',
-        'startTime': _prayerTimes?.isha,
-        'endTime': _getNextDayFajr(),
-        'icon': Icons.star
-      },
-      {
-        'name': 'তাহাজ্জুদ',
-        'startTime': _getTahajjudTime(),
-        'endTime': _prayerTimes?.fajr,
-        'icon': Icons.nightlight_round
-      },
-    ];
-
-    final prayer = prayerTimes.firstWhere(
-      (p) => p['name'] == prayerName,
-      orElse: () => {'icon': Icons.error}, // Default icon if not found
-    );
-    return prayer['icon'] as IconData;
-  }
-
   DateTime _getPrayerStartTime(String prayer) {
     if (_prayerTimes == null) return DateTime.now();
-    final jumma = DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর';
 
     switch (prayer) {
-      case 'তাহাজ্জুদ':
-        return _getTahajjudTime();
       case 'ফজর':
         return _prayerTimes!.fajr;
-      case 'সূর্যোদয়':
+      case 'নিষিদ্ধ সময়':
         return _prayerTimes!.sunrise;
       case 'ইশরাক':
         return _getIshraqTime();
-      case "জুম'আ" || 'জোহর':
+      case 'চাশত':
+        return _getChashtStartTime();
+      case 'নিষিদ্ধ সময়':
+        return _getZawalStartTime();
+      case "জুম'আ":
+      case 'জোহর':
         return _prayerTimes!.dhuhr;
       case 'আসর':
         return _prayerTimes!.asr;
+      case 'নিষিদ্ধ সময়':
+        return _getSunsetForbiddenStart();
       case 'মাগরিব':
         return _prayerTimes!.maghrib;
       case 'ইশা':
         return _prayerTimes!.isha;
+      case 'তাহাজ্জুদ':
+        return _getTahajjudTime();
       default:
         return DateTime.now();
     }
@@ -233,30 +184,54 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
     if (_prayerTimes == null) return DateTime.now();
 
     switch (prayer) {
-      case 'তাহাজ্জুদ':
-        return _prayerTimes!.fajr;
       case 'ফজর':
         return _prayerTimes!.sunrise;
-      case 'সূর্যোদয়':
+      case 'নিষিদ্ধ সময়':
         return _getIshraqTime();
       case 'ইশরাক':
+        return _getChashtStartTime();
+      case 'চাশত':
+        return _getZawalStartTime();
+      case 'নিষিদ্ধ সময়':
         return _prayerTimes!.dhuhr;
-      case "জুম'আ" || 'জোহর':
+      case "জুম'আ":
+      case 'জোহর':
         return _prayerTimes!.asr;
       case 'আসর':
+        return _getSunsetForbiddenStart();
+      case 'নিষিদ্ধ সময়':
         return _prayerTimes!.maghrib;
       case 'মাগরিব':
         return _prayerTimes!.isha;
       case 'ইশা':
-        return _getTahajjudTime();
+        return _getNextDayFajr();
+      case 'তাহাজ্জুদ':
+        return _prayerTimes!.fajr.add(const Duration(days: 1));
       default:
         return DateTime.now();
     }
   }
 
+  IconData _getPrayerIcon(String prayerName) {
+    final prayerIcons = {
+      'ফজর': Icons.wb_twilight,
+      'নিষিদ্ধ সময়': Icons.block,
+      'ইশরাক': Icons.wb_sunny_outlined,
+      'চাশত': Icons.wb_sunny_outlined,
+      'নিষিদ্ধ সময়': Icons.block,
+      "জুম'আ": Icons.wb_sunny,
+      'জোহর': Icons.wb_sunny,
+      'আসর': Icons.wb_cloudy,
+      'নিষিদ্ধ সময়': Icons.block,
+      'মাগরিব': Icons.nights_stay,
+      'ইশা': Icons.star,
+      'তাহাজ্জুদ': Icons.nightlight_round,
+    };
+    return prayerIcons[prayerName] ?? Icons.error;
+  }
+
   DateTime _getTahajjudTime() {
     if (_prayerTimes == null) return DateTime.now();
-
     final isha = _prayerTimes!.isha;
     final fajr = _prayerTimes!.fajr.add(const Duration(days: 1));
     final midpoint = isha.add(fajr.difference(isha) ~/ 2);
@@ -268,13 +243,26 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
     return _prayerTimes!.sunrise.add(const Duration(minutes: 20));
   }
 
+  DateTime _getChashtStartTime() {
+    if (_prayerTimes == null) return DateTime.now();
+    return _prayerTimes!.sunrise.add(const Duration(hours: 1));
+  }
+
+  DateTime _getZawalStartTime() {
+    if (_prayerTimes == null) return DateTime.now();
+    return _prayerTimes!.dhuhr.subtract(const Duration(minutes: 15));
+  }
+
+  DateTime _getSunsetForbiddenStart() {
+    if (_prayerTimes == null) return DateTime.now();
+    return _prayerTimes!.maghrib.subtract(const Duration(minutes: 5));
+  }
+
   DateTime _getNextDayFajr() {
     if (_prayerTimes == null) return DateTime.now();
-
     final tomorrow = DateTime.now().add(const Duration(days: 1));
     final tomorrowPrayers = PrayerTimes.today(
-      Coordinates(_currentPosition?.latitude ?? 23.8103,
-          _currentPosition?.longitude ?? 90.4125),
+      Coordinates(_currentPosition?.latitude ?? 23.8103, _currentPosition?.longitude ?? 90.4125),
       CalculationMethod.karachi.getParameters(),
     );
     return tomorrowPrayers.fajr;
@@ -288,14 +276,14 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // 4% of screen width
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
               return CustomPaint(
                 foregroundPainter: GlowingBorderPainter(
                   progress: _controller.value,
-                    glowColors: [
+                  glowColors: [
                     Colors.red.withOpacity(0.8),
                     Colors.orange.withOpacity(0.8),
                     Colors.yellow.withOpacity(0.8),
@@ -303,97 +291,82 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
                     Colors.blue.withOpacity(0.8),
                     Colors.indigo.withOpacity(0.8),
                     Colors.purple.withOpacity(0.8),
-                    ],
-                    // glowColors: [
-                    // const Color(0xFF26A69A).withOpacity(0.8), // Turquoise
-                    // const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
-                    // const Color(0xFF80CBC4).withOpacity(0.8), // Light Turquoise
-                    // Colors.white.withOpacity(0.9), // Soft White
-                    // const Color(0xFF80CBC4).withOpacity(0.8), // Light Turquoise
-                    // const Color(0xFF4DB6AC).withOpacity(0.8), // Medium Turquoise
-                    // const Color(0xFF26A69A).withOpacity(0.8), // Turquoise
-                    // ],
-                  borderRadius: screenWidth * 1, // 10% of screen width
+                  ],
+                  borderRadius: screenWidth * 1,
                 ),
                 child: Container(
                   width: double.infinity,
-                  margin: EdgeInsets.all(screenWidth * 0.01), // 1% of screen width
+                  margin: EdgeInsets.all(screenWidth * 0.01),
                   padding: EdgeInsets.symmetric(
-                    vertical: screenHeight * 0.005, // 0.5% of screen height
-                    horizontal: screenWidth * 0.06, // 6% of screen width
+                    vertical: screenHeight * 0.005,
+                    horizontal: screenWidth * 0.06,
                   ),
                   decoration: BoxDecoration(
                     color: Colors.teal.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(screenWidth * 1), // 10% of screen width
+                    borderRadius: BorderRadius.circular(screenWidth * 1),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Current Prayer Status
                       Text(
-                      'এখন চলছে',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontSize: screenWidth * 0.040, // 4.5% of screen width
-                      ),
-                      ),
-                      SizedBox(height: screenHeight * 0.001), // 0.1% of screen height
-                      // Prayer Name and Time
-                      Text(
-                      '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.045, // 5% of screen width
-                        fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      SizedBox(height: screenHeight * 0.001), // 0.5% of screen height
-                      // Remaining Time
-                      Text(
-                      'সময় বাকি: ${_getTimeRemaining()}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.045, // 4.5% of screen width
-                      ),
-                      ),
-
-                      // Separator Line
-                      Container(
-                      width: screenWidth * 0.55, // 55% of screen width
-                      height: 1,
-                      color: Colors.white.withOpacity(0.3),
-                      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // 0.5% of screen height
-                      ),
-                      // Bottom Times
-                      Text.rich(
-                      TextSpan(
-                        children: [
-                        TextSpan(
-                          text: 'সেহরি শেষ : ${_formatTime(_getNextDayFajr())}',
-                          style: TextStyle(
-                          color: Colors.yellow.withOpacity(0.8),
-                          fontSize: screenWidth * 0.027, // 2.7% of screen width
-                          fontWeight: FontWeight.bold,
-                          ),
+                        'এখন চলছে',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: screenWidth * 0.045,
                         ),
-                        TextSpan(
-                          text: ' | ',
-                          style: TextStyle(
+                      ),
+                      SizedBox(height: screenHeight * 0.001),
+                      Text(
+                        '${_getCurrentPrayer()} | ${_formatTime(_getPrayerStartTime(_getCurrentPrayer()))} - ${_formatTime(_getPrayerEndTime(_getCurrentPrayer()))}',
+                        style: TextStyle(
                           color: Colors.white,
-                          fontSize: screenWidth * 0.027, // 2.7% of screen width
+                          fontSize: screenWidth * 0.048,
                           fontWeight: FontWeight.bold,
-                          ),
                         ),
-                        TextSpan(
-                          text: 'ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
-                          style: TextStyle(
-                          color: Colors.yellow.withOpacity(0.8),
-                          fontSize: screenWidth * 0.027, // 2.7% of screen width
-                          fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        ],
                       ),
+                      SizedBox(height: screenHeight * 0.001),
+                      Text(
+                        'সময় বাকি: ${_getTimeRemaining()}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenWidth * 0.048,
+                        ),
+                      ),
+                      Container(
+                        width: screenWidth * 0.55,
+                        height: 1,
+                        color: Colors.white.withOpacity(0.3),
+                        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.005),
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'সেহরি শেষ : ${_formatTime(_getNextDayFajr())}',
+                              style: TextStyle(
+                                color: Colors.yellow.withOpacity(0.8),
+                                fontSize: screenWidth * 0.03,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' | ',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: screenWidth * 0.03,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'ইফতার শুরু : ${_formatTime(_prayerTimes?.maghrib)}',
+                              style: TextStyle(
+                                color: Colors.yellow.withOpacity(0.8),
+                                fontSize: screenWidth * 0.03,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -402,93 +375,93 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
             },
           ),
         ),
-        
-        SizedBox(height: screenHeight * 0.01), // 1% of screen height
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
-            _buildPrayerTimeCard(
-                _prayerTimes?.dhuhr,
-                DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
-                Icons.wb_sunny),
-            _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
-            _buildPrayerTimeCard(
-                _prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
-            _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
-          ],
+        SizedBox(height: screenHeight * 0.01),
+        // Replacing Row with GridView for all prayer times
+        SizedBox(
+          height: screenHeight * 0.07, // Adjust height as needed
+          child: GridView.count(
+            crossAxisCount: 5,
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+           
+            mainAxisSpacing: screenHeight * 0.01,
+            crossAxisSpacing: screenWidth * 0.02,
+            children: [
+              _buildPrayerTimeCard(_prayerTimes?.fajr, 'ফজর', Icons.wb_twilight),
+              // _buildPrayerTimeCard(_prayerTimes?.sunrise, 'নিষিদ্ধ সময় (সূর্যোদয়)', Icons.block),
+              // _buildPrayerTimeCard(_getIshraqTime(), 'ইশরাক', Icons.wb_sunny_outlined),
+              // _buildPrayerTimeCard(_getChashtStartTime(), 'চাশত', Icons.wb_sunny_outlined),
+              // _buildPrayerTimeCard(_getZawalStartTime(), 'নিষিদ্ধ সময় (জাওয়াল)', Icons.block),
+              _buildPrayerTimeCard(
+                  _prayerTimes?.dhuhr,
+                  DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
+                  Icons.wb_sunny),
+              _buildPrayerTimeCard(_prayerTimes?.asr, 'আসর', Icons.wb_cloudy),
+              // _buildPrayerTimeCard(_getSunsetForbiddenStart(), 'নিষিদ্ধ সময় (সূর্যাস্তের আগে)', Icons.block),
+              _buildPrayerTimeCard(_prayerTimes?.maghrib, 'মাগরিব', Icons.nights_stay),
+              _buildPrayerTimeCard(_prayerTimes?.isha, 'ইশা', Icons.star),
+              // _buildPrayerTimeCard(_getTahajjudTime(), 'তাহাজ্জুদ', Icons.nightlight_round),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildPrayerTimeCard(DateTime? time, String name, IconData icon) {
-    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
-    final cardWidth =
-        screenWidth / 5 - screenWidth * 0.02; // 1/5th of the width with padding adjustment
+ Widget _buildPrayerTimeCard(DateTime? time, String name, IconData icon) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final isActivePrayer = name == _getCurrentPrayer();
 
-    // Determine if this card represents the active prayer
-    final isActivePrayer = name == _getCurrentPrayer();
-
-    return Container(
-      width: cardWidth,
-      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.005), // Adjust horizontal margin
-      padding: EdgeInsets.all(screenWidth * 0.01), // 1% of screen width
-      decoration: BoxDecoration(
-        color: isActivePrayer
-            ? const Color.fromARGB(255, 255, 255, 255)
-                .withOpacity(0.8) // Active card color
-            : Colors.teal.withOpacity(0.5), // Default card color
-        borderRadius: BorderRadius.circular(screenWidth * 0.03), // 3% of screen width
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Icon(
-          //   icon,
-          //   color: isActivePrayer
-          //       ? const Color.fromARGB(255, 0, 190, 165)
-          //       : Colors.white,
-          //   size: screenWidth * 0.06, // 6% of screen width
-          // ),
-          // SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
-          Text(
-            name,
-            style: TextStyle(
-              color: isActivePrayer
-                  ? const Color.fromARGB(255, 0, 190, 165)
-                  : Colors.white,
-              fontSize: screenWidth * 0.035, // 3.5% of screen width
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
+  return Container(
+    // padding: EdgeInsets.symmetric(
+    //   vertical: screenWidth * 0.005,   // ভার্টিকাল প্যাডিং কমানো (0.5% of screen width)
+    //   horizontal: screenWidth * 0.01,  // হরাইজন্টাল প্যাডিং আগের মতোই
+    // ),
+    padding: EdgeInsets.only( // Using EdgeInsets.only for custom padding
+      // left: screenWidth * 0.05,  // Left padding (horizontal)
+      // right: screenWidth * 0.05, // Right padding (horizontal)
+      top: screenHeight * 0.0005, // Top padding (vertical)
+      bottom: screenHeight * 0.02, // Bottom padding (vertical)
+    ),
+    decoration: BoxDecoration(
+      color: isActivePrayer
+          ? const Color.fromARGB(255, 255, 255, 255).withOpacity(0.8)
+          : Colors.teal.withOpacity(0.5),
+      borderRadius: BorderRadius.circular(screenWidth * 0.03),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+            color: isActivePrayer ? const Color.fromARGB(255, 0, 190, 165) : Colors.white,
+            fontSize: screenWidth * 0.035,
+            fontWeight: FontWeight.w500,
           ),
-          // SizedBox(height: screenHeight * 0.005), // 0.5% of screen height
-          Text(
-            _formatTime(time),
-            style: TextStyle(
-              color: isActivePrayer
-                    ? Colors.teal
-                  : Colors.white,
-              fontSize: screenWidth * 0.027, // 3% of screen width
-            ),
-            textAlign: TextAlign.center,
+          textAlign: TextAlign.center,
+        ),
+        Text(
+          _formatTime(time),
+          style: TextStyle(
+            color: isActivePrayer ? Colors.teal : Colors.white,
+            fontSize: screenWidth * 0.027,
           ),
-        ],
-      ),
-    );
-  }
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
+}
 
   String _formatTime(DateTime? time) {
     if (time == null) return '--:--';
-    return DateFormat('hh:mm a','bn' ).format(time);
+    return DateFormat('hh:mm a', 'bn').format(time);
   }
 }
 
 class GlowingBorderPainter extends CustomPainter {
   final double progress;
-  final List<Color> glowColors; // Use a list of colors
+  final List<Color> glowColors;
   final double borderRadius;
 
   GlowingBorderPainter({
@@ -500,23 +473,19 @@ class GlowingBorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final rrect = RRect.fromRectAndRadius(
-      rect,
-      Radius.circular(borderRadius),
-    );
+    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(borderRadius));
 
-    // Create gradient for glow effect
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0
       ..shader = SweepGradient(
-        colors: glowColors, // Use the list of colors
-        stops: List.generate(glowColors.length, (index) => index / (glowColors.length - 1)), // Smooth stops
+        colors: glowColors,
+        stops: List.generate(glowColors.length, (index) => index / (glowColors.length - 1)),
         startAngle: 0,
         endAngle: math.pi * 2,
         transform: GradientRotation(progress * math.pi * 2),
       ).createShader(rect);
-    // Draw the glowing border
+
     canvas.drawRRect(rrect, paint);
   }
 

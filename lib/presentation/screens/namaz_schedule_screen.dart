@@ -4,6 +4,8 @@ import 'package:adhan/adhan.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:religion/presentation/widgets/common/header.dart';
+
 
 class NamazScheduleScreen extends StatefulWidget {
   const NamazScheduleScreen({Key? key}) : super(key: key);
@@ -28,24 +30,20 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
 
   Future<void> _getCurrentLocation() async {
     try {
-      // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          // Use default location if permission denied
           _useDefaultLocation();
           return;
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        // Use default location if permission permanently denied
         _useDefaultLocation();
         return;
       }
 
-      // Get current position
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -61,7 +59,6 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   }
 
   void _useDefaultLocation() {
-    // Default coordinates for Dhaka, Bangladesh
     setState(() {
       _currentPosition = Position(
         latitude: 23.8103,
@@ -96,6 +93,8 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -103,16 +102,24 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
           'নামাজের সময়সূচী',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF00BFA5), // Project color
-        iconTheme: const IconThemeData(color: Colors.white), // Back arrow button color
+        backgroundColor: const Color(0xFF00BFA5),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 50.0), // Add margin at the bottom
+            padding: EdgeInsets.only(bottom: screenHeight * 0.07), // 7% of screen height
             child: Column(
               children: [
-                _buildDropdownCalendar(),
+                ResponsiveHeader(
+                  selectedDate: _selectedDate,
+                  isCalendarVisible: _isCalendarVisible,
+                  onToggleCalendar: () {
+                    setState(() {
+                      _isCalendarVisible = !_isCalendarVisible;
+                    });
+                  },
+                ),
                 if (_isCalendarVisible) _buildCalendar(),
                 Expanded(
                   child: _prayerTimes != null
@@ -128,30 +135,9 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     );
   }
 
-  Widget _buildDropdownCalendar() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-            Text(
-            DateFormat('EEEE, d MMMM yyyy', 'bn').format(_selectedDate),
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          IconButton(
-            icon: Icon(_isCalendarVisible ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-            onPressed: () {
-              setState(() {
-                _isCalendarVisible = !_isCalendarVisible;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildCalendar() {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return TableCalendar(
       firstDay: DateTime.utc(2010, 10, 16),
       lastDay: DateTime.utc(2030, 3, 14),
@@ -161,7 +147,7 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
         setState(() {
           _selectedDate = selectedDay;
           _updatePrayerTimes();
-          _isCalendarVisible = false; // Hide calendar after selecting a date
+          _isCalendarVisible = false;
         });
       },
       calendarStyle: CalendarStyle(
@@ -173,62 +159,42 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
           color: const Color(0xFF00BFA5).withOpacity(0.5),
           shape: BoxShape.circle,
         ),
+        defaultTextStyle: TextStyle(fontSize: screenWidth * 0.04), // 4% of screen width
       ),
       headerStyle: HeaderStyle(
         formatButtonVisible: false,
         titleCentered: true,
+        titleTextStyle: TextStyle(fontSize: screenWidth * 0.045), // 4.5% of screen width
       ),
     );
   }
 
   Widget _buildPrayerTimesList() {
     final prayerTimes = [
-      {
-        'name': 'ফজর',
-        'startTime': _prayerTimes!.fajr,
-        'endTime': _prayerTimes!.sunrise,
-        'icon': Icons.wb_twilight
-      },
-      {
-        'name': 'সূর্যোদয়',
-        'startTime': _prayerTimes!.sunrise,
-        'endTime': _getIshraqTime(),
-        'icon': Icons.wb_sunny
-      },
-      {
-        'name': 'ইশরাক',
-        'startTime': _getIshraqTime(),
-        'endTime': _prayerTimes!.dhuhr,
-        'icon': Icons.wb_sunny_outlined
-      },
+      {'name': 'ফজর', 'startTime': _prayerTimes!.fajr, 'endTime': _prayerTimes!.sunrise, 'icon': Icons.wb_twilight},
+      {'name': 'নিষিদ্ধ সময়', 'startTime': _prayerTimes!.sunrise, 'endTime': _getIshraqTime(), 'icon': Icons.block},
+      {'name': 'ইশরাক', 'startTime': _getIshraqTime(), 'endTime': _getChashtStartTime(), 'icon': Icons.wb_sunny_outlined},
+      {'name': 'চাশত', 'startTime': _getChashtStartTime(), 'endTime': _getZawalStartTime(), 'icon': Icons.wb_sunny_outlined},
+      {'name': 'নিষিদ্ধ সময়', 'startTime': _getZawalStartTime(), 'endTime': _prayerTimes!.dhuhr, 'icon': Icons.block},
       {
         'name': DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
         'startTime': _prayerTimes!.dhuhr,
         'endTime': _prayerTimes!.asr,
         'icon': Icons.wb_sunny
       },
+      {'name': 'আসর', 'startTime': _prayerTimes!.asr, 'endTime': _getSunsetForbiddenStart(), 'icon': Icons.wb_cloudy},
       {
-        'name': 'আসর',
-        'startTime': _prayerTimes!.asr,
+        'name': 'নিষিদ্ধ সময়',
+        'startTime': _getSunsetForbiddenStart(),
         'endTime': _prayerTimes!.maghrib,
-        'icon': Icons.wb_cloudy
+        'icon': Icons.block
       },
-      {
-        'name': 'মাগরিব',
-        'startTime': _prayerTimes!.maghrib,
-        'endTime': _prayerTimes!.isha,
-        'icon': Icons.nights_stay
-      },
-      {
-        'name': 'ইশা',
-        'startTime': _prayerTimes!.isha,
-        'endTime': _getNextDayFajr(),
-        'icon': Icons.star
-      },
+      {'name': 'মাগরিব', 'startTime': _prayerTimes!.maghrib, 'endTime': _prayerTimes!.isha, 'icon': Icons.nights_stay},
+      {'name': 'ইশা', 'startTime': _prayerTimes!.isha, 'endTime': _getNextDayFajr(), 'icon': Icons.star},
       {
         'name': 'তাহাজ্জুদ',
         'startTime': _getTahajjudTime(),
-        'endTime': _prayerTimes!.fajr,
+        'endTime': _prayerTimes!.fajr.add(const Duration(days: 1)),
         'icon': Icons.nightlight_round
       },
     ];
@@ -238,8 +204,8 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
       initialItemCount: prayerTimes.length,
       itemBuilder: (context, index, animation) {
         final prayer = prayerTimes[index];
-        final isActivePrayer = _isActivePrayer(
-            prayer['startTime'] as DateTime, prayer['endTime'] as DateTime);
+        final isActivePrayer =
+            _isActivePrayer(prayer['startTime'] as DateTime, prayer['endTime'] as DateTime);
 
         return _buildAnimatedPrayerTimeItem(
           animation,
@@ -261,49 +227,48 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     IconData icon,
     bool isActivePrayer,
   ) {
+    final screenWidth = MediaQuery.of(context).size.width;
     final timeLeft = _getTimeLeft(endTime);
 
     return FadeTransition(
       opacity: animation,
       child: Card(
-        margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+        margin: EdgeInsets.symmetric(vertical: screenWidth * 0.005, horizontal: screenWidth * 0.04), // 0.5% and 4%
         color: isActivePrayer
-        ? const Color.fromARGB(255, 52, 151, 141)
-        : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
+            ? const Color.fromARGB(255, 52, 151, 141)
+            : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
         child: ListTile(
-          leading: Icon(icon, color: const Color.fromARGB(255, 255, 255, 255)),
+          leading: Icon(icon, color: Colors.white, size: screenWidth * 0.07), // 7% of screen width
           title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            prayerName,
-            style: const TextStyle(
-            color: Color.fromARGB(255, 255, 255, 255), fontSize: 18),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-          Text(
-            'শুরু: ${DateFormat.jm().format(startTime)}',
-            style: TextStyle(
-              fontSize: 14,
-              color: isActivePrayer
-              ? Colors.white
-              : const Color.fromARGB(255, 255, 255, 255),
-            ),
-          ),
-          Text(
-            'শেষ: ${DateFormat.jm().format(endTime)}',
-            style: TextStyle(
-              fontSize: 14,
-              color: isActivePrayer
-              ? Colors.white
-              : const Color.fromARGB(255, 255, 255, 255),
-            ),
-          ),
+              Text(
+                prayerName,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: screenWidth * 0.045, // 4.5% of screen width
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'শুরু: ${DateFormat.jm('bn').format(startTime)}',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.035, // 3.5% of screen width
+                      color: isActivePrayer ? Colors.white : Colors.white,
+                    ),
+                  ),
+                  Text(
+                    'শেষ: ${DateFormat.jm('bn').format(endTime)}',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.035, // 3.5% of screen width
+                      color: isActivePrayer ? Colors.white : Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ],
-          ),
-        ],
           ),
         ),
       ),
@@ -321,22 +286,27 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     return _prayerTimes!.sunrise.add(const Duration(minutes: 20));
   }
 
+  DateTime _getChashtStartTime() {
+    return _prayerTimes!.sunrise.add(const Duration(hours: 1));
+  }
+
+  DateTime _getZawalStartTime() {
+    return _prayerTimes!.dhuhr.subtract(const Duration(minutes: 15));
+  }
+
+  DateTime _getSunsetForbiddenStart() {
+    return _prayerTimes!.maghrib.subtract(const Duration(minutes: 5));
+  }
+
   DateTime _getNextDayFajr() {
     if (_currentPosition != null) {
       final tomorrow = _selectedDate.add(const Duration(days: 1));
       final dateComponents = DateComponents.from(tomorrow);
-      final coordinates = Coordinates(
-        _currentPosition!.latitude,
-        _currentPosition!.longitude,
-      );
-      final tomorrowPrayerTimes = PrayerTimes(
-        coordinates,
-        dateComponents,
-        _prayerTimes!.calculationParameters,
-      );
+      final coordinates = Coordinates(_currentPosition!.latitude, _currentPosition!.longitude);
+      final tomorrowPrayerTimes = PrayerTimes(coordinates, dateComponents, _prayerTimes!.calculationParameters);
       return tomorrowPrayerTimes.fajr;
     }
-    return DateTime.now(); // Fallback
+    return DateTime.now();
   }
 
   bool _isActivePrayer(DateTime startTime, DateTime endTime) {
