@@ -31,6 +31,7 @@ dependencies:
   shared_preferences: ^2.5.2
   sensors_plus: ^6.1.1
   flutter_compass: ^0.8.1
+  flutter_local_notifications: ^18.0.1
 
   # google_mobile_ads: ^5.3.1
 
@@ -53,7 +54,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Lal_Salu_Normal.ttf
         - asset: assets/fonts/Lal_Salu_Bold.ttf
-        
+
     - family: BrahmaputraMJ
       fonts:
         - asset: assets/fonts/BrahmaputraMJ_Regular.ttf
@@ -61,4 +62,6 @@ flutter:
   assets:
     - assets/images/
     - assets/images/alhuda_logo.png
+    - assets/azan.mp3
+    - assets/
   uses-material-design: true
