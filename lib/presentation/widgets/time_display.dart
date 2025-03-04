@@ -142,12 +142,12 @@ class _TimeDisplayState extends State<TimeDisplay> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'সূর্যোদয়',
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03), // 3% of screen width
+                      'সূর্যোদয়',
+                      style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03), // 3% of screen width
                       ),
                       Text(
-                        DateFormat('hh:mm a', 'bn').format(_sunrise),
-                        style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03, fontWeight: FontWeight.bold), // 3% of screen width
+                      DateFormat('hh:mm a', 'bn').format(_sunrise),
+                      style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03, fontWeight: FontWeight.bold), // 3% of screen width
                       ),
                     ],
                   ),
@@ -303,7 +303,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
   }
 
   String _getHijriDate() {
-    final hijri = HijriCalendar.now();
+    final hijri = HijriCalendar.fromDate(DateTime.now().subtract(Duration(days: 1)));
     final hijriMonths = [
       'মুহাররম',
       'সফর',

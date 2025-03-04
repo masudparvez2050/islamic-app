@@ -154,25 +154,25 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
     switch (prayer) {
       case 'ফজর':
         return _prayerTimes!.fajr;
-      case 'নিষিদ্ধ সময়':
-        return _prayerTimes!.sunrise;
+      case 'নিষিদ্ধ সময়-১':
+        return _prayerTimes!.sunrise.add(const Duration(minutes: 1));
       case 'ইশরাক':
-        return _getIshraqTime();
+        return _getIshraqTime().add(const Duration(minutes: 1));
       case 'চাশত':
-        return _getChashtStartTime();
-      case 'নিষিদ্ধ সময়':
-        return _getZawalStartTime();
+        return _getChashtStartTime().add(const Duration(minutes: 1));
+      case 'নিষিদ্ধ সময়-২':
+        return _getZawalStartTime().add(const Duration(minutes: 1));
       case "জুম'আ":
       case 'জোহর':
-        return _prayerTimes!.dhuhr;
+        return _prayerTimes!.dhuhr.add(const Duration(minutes: 1));
       case 'আসর':
-        return _prayerTimes!.asr;
-      case 'নিষিদ্ধ সময়':
-        return _getSunsetForbiddenStart();
+        return _prayerTimes!.asr.add(const Duration(minutes: 1));
+      case 'নিষিদ্ধ সময়-৩':
+        return _getSunsetForbiddenStart().subtract(const Duration(minutes: 10)).add(const Duration(minutes: 1));
       case 'মাগরিব':
-        return _prayerTimes!.maghrib;
+        return _prayerTimes!.maghrib.add(const Duration(minutes: 1));
       case 'ইশা':
-        return _prayerTimes!.isha;
+        return _prayerTimes!.isha.add(const Duration(minutes: 1));
       case 'তাহাজ্জুদ':
         return _getTahajjudTime();
       default:
@@ -186,27 +186,27 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
     switch (prayer) {
       case 'ফজর':
         return _prayerTimes!.sunrise;
-      case 'নিষিদ্ধ সময়':
+      case 'নিষিদ্ধ সময়-১':
         return _getIshraqTime();
       case 'ইশরাক':
         return _getChashtStartTime();
       case 'চাশত':
         return _getZawalStartTime();
-      case 'নিষিদ্ধ সময়':
+      case 'নিষিদ্ধ সময়-২':
         return _prayerTimes!.dhuhr;
       case "জুম'আ":
       case 'জোহর':
         return _prayerTimes!.asr;
       case 'আসর':
         return _getSunsetForbiddenStart();
-      case 'নিষিদ্ধ সময়':
+      case 'নিষিদ্ধ সময়-৩':
         return _prayerTimes!.maghrib;
       case 'মাগরিব':
         return _prayerTimes!.isha;
       case 'ইশা':
         return _getNextDayFajr();
       case 'তাহাজ্জুদ':
-        return _prayerTimes!.fajr.add(const Duration(days: 1));
+        return _prayerTimes!.fajr.subtract(const Duration(minutes: 1));
       default:
         return DateTime.now();
     }
@@ -215,14 +215,14 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
   IconData _getPrayerIcon(String prayerName) {
     final prayerIcons = {
       'ফজর': Icons.wb_twilight,
-      'নিষিদ্ধ সময়': Icons.block,
+      'নিষিদ্ধ সময়-১': Icons.block,
       'ইশরাক': Icons.wb_sunny_outlined,
       'চাশত': Icons.wb_sunny_outlined,
-      'নিষিদ্ধ সময়': Icons.block,
+      'নিষিদ্ধ সময়-২': Icons.block,
       "জুম'আ": Icons.wb_sunny,
       'জোহর': Icons.wb_sunny,
       'আসর': Icons.wb_cloudy,
-      'নিষিদ্ধ সময়': Icons.block,
+      'নিষিদ্ধ সময়-৩': Icons.block,
       'মাগরিব': Icons.nights_stay,
       'ইশা': Icons.star,
       'তাহাজ্জুদ': Icons.nightlight_round,
@@ -245,7 +245,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
 
   DateTime _getChashtStartTime() {
     if (_prayerTimes == null) return DateTime.now();
-    return _prayerTimes!.sunrise.add(const Duration(hours: 1));
+    return _prayerTimes!.sunrise.add(const Duration(minutes: 110));
   }
 
   DateTime _getZawalStartTime() {

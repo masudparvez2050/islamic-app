@@ -121,6 +121,7 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
                         });
                       },
                     ),
+                    
                     SizedBox(height: screenWidth * 0.04),
                     Expanded(
                       child: ListView.builder(
@@ -152,7 +153,9 @@ class _QuranScreenState extends State<QuranScreen> with SingleTickerProviderStat
                   ],
                 ),
               ),
+              
               actions: [
+                
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('বন্ধ করুন'),
@@ -497,15 +500,15 @@ class SurahDetailScreen extends StatelessWidget {
                       ),
                     ),
                     Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.share_outlined),
-                      onPressed: () {},
-                      color: Color(0xFF1F6E5C),
-                    ),
+                    // IconButton(
+                    //   icon: Icon(Icons.share_outlined),
+                    //   onPressed: () {},
+                    //   color: Color(0xFF1F6E5C),
+                    // ),
                     IconButton(
                       icon: Icon(Icons.bookmark_border),
                       onPressed: () {
-                        onBookmark(surahNumber, verseNumber);
+                        onBookmark(surahNumber, verseNumber );
                       },
                       color: Color(0xFF1F6E5C),
                     ),

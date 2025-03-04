@@ -73,7 +73,7 @@ class PoweredBy extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () => _launchURL('https://www.facebook.com/people/Al-Huda-Academy/100091305081988/?mibextid=ZbWKwL'),
+                onPressed: () => _launchURL('https://www.facebook.com/groups/1469984167721446/?ref=share&mibextid=NSMWBT'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
                   foregroundColor: Colors.white,

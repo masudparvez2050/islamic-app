@@ -3,7 +3,8 @@ buildscript {
         compileSdkVersion = 34
         targetSdkVersion = 34
         buildToolsVersion = "34.0.0"
-        javaVersion = JavaVersion.VERSION_17
+        javaVersion = JavaVersion.VERSION_11  // Changed back to VERSION_11
+        kotlinJvmTarget = "11"  // Changed back to "11"
     }
     
     repositories {
@@ -23,13 +24,14 @@ allprojects {
         mavenCentral()
     }
     
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    tasks.withType(JavaCompile).configureEach {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         kotlinOptions {
-            jvmTarget = '17'
+            jvmTarget = kotlinJvmTarget
+            freeCompilerArgs += ['-Xjvm-default=all']
         }
     }
 }

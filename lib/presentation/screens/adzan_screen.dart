@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart'; // For formatting time
 import 'package:audioplayers/audioplayers.dart'; // Optional for Azan sound
 import 'package:religion/presentation/widgets/add_2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdzanScreen extends StatefulWidget {
   const AdzanScreen({Key? key}) : super(key: key);
@@ -27,16 +28,33 @@ class _AdzanScreenState extends State<AdzanScreen> {
   @override
   void initState() {
     super.initState();
+    _loadToggleStates(); // Load saved states
     _fetchPrayerTimes();
     _startPrayerCheckTimer();
+  }
+
+  // Load toggle states from SharedPreferences
+  Future<void> _loadToggleStates() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      for (var prayer in prayerList) {
+        prayer['isAlertOn'] = prefs.getBool('${prayer['name']}_alert') ?? false;
+      }
+    });
+  }
+
+  // Save toggle state to SharedPreferences
+  Future<void> _saveToggleState(String prayerName, bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('${prayerName}_alert', value);
   }
 
   Future<void> _fetchPrayerTimes() async {
     try {
       Position position = await _determinePosition();
       final coordinates = Coordinates(position.latitude, position.longitude);
-      final params = CalculationMethod.muslim_world_league.getParameters();
-      params.madhab = Madhab.shafi;
+      final params = CalculationMethod.karachi.getParameters();
+      params.madhab =Madhab.hanafi;
       prayerTimes = PrayerTimes.today(coordinates, params);
 
       setState(() {
@@ -80,7 +98,8 @@ class _AdzanScreenState extends State<AdzanScreen> {
   }
 
   String _formatTime(DateTime time) {
-    return DateFormat('HH:mm a', 'bn').format(time);
+    // print(time);
+    return DateFormat('hh:mm a', 'bn').format(time);
   }
 
   void _startPrayerCheckTimer() {
@@ -192,16 +211,16 @@ class _AdzanScreenState extends State<AdzanScreen> {
                         (value) {
                           setState(() {
                             prayerList[index]['isAlertOn'] = value;
+                            _saveToggleState(prayerList[index]['name'], value); // Save when toggled
                           });
                         },
                       );
                     },
                   ),
                 ),
-                // Advertisement2 with fixed height
                 SizedBox(
                   width: screenWidth,
-                  height: screenHeight * 0.1, // 10% of screen height
+                  height: screenHeight * 0.1,
                   child: Advertisement2(),
                 ),
               ],

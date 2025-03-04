@@ -189,7 +189,7 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
         final sehriTimeLeft = _getTimeLeft(sehriTime);
         final iftarTimeLeft = _getTimeLeft(iftarTime);
 
-        final hijriDate = HijriCalendar.fromDate(_selectedDate.add(Duration(days: index)));
+        final hijriDate = HijriCalendar.fromDate(_selectedDate.add(Duration(days: index - 1)));
 
         return _buildTimeCard(
           DateFormat('EEEE, d MMMM yyyy', 'bn').format(_selectedDate.add(Duration(days: index))),
@@ -360,9 +360,23 @@ class _SehriIftarScreenState extends State<SehriIftarScreen> {
     final now = DateTime.now();
     final difference = endTime.difference(now);
     if (difference.isNegative) return 'শেষ হয়েছে';
+    
     final hours = difference.inHours;
     final minutes = difference.inMinutes % 60;
-    return '$hours ঘণ্টা $minutes মিনিট';
+    
+    final banglaNumbers = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    
+    String banglaHours = hours.toString()
+        .split('')
+        .map((digit) => banglaNumbers[int.parse(digit)])
+        .join('');
+    
+    String banglaMinutes = minutes.toString()
+        .split('')
+        .map((digit) => banglaNumbers[int.parse(digit)])
+        .join('');
+    
+    return '$banglaHours ঘণ্টা $banglaMinutes মিনিট';
   }
 
   String _getBanglaHijriDate(HijriCalendar hijriDate) {

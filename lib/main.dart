@@ -25,6 +25,8 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF00BFA5),
         scaffoldBackgroundColor: const Color(0xFF00BFA5),
         fontFamily: 'LalSalu',
+        
+
       ),
       home: const WelcomeScreen(),
     );

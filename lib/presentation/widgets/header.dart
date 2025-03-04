@@ -51,16 +51,17 @@ class Header extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035, vertical: screenHeight * 0.005),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(screenWidth * 0.15),
+              color: Colors.white.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(screenWidth * 0.15),
               ),
               child: Text(
-                'ধর্ম-Religion',
-                style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: screenWidth * 0.05,
-                  fontWeight: FontWeight.bold,
-                ),
+              'ধর্ম - Dharma',
+              style: TextStyle(
+                // fontFamily: 'BrahmaputraMJ',
+                color: Colors.teal,
+                fontSize: screenWidth * 0.05,
+                fontWeight: FontWeight.bold,
+              ),
               ),
             ),
           ),

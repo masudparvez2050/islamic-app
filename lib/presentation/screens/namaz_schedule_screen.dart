@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:religion/presentation/widgets/common/header.dart';
 
-
 class NamazScheduleScreen extends StatefulWidget {
   const NamazScheduleScreen({Key? key}) : super(key: key);
 
@@ -172,29 +171,64 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   Widget _buildPrayerTimesList() {
     final prayerTimes = [
       {'name': 'ফজর', 'startTime': _prayerTimes!.fajr, 'endTime': _prayerTimes!.sunrise, 'icon': Icons.wb_twilight},
-      {'name': 'নিষিদ্ধ সময়', 'startTime': _prayerTimes!.sunrise, 'endTime': _getIshraqTime(), 'icon': Icons.block},
-      {'name': 'ইশরাক', 'startTime': _getIshraqTime(), 'endTime': _getChashtStartTime(), 'icon': Icons.wb_sunny_outlined},
-      {'name': 'চাশত', 'startTime': _getChashtStartTime(), 'endTime': _getZawalStartTime(), 'icon': Icons.wb_sunny_outlined},
-      {'name': 'নিষিদ্ধ সময়', 'startTime': _getZawalStartTime(), 'endTime': _prayerTimes!.dhuhr, 'icon': Icons.block},
-      {
-        'name': DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
-        'startTime': _prayerTimes!.dhuhr,
-        'endTime': _prayerTimes!.asr,
-        'icon': Icons.wb_sunny
-      },
-      {'name': 'আসর', 'startTime': _prayerTimes!.asr, 'endTime': _getSunsetForbiddenStart(), 'icon': Icons.wb_cloudy},
       {
         'name': 'নিষিদ্ধ সময়',
-        'startTime': _getSunsetForbiddenStart(),
-        'endTime': _prayerTimes!.maghrib,
+        'startTime': _prayerTimes!.sunrise.add(const Duration(minutes: 1)), // Start 1 minute after sunrise
+        'endTime': _getIshraqTime(),
         'icon': Icons.block
       },
-      {'name': 'মাগরিব', 'startTime': _prayerTimes!.maghrib, 'endTime': _prayerTimes!.isha, 'icon': Icons.nights_stay},
-      {'name': 'ইশা', 'startTime': _prayerTimes!.isha, 'endTime': _getNextDayFajr(), 'icon': Icons.star},
+      {
+        'name': 'ইশরাক',
+        'startTime': _getIshraqTime().add(const Duration(minutes: 1)),
+        'endTime': _getChashtStartTime(),
+        'icon': Icons.wb_sunny_outlined
+      },
+      {
+        'name': 'চাশত',
+        'startTime': _getChashtStartTime().add(const Duration(minutes: 1)),
+        'endTime': _getZawalStartTime(),
+        'icon': Icons.wb_sunny_outlined
+      },
+      {
+        'name': 'নিষিদ্ধ সময়',
+        'startTime': _getZawalStartTime().add(const Duration(minutes: 1)),
+        'endTime': _prayerTimes!.dhuhr, // Start 1 minute after Dhuhr
+        'icon': Icons.block
+      },
+      {
+        'name': DateTime.now().weekday == DateTime.friday ? "জুম'আ" : 'জোহর',
+        'startTime': _prayerTimes!.dhuhr.add(const Duration(minutes: 1)), // Start 1 minute after previous end
+        'endTime': _prayerTimes!.asr, // Asr end time minus 10 minutes
+        'icon': Icons.wb_sunny
+      },
+      {
+        'name': 'আসর',
+        'startTime': _prayerTimes!.asr.add(const Duration(minutes: 1)), // Start 1 minute after previous end
+        'endTime': _getSunsetForbiddenStart().subtract(const Duration(minutes: 10)),
+        'icon': Icons.wb_cloudy
+      },
+      {
+        'name': 'নিষিদ্ধ সময়',
+        'startTime': _getSunsetForbiddenStart().subtract(const Duration(minutes: 10)).add(const Duration(minutes: 1)),
+        'endTime': _prayerTimes!.maghrib, // Start 1 minute after Maghrib
+        'icon': Icons.block
+      },
+      {
+        'name': 'মাগরিব',
+        'startTime': _prayerTimes!.maghrib.add(const Duration(minutes: 1)), // Start 1 minute after previous end
+        'endTime': _prayerTimes!.isha,
+        'icon': Icons.nights_stay
+      },
+      {
+        'name': 'ইশা',
+        'startTime': _prayerTimes!.isha.add(const Duration(minutes: 1)), // Start 1 minute after previous end
+        'endTime': _getNextDayFajr(),
+        'icon': Icons.star
+      },
       {
         'name': 'তাহাজ্জুদ',
         'startTime': _getTahajjudTime(),
-        'endTime': _prayerTimes!.fajr.add(const Duration(days: 1)),
+        'endTime': _prayerTimes!.fajr.subtract(const Duration(minutes: 1)),
         'icon': Icons.nightlight_round
       },
     ];
@@ -255,14 +289,14 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
                   Text(
                     'শুরু: ${DateFormat.jm('bn').format(startTime)}',
                     style: TextStyle(
-                      fontSize: screenWidth * 0.035, // 3.5% of screen width
+                      fontSize: screenWidth * 0.045, // 4.5% of screen width
                       color: isActivePrayer ? Colors.white : Colors.white,
                     ),
                   ),
                   Text(
                     'শেষ: ${DateFormat.jm('bn').format(endTime)}',
                     style: TextStyle(
-                      fontSize: screenWidth * 0.035, // 3.5% of screen width
+                      fontSize: screenWidth * 0.045, // 4.5% of screen width
                       color: isActivePrayer ? Colors.white : Colors.white,
                     ),
                   ),
@@ -287,7 +321,7 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
   }
 
   DateTime _getChashtStartTime() {
-    return _prayerTimes!.sunrise.add(const Duration(hours: 1));
+    return _prayerTimes!.sunrise.add(const Duration(minutes: 110));
   }
 
   DateTime _getZawalStartTime() {

@@ -96,7 +96,7 @@ class Footer extends StatelessWidget {
               _buildSocialIcon(FontAwesomeIcons.globe, 
                 () => _launchURL('https://alhudabd.com'), width),
               _buildSocialIcon(FontAwesomeIcons.facebook, 
-                () => _launchURL('https://facebook.com/alhudabdhttps://www.facebook.com/profile.php?id=100091305081988&mibextid=ZbWKwL'), width),
+                () => _launchURL('https://www.facebook.com/groups/1469984167721446/?ref=share&mibextid=NSMWBT'), width),
               _buildSocialIcon(FontAwesomeIcons.youtube, 
                 () => _launchURL('https://www.youtube.com/@alhudaacademy1123'), width),
               _buildSocialIcon(FontAwesomeIcons.envelope, _launchEmail, width),
