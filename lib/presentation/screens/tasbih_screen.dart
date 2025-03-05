@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:religion/presentation/widgets/common/headerAdzan.dart';
 
 class TasbihScreen extends StatefulWidget {
   const TasbihScreen({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class TasbihScreen extends StatefulWidget {
 class _TasbihScreenState extends State<TasbihScreen> {
   int _count = 0;
   int _totalCount = 0;
+  String _selectedTasbih = 'সাধারণ'; // Default tasbih type
 
   void _incrementCount() {
     setState(() {
@@ -24,52 +26,143 @@ class _TasbihScreenState extends State<TasbihScreen> {
     });
   }
 
+  void _resetTotalCount() {
+    setState(() {
+      _totalCount = 0;
+      _count = 0;
+    });
+  }
+
+  void _setPresetCount(int count) {
+    setState(() {
+      _count = count;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Tasbih'),
-        backgroundColor: const Color(0xFF00BFA5),
-      ),
-      body: Center(
+      appBar: ResponsiveHeader(title: 'তাসবিহ'), // Using responsive header
+      body: Padding(
+        padding: EdgeInsets.all(screenWidth * 0.04), // 4% of screen width
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Tasbih Type Dropdown
+            DropdownButton<String>(
+              value: _selectedTasbih,
+              items: <String>['সাধারণ', 'সুবহানআল্লাহ', 'আলহামদুলিল্লাহ', 'আল্লাহু আকবার']
+                  .map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: TextStyle(fontSize: screenWidth * 0.045), // 4.5% of screen width
+                  ),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedTasbih = newValue!;
+                  if (_selectedTasbih != 'সাধারণ') {
+                    _setPresetCount(33); // Set to 33 for Allah's names
+                  } else {
+                    _count = 0; // Reset for general tasbih
+                  }
+                });
+              },
+            ),
+            SizedBox(height: screenHeight * 0.03), // 3% of screen height
+            // Current Count Display
             Text(
               '$_count',
-              style: const TextStyle(fontSize: 72, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: screenWidth * 0.18, // 18% of screen width
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF00BFA5),
+              ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.02), // 2% of screen height
+            // Total Count Display
             Text(
-              'Total Count: $_totalCount',
-              style: const TextStyle(fontSize: 18),
+              'মোট গণনা: $_totalCount',
+              style: TextStyle(fontSize: screenWidth * 0.045), // 4.5% of screen width
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: screenHeight * 0.05), // 5% of screen height
+            // Increment Button
             GestureDetector(
               onTap: _incrementCount,
               child: Container(
-                width: 150,
-                height: 150,
+                width: screenWidth * 0.4, // 40% of screen width
+                height: screenWidth * 0.4, // Square shape, 40% of screen width
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF00BFA5),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF00BFA5), Color(0xFF00C4B4)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.add,
                   color: Colors.white,
-                  size: 72,
+                  size: screenWidth * 0.15, // 15% of screen width
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _resetCount,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: const Text('Reset', style: TextStyle(fontSize: 18)),
+            SizedBox(height: screenHeight * 0.03), // 3% of screen height
+            // Reset Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _resetCount,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.08, // 8% of screen width
+                      vertical: screenHeight * 0.015, // 1.5% of screen height
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'বর্তমান রিসেট',
+                    style: TextStyle(fontSize: screenWidth * 0.04), // 4% of screen width
+                  ),
+                ),
+                SizedBox(width: screenWidth * 0.03), // 3% of screen width
+                ElevatedButton(
+                  onPressed: _resetTotalCount,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orangeAccent,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.08, // 8% of screen width
+                      vertical: screenHeight * 0.015, // 1.5% of screen height
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'মোট রিসেট',
+                    style: TextStyle(fontSize: screenWidth * 0.04), // 4% of screen width
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -77,4 +170,3 @@ class _TasbihScreenState extends State<TasbihScreen> {
     );
   }
 }
-

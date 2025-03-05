@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:religion/presentation/widgets/common/headerAdzan.dart';
 import 'package:religion/presentation/widgets/add_2.dart';
 
@@ -25,6 +27,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
     {'name': 'আসর', 'time': null, 'isAlertOn': false},
     {'name': 'মাগরিব', 'time': null, 'isAlertOn': false},
     {'name': 'ইশা', 'time': null, 'isAlertOn': false},
+    {'name': 'টেস্ট', 'time': null, 'isAlertOn': false},
   ];
   Timer? _prayerCheckTimer;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -32,6 +35,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
   @override
   void initState() {
     super.initState();
+    tz.initializeTimeZones();
     _initializeNotifications().then((_) {
       _loadToggleStates();
       _fetchPrayerTimes();
@@ -96,6 +100,11 @@ class _AdzanScreenState extends State<AdzanScreen> {
   Future<void> _saveToggleState(String prayerName, bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('${prayerName}_alert', value);
+    if (value) {
+      _schedulePrayerNotification(prayerName);
+    } else {
+      _cancelPrayerNotification(prayerName);
+    }
   }
 
   Future<void> _fetchPrayerTimes() async {
@@ -107,13 +116,15 @@ class _AdzanScreenState extends State<AdzanScreen> {
       prayerTimes = PrayerTimes.today(coordinates, params);
 
       setState(() {
-       prayerList[0]['time'] = DateTime.now().add(const Duration(minutes: 1));
-prayerList[1]['time'] = DateTime.now().add(const Duration(minutes: 1));
-// prayerList[1]['time'] = prayerTimes.fajr;
-prayerList[2]['time'] = prayerTimes.dhuhr;
-prayerList[3]['time'] = prayerTimes.asr;
-prayerList[4]['time'] = prayerTimes.maghrib;
-prayerList[5]['time'] = prayerTimes.isha;
+       
+        
+       
+        prayerList[0]['time'] = prayerTimes.fajr;
+        prayerList[1]['time'] = prayerTimes.dhuhr;
+        prayerList[2]['time'] = prayerTimes.asr;
+        prayerList[3]['time'] = prayerTimes.maghrib;
+        prayerList[4]['time'] = prayerTimes.isha;
+        prayerList[5]['time'] = DateTime.now().add(const Duration(minutes: 1));
         isLoading = false;
       });
       _startPrayerCheckTimer();
@@ -147,9 +158,9 @@ prayerList[5]['time'] = prayerTimes.isha;
   }
 
   String _formatTime(DateTime? time) {
-  if (time == null) return '';
-  return DateFormat('hh:mm a', 'bn').format(time);
-}
+    if (time == null) return '';
+    return DateFormat('hh:mm a', 'bn').format(time);
+  }
 
   void _startPrayerCheckTimer() {
     _prayerCheckTimer?.cancel();
@@ -250,6 +261,50 @@ prayerList[5]['time'] = prayerTimes.isha;
     }
   }
 
+  Future<void> _schedulePrayerNotification(String prayerName) async {
+    final prayer = prayerList.firstWhere((p) => p['name'] == prayerName);
+    final prayerTime = prayer['time'] as DateTime?;
+    if (prayerTime != null) {
+      final androidDetails = AndroidNotificationDetails(
+        'prayer_channel_id',
+        'Prayer Alerts',
+        channelDescription: 'Notifications for prayer times',
+        importance: Importance.max,
+        priority: Priority.high,
+        enableVibration: true,
+        playSound: true,
+        fullScreenIntent: true,
+      );
+      
+      final platformDetails = NotificationDetails(
+        android: androidDetails,
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+          sound: 'azan.mp3',
+        ),
+      );
+
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+  prayerName.hashCode,
+  'আজান',
+  '$prayerName এর আজান বাজছে!',
+  tz.TZDateTime.from(prayerTime, tz.local),
+  platformDetails,
+  // Replace androidAllowWhileIdle with androidScheduleMode
+  androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+  uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+  matchDateTimeComponents: DateTimeComponents.time,
+);
+    }
+  }
+
+  Future<void> _cancelPrayerNotification(String prayerName) async {
+    await flutterLocalNotificationsPlugin.cancel(prayerName.hashCode);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -302,36 +357,24 @@ prayerList[5]['time'] = prayerTimes.isha;
                     ],
                   ),
                 ),
-Expanded(
-  child: ListView.builder(
-    itemCount: prayerList.length,
-    itemBuilder: (context, index) {
-      final prayerTime = prayerList[index]['time'];
-      // Debug print to check the type
-      print('Index $index, Prayer: ${prayerList[index]['name']}, Time type: ${prayerTime.runtimeType}, Value: $prayerTime');
-      // Safely handle the time value
-      String formattedTime;
-      if (prayerTime is DateTime) {
-        formattedTime = _formatTime(prayerTime);
-      } else if (prayerTime is String) {
-        formattedTime = prayerTime; // If it's already a String, use it directly
-      } else {
-        formattedTime = ''; // Fallback for null or unexpected types
-      }
-      return _buildPrayerTimeItem(
-        prayerList[index]['name'],
-        formattedTime,
-        prayerList[index]['isAlertOn'],
-        index == 0 ? null : (value) {
-          setState(() {
-            prayerList[index]['isAlertOn'] = value;
-            _saveToggleState(prayerList[index]['name'], value);
-          });
-        },
-      );
-    },
-  ),
-),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: prayerList.length,
+                    itemBuilder: (context, index) {
+                      return _buildPrayerTimeItem(
+                        prayerList[index]['name'],
+                        _formatTime(prayerList[index]['time'] as DateTime?),
+                        prayerList[index]['isAlertOn'],
+                         (value) {
+                          setState(() {
+                            prayerList[index]['isAlertOn'] = value;
+                            _saveToggleState(prayerList[index]['name'], value);
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
                 SizedBox(
                   width: screenWidth,
                   height: screenHeight * 0.1,
@@ -342,43 +385,38 @@ Expanded(
     );
   }
 
- Widget _buildPrayerTimeItem(
-  String prayerName,
-  String time, // Explicitly a String
-  bool isAlertOn,
-  Function(bool)? onToggle,
-) {
-  final double screenWidth = MediaQuery.of(context).size.width;
+  Widget _buildPrayerTimeItem(String prayerName, String time, bool isAlertOn, Function(bool)? onToggle) {
+    final double screenWidth = MediaQuery.of(context).size.width;
 
-  return ListTile(
-    leading: Icon(
-      Icons.access_time,
-      color: const Color(0xFF00BFA5),
-      size: screenWidth * 0.08,
-    ),
-    title: Text(
-      prayerName,
-      style: TextStyle(fontSize: screenWidth * 0.05),
-    ),
-    trailing: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          time,
-          style: TextStyle(fontSize: screenWidth * 0.05),
-        ),
-        SizedBox(width: screenWidth * 0.02),
-        if (onToggle != null)
-          Transform.scale(
-            scale: 0.7,
-            child: Switch(
-              value: isAlertOn,
-              onChanged: onToggle,
-              activeColor: const Color(0xFF00BFA5),
-            ),
+    return ListTile(
+      leading: Icon(
+        Icons.access_time,
+        color: const Color(0xFF00BFA5),
+        size: screenWidth * 0.08,
+      ),
+      title: Text(
+        prayerName,
+        style: TextStyle(fontSize: screenWidth * 0.05),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            time,
+            style: TextStyle(fontSize: screenWidth * 0.05),
           ),
-      ],
-    ),
-  );
-}
+          SizedBox(width: screenWidth * 0.02),
+          
+            Transform.scale(
+              scale: 0.7,
+              child: Switch(
+                value: isAlertOn,
+                onChanged: onToggle,
+                activeColor: const Color(0xFF00BFA5),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }

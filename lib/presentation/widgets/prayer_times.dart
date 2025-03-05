@@ -198,7 +198,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> with SingleTicker
       case 'জোহর':
         return _prayerTimes!.asr;
       case 'আসর':
-        return _getSunsetForbiddenStart();
+        return _getSunsetForbiddenStart().subtract(const Duration(minutes: 10));
       case 'নিষিদ্ধ সময়-৩':
         return _prayerTimes!.maghrib;
       case 'মাগরিব':

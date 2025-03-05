@@ -10,12 +10,16 @@ class NewsDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-  title: const Text(
-    'বিস্তারিত খবর',
-    style: TextStyle(color: Colors.white), // Set text color to white
-  ),
-  backgroundColor: const Color(0xFF00BFA5), // AppBar background color
-),
+      title: const Text(
+        'বিস্তারিত খবর',
+        style: TextStyle(color: Colors.white), // Set text color to white
+      ),
+      backgroundColor: const Color(0xFF00BFA5), // AppBar background color
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+      ),
 
       body: SingleChildScrollView(
        
