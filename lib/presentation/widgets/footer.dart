@@ -26,7 +26,7 @@ class Footer extends StatelessWidget {
   Future<void> _launchPhone() async {
     final Uri phoneLaunchUri = Uri(
       scheme: 'tel',
-      path: '+88001601332914',
+      path: '+8801601332914',
     );
     
     if (!await launchUrl(phoneLaunchUri)) {
@@ -96,7 +96,7 @@ class Footer extends StatelessWidget {
               _buildSocialIcon(FontAwesomeIcons.globe, 
                 () => _launchURL('https://alhudabd.com'), width),
               _buildSocialIcon(FontAwesomeIcons.facebook, 
-                () => _launchURL('https://www.facebook.com/groups/1469984167721446/?ref=share&mibextid=NSMWBT'), width),
+                () => _launchURL('https://www.facebook.com/share/1E2Sy7qSQ1/'), width),
               _buildSocialIcon(FontAwesomeIcons.youtube, 
                 () => _launchURL('https://www.youtube.com/@alhudaacademy1123'), width),
               _buildSocialIcon(FontAwesomeIcons.envelope, _launchEmail, width),

@@ -24,36 +24,36 @@ class SettingsScreen extends StatelessWidget {
           _buildSettingItem(context, 'লগইন / প্রোফাইল', Icons.person, () {
             // TODO: Implement login/profile functionality
           }),
-          _buildSettingItem(context, 'ভাষা', Icons.language, () {
-            // TODO: Implement language selection
-          }),
-          _buildSettingItem(context, 'মুড (ডার্ক/লাইট)', Icons.brightness_6, () {
-            // TODO: Implement theme mode toggle
-          }),
-          _buildSettingItem(context, 'লোকেশন', Icons.location_on, () {
-            // TODO: Implement location settings
-          }),
-          _buildSettingItem(context, 'মাজহাব (হানাফি/শাফি)', Icons.school, () {
-            // TODO: Implement madhab selection
-          }),
-          _buildSettingItem(context, 'আজান সেটিংস', Icons.volume_up, () {
-            // TODO: Implement adhan settings
-          }),
-          _buildSettingItem(context, 'এলার্ম সেটিংস', Icons.alarm, () {
-            // TODO: Implement alarm settings
-          }),
-          _buildSettingItem(context, 'আমাদের সম্পর্কে', Icons.info, () {
-            // TODO: Implement about us page
-          }),
-          _buildSettingItem(context, 'ডেভেলপার', Icons.code, () {
-            // TODO: Implement developers page
-          }),
-          _buildSettingItem(context, 'পাওয়ার্ড বাই', Icons.power, () {
-            // TODO: Implement powered by page
-          }),
-          _buildSettingItem(context, 'সোশ্যাল লিংক', Icons.share, () {
-            // TODO: Implement social links page
-          }),
+          // _buildSettingItem(context, 'ভাষা', Icons.language, () {
+          //   // TODO: Implement language selection
+          // }),
+          // _buildSettingItem(context, 'মুড (ডার্ক/লাইট)', Icons.brightness_6, () {
+          //   // TODO: Implement theme mode toggle
+          // }),
+          // _buildSettingItem(context, 'লোকেশন', Icons.location_on, () {
+          //   // TODO: Implement location settings
+          // }),
+          // _buildSettingItem(context, 'মাজহাব (হানাফি/শাফি)', Icons.school, () {
+          //   // TODO: Implement madhab selection
+          // }),
+          // _buildSettingItem(context, 'আজান সেটিংস', Icons.volume_up, () {
+          //   // TODO: Implement adhan settings
+          // }),
+          // _buildSettingItem(context, 'এলার্ম সেটিংস', Icons.alarm, () {
+          //   // TODO: Implement alarm settings
+          // }),
+          // _buildSettingItem(context, 'আমাদের সম্পর্কে', Icons.info, () {
+          //   // TODO: Implement about us page
+          // }),
+          // _buildSettingItem(context, 'ডেভেলপার', Icons.code, () {
+          //   // TODO: Implement developers page
+          // }),
+          // _buildSettingItem(context, 'পাওয়ার্ড বাই', Icons.power, () {
+          //   // TODO: Implement powered by page
+          // }),
+          // _buildSettingItem(context, 'সোশ্যাল লিংক', Icons.share, () {
+          //   // TODO: Implement social links page
+          // }),
         ],
       ),
     );

@@ -121,12 +121,12 @@ class _QiblaScreenState extends State<QiblaScreen> {
                   // ),
                   SizedBox(height: screenHeight * 0.03), // 3% of screen height
                   Container(
-                    width: screenWidth * 0.6, // 50% of screen width
-                    height: screenWidth * 0.6,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF00BFA5), width: screenWidth * 0.005),
-                    ),
+                    width: screenWidth * 0.7, // 50% of screen width
+                    height: screenWidth * 0.7,
+                    // decoration: BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   border: Border.all(color: const Color(0xFF00BFA5), width: screenWidth * 0.005),
+                    // ),
                     child: Center(
                       child: Transform.rotate(
                         angle: heading != null && qiblaDirection != null
@@ -134,20 +134,36 @@ class _QiblaScreenState extends State<QiblaScreen> {
                             : 0,
                         child: Image.asset(
                           'assets/images/kaaba.png', // Add your Kaaba image in assets
-                          width: screenWidth * 0.50, // 25% of screen width
-                          height: screenWidth * 0.50,
+                          width: screenWidth * 1.25, // 25% of screen width
+                          height: screenWidth * 1.25,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.03),
-                  Text(
-                    qiblaDirection != null ? 'আপনার অবস্থান থেকে কিবলার দিক ${qiblaDirection!.toStringAsFixed(0)}° ${_getDirectionText(qiblaDirection)}' : 'দিক গণনা হচ্ছে...',
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.045, // 4.5% of screen width
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                    SizedBox(height: screenHeight * 0.03),
+                    Text.rich(
+  TextSpan(
+    children: [
+      TextSpan(
+        text: 'আপনার অবস্থান থেকে কিবলার দিক ',
+        style: TextStyle(
+          fontSize: screenWidth * 0.045,
+          fontWeight: FontWeight.bold,
+          decoration: TextDecoration.none,
+        ),
+      ),
+      TextSpan(
+        text: qiblaDirection != null ? _getDirectionText(qiblaDirection) : 'দিক গণনা হচ্ছে...',
+        style: TextStyle(
+          fontSize: screenWidth * 0.045,
+          fontWeight: FontWeight.bold,
+          decoration: qiblaDirection != null ? TextDecoration.underline : TextDecoration.none,
+          decorationThickness: 5.0,
+        ),
+      ),
+    ],
+  ),
+),
                   SizedBox(height: screenHeight * 0.015),
                   Text(
                     'কিবলার দিকে নামাজ পড়তে ${qiblaDirection != null ? _getDirectionText(qiblaDirection) : 'দিক নির্ধারণ করা যায়নি'} মুখ করুন',
