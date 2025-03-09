@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quran/quran.dart' as quran;
-import 'package:religion/presentation/widgets/add_2.dart';
-import 'package:religion/presentation/widgets/common/headerQuran.dart'; 
-import 'package:religion/utils/quran_helper.dart'; 
+import 'package:dharma/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/widgets/common/headerQuran.dart'; 
+import 'package:dharma/utils/quran_helper.dart'; 
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({Key? key}) : super(key: key);

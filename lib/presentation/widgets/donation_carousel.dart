@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/donation_screen.dart';
+import 'package:dharma/presentation/screens/donation_screen.dart';
 
 class DonationCarousel extends StatefulWidget {
   const DonationCarousel({Key? key}) : super(key: key);

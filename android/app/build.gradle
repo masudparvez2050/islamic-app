@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.religion"
+    namespace = "com.example.dharma"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.religion"
+        applicationId = "com.example.dharma"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

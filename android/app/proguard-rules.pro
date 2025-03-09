@@ -1,4 +1,4 @@
--keep class com.example.religion.** { *; }
+-keep class com.example.dharma.** { *; }
 -keep class com.google.android.gms.** { *; }
 -keep class com.adhan.** { *; }
 -dontwarn com.google.android.gms.**

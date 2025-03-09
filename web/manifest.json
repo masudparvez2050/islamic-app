@@ -1,6 +1,6 @@
 {
-    "name": "religion",
-    "short_name": "religion",
+    "name": "dharma",
+    "short_name": "dharma",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

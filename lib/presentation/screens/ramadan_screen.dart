@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
-import 'package:religion/presentation/screens/namaz_schedule_screen.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/screens/namaz_schedule_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:hijri/hijri_calendar.dart';
-import 'package:religion/presentation/widgets/common/headerRamadan.dart'; // Updated header import
+import 'package:dharma/presentation/widgets/common/headerRamadan.dart'; // Updated header import
 
 class RamadanScreen extends StatelessWidget {
   const RamadanScreen({Key? key}) : super(key: key);

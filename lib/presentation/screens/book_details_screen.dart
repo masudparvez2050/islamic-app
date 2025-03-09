@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   final String title;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
 import 'package:adhan/adhan.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:religion/presentation/widgets/common/header.dart';
+import 'package:dharma/presentation/widgets/common/header.dart';
 
 class NamazScheduleScreen extends StatefulWidget {
   const NamazScheduleScreen({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:religion/presentation/screens/welcome_screen.dart';
+import 'package:dharma/presentation/screens/welcome_screen.dart';
 
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/widgets/common/headerAdzan.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/widgets/common/headerAdzan.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
 
 class AllahNamesScreen extends StatefulWidget {
   const AllahNamesScreen({Key? key}) : super(key: key);

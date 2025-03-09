@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/book_library_screen.dart';
-import 'package:religion/presentation/screens/book_details_screen.dart';
+import 'package:dharma/presentation/screens/book_library_screen.dart';
+import 'package:dharma/presentation/screens/book_details_screen.dart';
 
 class BookLibrary extends StatelessWidget {
   const BookLibrary({Key? key}) : super(key: key);

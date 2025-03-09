@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/settings_screen.dart';
+import 'package:dharma/presentation/screens/settings_screen.dart';
 
 class Header extends StatelessWidget {
   const Header({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class Header extends StatelessWidget {
               borderRadius: BorderRadius.circular(60),
             ),
             child: const Text(
-              'ধর্ম-Religion',
+              'ধর্ম - Dharma',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-import 'package:religion/presentation/widgets/common/headerAdzan.dart'; // Assuming similar header structure
+import 'package:dharma/presentation/widgets/common/headerAdzan.dart'; // Assuming similar header structure
 
 class QiblaScreen extends StatefulWidget {
   const QiblaScreen({Key? key}) : super(key: key);

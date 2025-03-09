@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/widgets/common/headerAdzan.dart';
+import 'package:dharma/presentation/widgets/common/headerAdzan.dart';
 
 class TasbihScreen extends StatefulWidget {
   const TasbihScreen({Key? key}) : super(key: key);

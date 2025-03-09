@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/quran_screen.dart';
-import 'package:religion/presentation/screens/book_library_screen.dart';
-import 'package:religion/presentation/screens/video_library_screen.dart';
+import 'package:dharma/presentation/screens/quran_screen.dart';
+import 'package:dharma/presentation/screens/book_library_screen.dart';
+import 'package:dharma/presentation/screens/video_library_screen.dart';
 
 class TopFeatures extends StatelessWidget {
   const TopFeatures({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/news_details_screen.dart';
+import 'package:dharma/presentation/screens/news_details_screen.dart';
 
 class RecentNewsScreen extends StatelessWidget {
   const RecentNewsScreen({Key? key}) : super(key: key);

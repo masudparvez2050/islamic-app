@@ -4,8 +4,8 @@ import 'package:adhan/adhan.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:hijri/hijri_calendar.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
-import 'package:religion/presentation/widgets/common/header.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/widgets/common/header.dart';
 
 class SehriIftarScreen extends StatefulWidget {
   const SehriIftarScreen({Key? key}) : super(key: key);

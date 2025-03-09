@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:religion/presentation/screens/quran_screen.dart';
-import 'package:religion/presentation/screens/adzan_screen.dart';
-import 'package:religion/presentation/screens/qibla_screen.dart';
-import 'package:religion/presentation/screens/donation_screen.dart';
-import 'package:religion/presentation/screens/namaz_schedule_screen.dart';
-import 'package:religion/presentation/screens/sehri_iftar_screen.dart';
-import 'package:religion/presentation/screens/ramadan_screen.dart';
-import 'package:religion/presentation/screens/tasbih_screen.dart';
-import 'package:religion/presentation/screens/hadith_screen.dart';
-import 'package:religion/presentation/screens/allah_names_screen.dart';
+import 'package:dharma/presentation/screens/quran_screen.dart';
+import 'package:dharma/presentation/screens/adzan_screen.dart';
+import 'package:dharma/presentation/screens/qibla_screen.dart';
+import 'package:dharma/presentation/screens/donation_screen.dart';
+import 'package:dharma/presentation/screens/namaz_schedule_screen.dart';
+import 'package:dharma/presentation/screens/sehri_iftar_screen.dart';
+import 'package:dharma/presentation/screens/ramadan_screen.dart';
+import 'package:dharma/presentation/screens/tasbih_screen.dart';
+import 'package:dharma/presentation/screens/hadith_screen.dart';
+import 'package:dharma/presentation/screens/allah_names_screen.dart';
 
 class Features extends StatelessWidget {
   const Features({Key? key}) : super(key: key);

@@ -8,8 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:religion/presentation/widgets/common/headerAdzan.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/widgets/common/headerAdzan.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
 
 class AdzanScreen extends StatefulWidget {
   const AdzanScreen({Key? key}) : super(key: key);

@@ -1,10 +1,10 @@
 // import 'package:flutter/material.dart';
-// import 'package:religion/presentation/screens/home_screen.dart';
-// import 'package:religion/presentation/screens/namaz_schedule_screen.dart';
-// import 'package:religion/presentation/screens/quran_screen.dart';
-// import 'package:religion/presentation/screens/ramadan_screen.dart';
-// import 'package:religion/presentation/screens/settings_screen.dart';
-// import 'package:religion/presentation/widgets/features.dart';
+// import 'package:dharma/presentation/screens/home_screen.dart';
+// import 'package:dharma/presentation/screens/namaz_schedule_screen.dart';
+// import 'package:dharma/presentation/screens/quran_screen.dart';
+// import 'package:dharma/presentation/screens/ramadan_screen.dart';
+// import 'package:dharma/presentation/screens/settings_screen.dart';
+// import 'package:dharma/presentation/widgets/features.dart';
 
 // class BottomNavBar extends StatelessWidget {
 //   const BottomNavBar({Key? key}) : super(key: key);

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:religion/presentation/screens/video_details_screen.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/screens/video_details_screen.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
 
 class VideoLibraryScreen extends StatefulWidget {
   const VideoLibraryScreen({Key? key}) : super(key: key);

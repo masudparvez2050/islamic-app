@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
-import 'package:religion/presentation/screens/book_details_screen.dart';
-import 'package:religion/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/screens/book_details_screen.dart';
+import 'package:dharma/presentation/widgets/add_2.dart';
 
 class BookLibraryScreen extends StatefulWidget {
   const BookLibraryScreen({Key? key}) : super(key: key);
