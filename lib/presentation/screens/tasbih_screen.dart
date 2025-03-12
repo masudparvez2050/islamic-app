@@ -13,6 +13,11 @@ class _TasbihScreenState extends State<TasbihScreen> {
   int _totalCount = 0;
   String _selectedTasbih = 'সাধারণ'; // Default tasbih type
 
+  String _bnDigit(int number) {
+    final bn = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return number.toString().split('').map((e) => bn[int.parse(e)]).join();
+  }
+
   void _incrementCount() {
     setState(() {
       _count++;
@@ -79,7 +84,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
             SizedBox(height: screenHeight * 0.03), // 3% of screen height
             // Current Count Display
             Text(
-              '$_count',
+              _bnDigit(_count),
               style: TextStyle(
                 fontSize: screenWidth * 0.18, // 18% of screen width
                 fontWeight: FontWeight.bold,
@@ -89,7 +94,7 @@ class _TasbihScreenState extends State<TasbihScreen> {
             SizedBox(height: screenHeight * 0.02), // 2% of screen height
             // Total Count Display
             Text(
-              'মোট গণনা: $_totalCount',
+              'মোট গণনা: ${_bnDigit(_totalCount)}',
               style: TextStyle(fontSize: screenWidth * 0.045), // 4.5% of screen width
             ),
             SizedBox(height: screenHeight * 0.05), // 5% of screen height
@@ -130,38 +135,39 @@ class _TasbihScreenState extends State<TasbihScreen> {
                 ElevatedButton(
                   onPressed: _resetCount,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.08, // 8% of screen width
-                      vertical: screenHeight * 0.015, // 1.5% of screen height
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                  backgroundColor: Colors.redAccent,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.08, // 8% of screen width
+                    vertical: screenHeight * 0.015, // 1.5% of screen height
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   ),
                   child: Text(
-                    'বর্তমান রিসেট',
-                    style: TextStyle(fontSize: screenWidth * 0.04), // 4% of screen width
+                  'বর্তমান রিসেট',
+                  style: TextStyle(fontSize: screenWidth * 0.04, color: Colors.white), // 4% of screen width
                   ),
                 ),
                 SizedBox(width: screenWidth * 0.03), // 3% of screen width
                 ElevatedButton(
                   onPressed: _resetTotalCount,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orangeAccent,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.08, // 8% of screen width
-                      vertical: screenHeight * 0.015, // 1.5% of screen height
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                  backgroundColor: Colors.orangeAccent,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.08, // 8% of screen width
+                    vertical: screenHeight * 0.015, // 1.5% of screen height
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   ),
                   child: Text(
-                    'মোট রিসেট',
-                    style: TextStyle(fontSize: screenWidth * 0.04), // 4% of screen width
+                  'মোট রিসেট',
+                  style: TextStyle(fontSize: screenWidth * 0.04, color: Colors.white), // 4% of screen width
                   ),
                 ),
+                
               ],
             ),
           ],

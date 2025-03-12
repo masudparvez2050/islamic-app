@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dharma/presentation/screens/home_screen.dart';
+import 'package:dharma/presentation/screens/settings/login_profile_screen.dart';
+import 'package:dharma/presentation/screens/settings/language_screen.dart';
+import 'package:dharma/presentation/screens/settings/theme_mode_screen.dart';
+import 'package:dharma/presentation/screens/settings/location_screen.dart';
+import 'package:dharma/presentation/screens/settings/madhab_screen.dart';
+import 'package:dharma/presentation/screens/settings/adhan_settings_screen.dart';
+import 'package:dharma/presentation/screens/settings/alarm_settings_screen.dart';
+import 'package:dharma/presentation/screens/settings/about_us_screen.dart';
+import 'package:dharma/presentation/screens/settings/developers_screen.dart';
+import 'package:dharma/presentation/screens/settings/powered_by_screen.dart';
+import 'package:dharma/presentation/screens/settings/social_links_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -16,44 +27,41 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         children: [
           _buildSettingItem(context, 'হোম', Icons.home, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
+            _navigateToScreen(context, const HomeScreen());
           }),
-          _buildSettingItem(context, 'লগইন / প্রোফাইল', Icons.person, () {
-            // TODO: Implement login/profile functionality
-          }),
+          // _buildSettingItem(context, 'লগইন / প্রোফাইল', Icons.person, () {
+          //   _navigateToScreen(context, const LoginProfileScreen());
+          // }),
           // _buildSettingItem(context, 'ভাষা', Icons.language, () {
-          //   // TODO: Implement language selection
+          //   _navigateToScreen(context, const LanguageScreen());
           // }),
           // _buildSettingItem(context, 'মুড (ডার্ক/লাইট)', Icons.brightness_6, () {
-          //   // TODO: Implement theme mode toggle
+          //   _navigateToScreen(context, const ThemeModeScreen());
           // }),
           // _buildSettingItem(context, 'লোকেশন', Icons.location_on, () {
-          //   // TODO: Implement location settings
+          //   _navigateToScreen(context, const LocationScreen());
           // }),
           // _buildSettingItem(context, 'মাজহাব (হানাফি/শাফি)', Icons.school, () {
-          //   // TODO: Implement madhab selection
+          //   _navigateToScreen(context, const MadhabScreen());
           // }),
           // _buildSettingItem(context, 'আজান সেটিংস', Icons.volume_up, () {
-          //   // TODO: Implement adhan settings
+          //   _navigateToScreen(context, const AdhanSettingsScreen());
           // }),
           // _buildSettingItem(context, 'এলার্ম সেটিংস', Icons.alarm, () {
-          //   // TODO: Implement alarm settings
+          //   _navigateToScreen(context, const AlarmSettingsScreen());
           // }),
-          // _buildSettingItem(context, 'আমাদের সম্পর্কে', Icons.info, () {
-          //   // TODO: Implement about us page
-          // }),
+          _buildSettingItem(context, 'আমাদের সম্পর্কে', Icons.info, () {
+            _navigateToScreen(context, const AboutUsScreen());
+          }),
           // _buildSettingItem(context, 'ডেভেলপার', Icons.code, () {
-          //   // TODO: Implement developers page
+          //   _navigateToScreen(context, const DevelopersScreen());
           // }),
-          // _buildSettingItem(context, 'পাওয়ার্ড বাই', Icons.power, () {
-          //   // TODO: Implement powered by page
-          // }),
-          // _buildSettingItem(context, 'সোশ্যাল লিংক', Icons.share, () {
-          //   // TODO: Implement social links page
-          // }),
+          _buildSettingItem(context, 'পাওয়ার্ড বাই', Icons.power, () {
+            _navigateToScreen(context, const PoweredByScreen());
+          }),
+          _buildSettingItem(context, 'সোশ্যাল লিংক', Icons.share, () {
+            _navigateToScreen(context, const SocialLinksScreen());
+          }),
         ],
       ),
     );
@@ -65,6 +73,27 @@ class SettingsScreen extends StatelessWidget {
       title: Text(title),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
+    );
+  }
+
+  void _navigateToScreen(BuildContext context, Widget screen) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => screen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
     );
   }
 }
