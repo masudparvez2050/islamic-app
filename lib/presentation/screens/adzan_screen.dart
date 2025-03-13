@@ -8,8 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:dharma/presentation/widgets/common/headerAdzan.dart';
-import 'package:dharma/presentation/widgets/add_2.dart';
+import 'package:dharma/presentation/widgets/add_2.dart'; // Assuming this is your advertisement widget
 
 class AdzanScreen extends StatefulWidget {
   const AdzanScreen({Key? key}) : super(key: key);
@@ -22,15 +21,16 @@ class _AdzanScreenState extends State<AdzanScreen> {
   late PrayerTimes prayerTimes;
   bool isLoading = true;
   List<Map<String, dynamic>> prayerList = [
-    {'name': 'ফজর', 'time': null, 'isAlertOn': false},
-    {'name': 'জোহর', 'time': null, 'isAlertOn': false},
-    {'name': 'আসর', 'time': null, 'isAlertOn': false},
-    {'name': 'মাগরিব', 'time': null, 'isAlertOn': false},
-    {'name': 'ইশা', 'time': null, 'isAlertOn': false},
-    {'name': 'টেস্ট', 'time': null, 'isAlertOn': false},
+    {'name': 'ফজর', 'time': null, 'isAlertOn': false, 'icon': Icons.bedtime_outlined},
+    {'name': 'জোহর', 'time': null, 'isAlertOn': false, 'icon': Icons.wb_sunny_outlined},
+    {'name': 'আসর', 'time': null, 'isAlertOn': false, 'icon': Icons.wb_twilight_outlined},
+    {'name': 'মাগরিব', 'time': null, 'isAlertOn': false, 'icon': Icons.nights_stay_outlined},
+    {'name': 'ইশা', 'time': null, 'isAlertOn': false, 'icon': Icons.star_outline},
   ];
   Timer? _prayerCheckTimer;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  DateTime? _currentDate;
+  String _currentLocation = 'লোকেশন লোড হচ্ছে...';
 
   @override
   void initState() {
@@ -51,7 +51,6 @@ class _AdzanScreenState extends State<AdzanScreen> {
   Future<void> _initializeNotifications() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    // Create notification channel for Android
     const androidChannel = AndroidNotificationChannel(
       'prayer_channel_id',
       'Prayer Alerts',
@@ -72,12 +71,12 @@ class _AdzanScreenState extends State<AdzanScreen> {
       requestSoundPermission: true,
       requestBadgePermission: true,
     );
-    
+
     const initializationSettings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
     );
-    
+
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (details) async {
@@ -115,16 +114,15 @@ class _AdzanScreenState extends State<AdzanScreen> {
       params.madhab = Madhab.hanafi;
       prayerTimes = PrayerTimes.today(coordinates, params);
 
+      _getCurrentLocationName(position);
+
       setState(() {
-       
-        
-       
+        _currentDate = DateTime.now();
         prayerList[0]['time'] = prayerTimes.fajr;
         prayerList[1]['time'] = prayerTimes.dhuhr;
         prayerList[2]['time'] = prayerTimes.asr;
         prayerList[3]['time'] = prayerTimes.maghrib;
         prayerList[4]['time'] = prayerTimes.isha;
-        prayerList[5]['time'] = DateTime.now().add(const Duration(minutes: 1));
         isLoading = false;
       });
       _startPrayerCheckTimer();
@@ -136,10 +134,16 @@ class _AdzanScreenState extends State<AdzanScreen> {
     }
   }
 
+  Future<void> _getCurrentLocationName(Position position) async {
+    setState(() {
+      _currentLocation = 'বর্তমান লোকেশন';
+    });
+  }
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services authorities disabled.');
+      return Future.error('Location services are disabled.');
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
@@ -171,9 +175,8 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
   void _checkPrayerAlerts() {
     if (isLoading) return;
-    
+
     final now = DateTime.now();
-    // Skip first item (current time) as it shouldn't have an alert
     for (var i = 1; i < prayerList.length; i++) {
       var prayer = prayerList[i];
       if (prayer['isAlertOn'] && prayer['time'] != null) {
@@ -184,7 +187,6 @@ class _AdzanScreenState extends State<AdzanScreen> {
           setState(() {
             prayer['alertShown'] = true;
           });
-          // Reset alert flag after 23 hours to allow next day's alert
           Future.delayed(const Duration(hours: 23), () {
             if (mounted) {
               setState(() {
@@ -198,7 +200,6 @@ class _AdzanScreenState extends State<AdzanScreen> {
   }
 
   Future<void> _showAzanAlert(String prayerName) async {
-    // Play azan sound
     final player = AudioPlayer();
     try {
       await player.play(AssetSource('azan.mp3'));
@@ -206,7 +207,6 @@ class _AdzanScreenState extends State<AdzanScreen> {
       print('Error playing azan: $e');
     }
 
-    // Show notification
     const androidDetails = AndroidNotificationDetails(
       'prayer_channel_id',
       'Prayer Alerts',
@@ -217,7 +217,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
       playSound: true,
       fullScreenIntent: true,
     );
-    
+
     const platformDetails = NotificationDetails(
       android: androidDetails,
       iOS: DarwinNotificationDetails(
@@ -230,7 +230,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
     try {
       await flutterLocalNotificationsPlugin.show(
-        DateTime.now().millisecond, // Unique ID
+        DateTime.now().millisecond,
         'আজান',
         '$prayerName এর আজান বাজছে!',
         platformDetails,
@@ -239,7 +239,6 @@ class _AdzanScreenState extends State<AdzanScreen> {
       print('Error showing notification: $e');
     }
 
-    // Show in-app alert dialog
     if (mounted) {
       showDialog(
         context: context,
@@ -275,7 +274,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
         playSound: true,
         fullScreenIntent: true,
       );
-      
+
       final platformDetails = NotificationDetails(
         android: androidDetails,
         iOS: DarwinNotificationDetails(
@@ -287,17 +286,15 @@ class _AdzanScreenState extends State<AdzanScreen> {
       );
 
       await flutterLocalNotificationsPlugin.zonedSchedule(
-  prayerName.hashCode,
-  'আজান',
-  '$prayerName এর আজান বাজছে!',
-  tz.TZDateTime.from(prayerTime, tz.local),
-  platformDetails,
-  // Replace androidAllowWhileIdle with androidScheduleMode
-  androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-  uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
-  matchDateTimeComponents: DateTimeComponents.time,
-);
+        prayerName.hashCode,
+        'আজান',
+        '$prayerName এর আজান বাজছে!',
+        tz.TZDateTime.from(prayerTime, tz.local),
+        platformDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
     }
   }
 
@@ -312,110 +309,345 @@ class _AdzanScreenState extends State<AdzanScreen> {
 
     String nextPrayer = '';
     String nextTime = '';
+    DateTime? nextPrayerTime;
+    double progressValue = 0.0;
+    int remainingMinutes = 0;
+
     if (!isLoading) {
       final now = DateTime.now();
-      // Skip current time for next prayer calculation
-      for (var i = 1; i < prayerList.length; i++) {
+      for (var i = 1; i < prayerList.length - 1; i++) {
         final prayerTime = prayerList[i]['time'] as DateTime?;
         if (prayerTime != null && now.isBefore(prayerTime)) {
           nextPrayer = prayerList[i]['name'];
           nextTime = _formatTime(prayerTime);
+          nextPrayerTime = prayerTime;
+
+          final previousPrayerTime = i > 0
+              ? prayerList[i - 1]['time'] as DateTime?
+              : prayerList.last['time'] as DateTime?;
+          if (previousPrayerTime != null) {
+            final totalMinutes = prayerTime.difference(previousPrayerTime).inMinutes;
+            final elapsedMinutes = now.difference(previousPrayerTime).inMinutes;
+            progressValue = totalMinutes > 0 ? elapsedMinutes / totalMinutes : 0.0;
+            progressValue = progressValue.clamp(0.0, 1.0);
+            remainingMinutes = prayerTime.difference(now).inMinutes;
+          }
           break;
         }
       }
-      // If no next prayer found today, show first prayer
+
       if (nextPrayer.isEmpty) {
-        nextPrayer = prayerList[1]['name'];
-        nextTime = _formatTime(prayerList[1]['time'] as DateTime?);
+        nextPrayer = prayerList[0]['name'];
+        nextTime = _formatTime(prayerList[0]['time'] as DateTime?);
+        nextPrayerTime = prayerList[0]['time'] as DateTime?;
       }
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const ResponsiveHeader(title: 'আজান'),
+      appBar: AppBar(
+        title: Text(
+          'আজান',
+          style: TextStyle(
+            fontSize: screenWidth * 0.055,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.teal,
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(screenWidth * 0.04),
-                  color: const Color(0xFF00BFA5).withOpacity(0.1),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'পরবর্তী নামাজ',
-                        style: TextStyle(fontSize: screenWidth * 0.05),
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: screenHeight * 0.03),
+                    _buildNextPrayerCard(
+                        nextPrayer, nextTime, progressValue, remainingMinutes, nextPrayerTime, screenWidth, screenHeight),
+                    SizedBox(height: screenHeight * 0.03),
+                    Text(
+                      'আজকের নামাজের সময়',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.045,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
                       ),
-                      Text(
-                        '$nextPrayer - $nextTime',
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    _buildPrayerTimesList(screenWidth, screenHeight),
+                    SizedBox(height: screenHeight * 0.02),
+                    Container(
+                      width: screenWidth,
+                      height: screenHeight * 0.1,
+                      child: const Advertisement2(),
+                    ),
+                    SizedBox(height: screenHeight * 0.025),
+                  ],
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: prayerList.length,
-                    itemBuilder: (context, index) {
-                      return _buildPrayerTimeItem(
-                        prayerList[index]['name'],
-                        _formatTime(prayerList[index]['time'] as DateTime?),
-                        prayerList[index]['isAlertOn'],
-                         (value) {
-                          setState(() {
-                            prayerList[index]['isAlertOn'] = value;
-                            _saveToggleState(prayerList[index]['name'], value);
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: screenWidth,
-                  height: screenHeight * 0.1,
-                  child: const Advertisement2(),
-                ),
-              ],
+              ),
             ),
     );
   }
 
-  Widget _buildPrayerTimeItem(String prayerName, String time, bool isAlertOn, Function(bool)? onToggle) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+  Widget _buildNextPrayerCard(String prayerName, String time, double progressValue, int remainingMinutes,
+      DateTime? prayerTime, double screenWidth, double screenHeight) {
+    final IconData prayerIcon = prayerList
+        .firstWhere(
+          (p) => p['name'] == prayerName,
+          orElse: () => {'icon': Icons.access_time_outlined} as Map<String, dynamic>,
+        )['icon'];
 
-    return ListTile(
-      leading: Icon(
-        Icons.access_time,
-        color: const Color(0xFF00BFA5),
-        size: screenWidth * 0.08,
-      ),
-      title: Text(
-        prayerName,
-        style: TextStyle(fontSize: screenWidth * 0.05),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            time,
-            style: TextStyle(fontSize: screenWidth * 0.05),
+    final timeRemaining = remainingMinutes > 60
+        ? '${(remainingMinutes / 60).floor()} ঘণ্টা ${remainingMinutes % 60} মিনিট বাকি'
+        : '$remainingMinutes মিনিট বাকি';
+
+    final Map<String, Color> prayerColors = {
+      'ফজর': Color(0xFF5E35B1),
+      'জোহর': Color(0xFF00897B),
+      'আসর': Color(0xFFFF8F00),
+      'মাগরিব': Color(0xFF1565C0),
+      'ইশা': Color(0xFF546E7A),
+    };
+
+    final Color prayerColor = prayerColors[prayerName] ?? Color(0xFF00BFA5);
+
+    return Container(
+      padding: EdgeInsets.all(screenWidth * 0.05),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(screenWidth * 0.05),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            prayerColor,
+            prayerColor.withOpacity(0.8),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: prayerColor.withOpacity(0.3),
+            blurRadius: screenWidth * 0.0375,
+            offset: Offset(0, screenHeight * 0.00625),
           ),
-          SizedBox(width: screenWidth * 0.02),
-          
-            Transform.scale(
-              scale: 0.7,
-              child: Switch(
-                value: isAlertOn,
-                onChanged: onToggle,
-                activeColor: const Color(0xFF00BFA5),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: -screenHeight * 0.025,
+            right: -screenWidth * 0.05,
+            child: _buildDecorativeCircle(prayerColor, screenWidth * 0.175, screenWidth, screenHeight),
+          ),
+          Positioned(
+            bottom: -screenHeight * 0.05,
+            left: -screenWidth * 0.05,
+            child: _buildDecorativeCircle(prayerColor, screenWidth * 0.25, screenWidth, screenHeight),
+          ),
+          Positioned(
+            top: screenHeight * 0.05,
+            right: screenWidth * 0.15,
+            child: _buildDecorativeCircle(prayerColor, screenWidth * 0.1, screenWidth, screenHeight),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'পরবর্তী নামাজ',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.w500,
+                      fontSize: screenWidth * 0.035,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.03, vertical: screenHeight * 0.0075),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                    ),
+                    child: Text(
+                      time,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenWidth * 0.0325,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              Row(
+                children: [
+                  Icon(
+                    prayerIcon,
+                    color: Colors.white,
+                    size: screenWidth * 0.08,
+                  ),
+                  SizedBox(width: screenWidth * 0.03),
+                  Text(
+                    prayerName,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * 0.07,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.025),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(screenWidth * 0.025),
+                child: LinearProgressIndicator(
+                  value: progressValue,
+                  backgroundColor: Colors.white.withOpacity(0.2),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  minHeight: screenHeight * 0.0075,
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.0125),
+              Text(
+                timeRemaining,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.9),
+                  fontSize: screenWidth * 0.035,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDecorativeCircle(Color baseColor, double size, double screenWidth, double screenHeight) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white.withOpacity(0.15),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+          width: screenWidth * 0.005,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPrayerTimesList(double screenWidth, double screenHeight) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(screenWidth * 0.04),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: screenWidth * 0.025,
+            offset: Offset(0, screenHeight * 0.0025),
+          ),
+        ],
+      ),
+      child: ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: prayerList.length,
+        separatorBuilder: (context, index) => Divider(
+            height: screenHeight * 0.00125,
+            thickness: screenWidth * 0.00125,
+            indent: screenWidth * 0.175,
+            color: Colors.grey.withOpacity(0.2)),
+        itemBuilder: (context, index) {
+          return _buildPrayerTimeItem(
+            prayerList[index]['name'],
+            _formatTime(prayerList[index]['time'] as DateTime?),
+            prayerList[index]['isAlertOn'],
+            prayerList[index]['icon'],
+            (value) {
+              setState(() {
+                prayerList[index]['isAlertOn'] = value;
+                _saveToggleState(prayerList[index]['name'], value);
+              });
+            },
+            screenWidth,
+            screenHeight,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPrayerTimeItem(String prayerName, String time, bool isAlertOn, IconData icon, Function(bool)? onToggle,
+      double screenWidth, double screenHeight) {
+    final now = DateTime.now();
+    final prayerTime = prayerList.firstWhere((p) => p['name'] == prayerName)['time'] as DateTime?;
+
+    final int prayerIndex = prayerList.indexWhere((p) => p['name'] == prayerName);
+    final bool isActive = prayerTime != null &&
+        ((prayerName == 'ফজর' &&
+                prayerList.last['time'] != null &&
+                now.isAfter(prayerList.last['time'] as DateTime)) ||
+            (prayerIndex > 0 &&
+                now.isAfter(prayerList[prayerIndex - 1]['time'] as DateTime) &&
+                now.isBefore(prayerTime)));
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.0075),
+      child: ListTile(
+        leading: Container(
+          width: screenWidth * 0.12,
+          height: screenWidth * 0.12,
+          decoration: BoxDecoration(
+            color: isActive ? Color(0xFF00BFA5).withOpacity(0.1) : Colors.grey.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(screenWidth * 0.03),
+          ),
+          child: Icon(
+            icon,
+            color: isActive ? Color(0xFF00BFA5) : Colors.grey,
+            size: screenWidth * 0.06,
+          ),
+        ),
+        title: Text(
+          prayerName,
+          style: TextStyle(
+            fontSize: screenWidth * 0.04,
+            fontWeight: FontWeight.w500,
+            color: isActive ? Color(0xFF00BFA5) : Colors.black87,
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+            children: [
+            Text(
+              time,
+              style: TextStyle(
+              fontSize: screenWidth * 0.04,
+              color: isActive ? Color(0xFF00BFA5) : Colors.black54,
+              fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
               ),
             ),
-        ],
+            SizedBox(width: screenWidth * 0.03),
+            Transform.scale(
+              scale: 0.75,
+              child: Switch.adaptive(
+              value: isAlertOn,
+              onChanged: onToggle,
+              activeColor: Color(0xFF00BFA5),
+              activeTrackColor: Color(0xFF00BFA5).withOpacity(0.3),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -7,56 +7,107 @@ class DonationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-
+    
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF9FAFB),
       appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
         title: Text(
           'দান করুন',
           style: TextStyle(
             color: Colors.white,
-            fontSize: screenWidth * 0.06,  // 5% of screen width
-            
+            fontSize: screenWidth * 0.055,
+            fontWeight: FontWeight.w600,
           ),
         ),
         backgroundColor: const Color(0xFF00BFA5),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(screenWidth * 0.04), // 4% of screen width
-        children: [
-          Text(
-            'আমাদের কাজে সহায়তা করুন',
-            style: TextStyle(
-              fontSize: screenWidth * 0.06, // 6% of screen width
-              fontWeight: FontWeight.bold,
-            ),
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.05, 
+            vertical: screenHeight * 0.025
           ),
-          SizedBox(height: screenHeight * 0.02), // 2% of screen height
-          Text(
-            'আপনার দান আমাদের ইসলামিক জ্ঞান প্রচার এবং সম্প্রদায়কে সমর্থন করার মিশন চালিয়ে যেতে সাহায্য করে।',
-            style: TextStyle(fontSize: screenWidth * 0.04), // 4% of screen width
-          ),
-          SizedBox(height: screenHeight * 0.03), // 3% of screen height
-          _buildDonationOption(context, 'একবার দান', Icons.attach_money, 'one_time', screenWidth, screenHeight),
-          _buildDonationOption(context, 'মাসিক দান', Icons.repeat, 'monthly', screenWidth, screenHeight),
-          _buildDonationOption(context, 'যাকাত', Icons.favorite, 'zakat', screenWidth, screenHeight),
-          _buildDonationOption(context, 'সাদাকাহ', Icons.volunteer_activism, 'sadaqah', screenWidth, screenHeight),
-          SizedBox(height: screenHeight * 0.03), // 3% of screen height
-          ElevatedButton(
-            onPressed: () {
-              // Handle general donation process
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF00BFA5),
-              padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02), // 2% of screen height
+          children: [
+            Container(
+              padding: EdgeInsets.all(screenWidth * 0.05),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF00BFA5), Color(0xFF00D0B0)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'আমাদের কাজে সহায়তা করুন',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.06,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Text(
+                    'আপনার দান আমাদের ইসলামিক জ্ঞান প্রচার এবং সম্প্রদায়কে সমর্থন করার মিশন চালিয়ে যেতে সাহায্য করে।',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.038,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Text(
-              'এখনই দান করুন',
-              style: TextStyle(fontSize: screenWidth * 0.045), // 4.5% of screen width
+            SizedBox(height: screenHeight * 0.025),
+            Text(
+              'দান করার উপায়',
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: screenHeight * 0.015),
+            _buildDonationOption(context, 'একবার দান', Icons.account_balance_wallet_outlined, 'one_time', screenWidth, screenHeight),
+            _buildDonationOption(context, 'মাসিক দান', Icons.autorenew_rounded, 'monthly', screenWidth, screenHeight),
+            _buildDonationOption(context, 'যাকাত', Icons.favorite_border_rounded, 'zakat', screenWidth, screenHeight),
+            _buildDonationOption(context, 'সাদাকাহ', Icons.volunteer_activism_outlined, 'sadaqah', screenWidth, screenHeight),
+            SizedBox(height: screenHeight * 0.03),
+            ElevatedButton(
+              onPressed: () {
+                // Handle general donation process
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF00BFA5),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'এখনই দান করুন',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.045,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -69,30 +120,70 @@ class DonationScreen extends StatelessWidget {
     double screenWidth,
     double screenHeight,
   ) {
-    return Card(
-      margin: EdgeInsets.only(bottom: screenHeight * 0.02), // 2% of screen height
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: const Color(0xFF00BFA5),
-          size: screenWidth * 0.07, // 7% of screen width
-        ),
-        title: Text(
-          title,
-          style: TextStyle(fontSize: screenWidth * 0.045), // 4.5% of screen width
-        ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: screenWidth * 0.05, // 5% of screen width
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DonationDetailScreen(donationType: type, title: title),
+    return Container(
+      margin: EdgeInsets.only(bottom: screenHeight * 0.015),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DonationDetailScreen(donationType: type, title: title),
+              ),
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.02,
+              horizontal: screenWidth * 0.04,
             ),
-          );
-        },
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(screenWidth * 0.025),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF00BFA5).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: const Color(0xFF00BFA5),
+                    size: screenWidth * 0.06,
+                  ),
+                ),
+                SizedBox(width: screenWidth * 0.03),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.043,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: screenWidth * 0.04,
+                  color: Colors.black45,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -112,51 +203,115 @@ class DonationDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    
+    // Get icon based on donation type
+    IconData typeIcon = Icons.volunteer_activism_outlined;
+    switch (donationType) {
+      case 'one_time': typeIcon = Icons.account_balance_wallet_outlined; break;
+      case 'monthly': typeIcon = Icons.autorenew_rounded; break;
+      case 'zakat': typeIcon = Icons.favorite_border_rounded; break;
+      case 'sadaqah': typeIcon = Icons.volunteer_activism_outlined; break;
+    }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF9FAFB),
       appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
         title: Text(
           title,
           style: TextStyle(
-            fontSize: screenWidth * 0.05, // 5% of screen width
+            fontSize: screenWidth * 0.05,
+            fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
         ),
         backgroundColor: const Color(0xFF00BFA5),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04), // 4% of screen width
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              _getDetailTitle(),
-              style: TextStyle(
-                fontSize: screenWidth * 0.06, // 6% of screen width
-                fontWeight: FontWeight.bold,
-              ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(screenWidth * 0.05),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: screenWidth * 0.2,
+                    height: screenWidth * 0.2,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF00BFA5).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      typeIcon,
+                      color: const Color(0xFF00BFA5),
+                      size: screenWidth * 0.1,
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.025),
+                Center(
+                  child: Text(
+                    _getDetailTitle(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.06,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                Container(
+                  padding: EdgeInsets.all(screenWidth * 0.05),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    _getDetailDescription(),
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      height: 1.5,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.04),
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle donation process for this type
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF00BFA5),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    minimumSize: Size(double.infinity, screenHeight * 0.06),
+                  ),
+                  child: Text(
+                    'এখনই দান করুন',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.045,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: screenHeight * 0.02), // 2% of screen height
-            Text(
-              _getDetailDescription(),
-              style: TextStyle(fontSize: screenWidth * 0.04), // 4% of screen width
-            ),
-            SizedBox(height: screenHeight * 0.03), // 3% of screen height
-            ElevatedButton(
-              onPressed: () {
-                // Handle donation process for this type
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF00BFA5),
-                minimumSize: Size.fromHeight(screenHeight * 0.06), // 6% of screen height
-              ),
-              child: Text(
-                'এখনই দান করুন',
-                style: TextStyle(fontSize: screenWidth * 0.045), // 4.5% of screen width
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

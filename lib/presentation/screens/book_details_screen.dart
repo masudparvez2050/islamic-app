@@ -23,14 +23,20 @@ class BookDetailsScreen extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'বইয়ের বিবরণ',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: const Color(0xFF00BFA5),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share_outlined, color: Colors.white),
+            onPressed: () {
+              // Handle share functionality
+            },
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,83 +46,171 @@ class BookDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.network(
-                    imageUrl,
-                    height: screenHeight * 0.4, // 40% of screen height
-                    width: double.infinity,
-                    fit: BoxFit.contain,
+                  Stack(
+                    children: [
+                      Container(
+                        height: screenHeight * 0.5,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              const Color(0xFF00BFA5),
+                              const Color(0xFF00BFA5).withOpacity(0.8),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          height: 30,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(30),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: screenHeight * 0.12),
+                        child: Center(
+                          child: Container(
+                            height: screenHeight * 0.3,
+                            width: screenWidth * 0.5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
-                    padding: EdgeInsets.all(screenWidth * 0.04), // 4% of screen width
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.06,
+                      vertical: screenHeight * 0.02,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.06, // 6% of screen width
-                            fontWeight: FontWeight.bold,
+                        Center(
+                          child: Text(
+                            title,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.06,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5,
+                            ),
                           ),
                         ),
-                        SizedBox(height: screenHeight * 0.01), // 1% of screen height
-                        Text(
-                          'লেখক: $author',
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.045, // 4.5% of screen width
-                            color: Colors.grey[600],
+                        SizedBox(height: screenHeight * 0.01),
+                        Center(
+                          child: Text(
+                            'লেখক: $author',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              color: Colors.grey[700],
+                              letterSpacing: 0.3,
+                            ),
                           ),
                         ),
-                        SizedBox(height: screenHeight * 0.02), // 2% of screen height
-                        SizedBox(height: screenHeight * 0.03), // 3% of screen height
+                        SizedBox(height: screenHeight * 0.04),
                         Row(
                           children: [
                             Expanded(
-                              child: ElevatedButton(
+                              child: ElevatedButton.icon(
                                 onPressed: () async {
-                                  if (await canLaunch(link)) {
-                                    await launch(link);
+                                  final Uri url = Uri.parse(link);
+                                  if (await canLaunchUrl(url)) {
+                                    await launchUrl(url);
                                   } else {
                                     throw 'Could not launch $link';
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.teal,
+                                  backgroundColor: const Color(0xFF00BFA5),
+                                  foregroundColor: Colors.white,
                                   padding: EdgeInsets.symmetric(
-                                    vertical: screenHeight * 0.02, // 2% of screen height
+                                    vertical: screenHeight * 0.02,
+                                  ),
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                child: Text(
-                                  'বই কিনুন',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: screenWidth * 0.045, // 4.5% of screen width
-                                  ),
-                                ),
+                                icon: const Icon(Icons.shopping_cart_outlined),
+                                label: const Text('বই কিনুন'),
                               ),
                             ),
-                            SizedBox(width: screenWidth * 0.04), // 4% of screen width
+                            SizedBox(width: screenWidth * 0.04),
                             Expanded(
-                              child: OutlinedButton(
+                              child: ElevatedButton.icon(
                                 onPressed: () {
                                   // Handle download book action
                                 },
-                                style: OutlinedButton.styleFrom(
-                                  backgroundColor: Colors.teal,
-                                  side: BorderSide(color: Colors.teal),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey[100],
+                                  foregroundColor: const Color(0xFF00BFA5),
                                   padding: EdgeInsets.symmetric(
-                                    vertical: screenHeight * 0.02, // 2% of screen height
+                                    vertical: screenHeight * 0.02,
+                                  ),
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                child: Text(
-                                  'ডাউনলোড করুন',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: screenWidth * 0.045, // 4.5% of screen width
-                                  ),
-                                ),
+                                icon: const Icon(Icons.file_download_outlined),
+                                label: const Text('ডাউনলোড'),
                               ),
                             ),
                           ],
+                        ),
+                        SizedBox(height: screenHeight * 0.03),
+                        Container(
+                          padding: EdgeInsets.all(screenWidth * 0.04),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.info_outline,
+                                color: Color(0xFF00BFA5),
+                              ),
+                              SizedBox(width: screenWidth * 0.03),
+                              const Expanded(
+                                child: Text(
+                                  'এই বই সম্পর্কে আরও তথ্য জানতে আমাদের সাথে যোগাযোগ করুন',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -125,10 +219,20 @@ class BookDetailsScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: screenHeight * 0.065, // Adjust the height as needed
+          Container(
+            height: screenHeight * 0.065,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 5,
+                  offset: const Offset(0, -3),
+                ),
+              ],
+            ),
             child: Advertisement2(),
-          ), // Add the Advertisement2 widget here
+          ),
         ],
       ),
     );

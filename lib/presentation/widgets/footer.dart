@@ -79,15 +79,27 @@ class Footer extends StatelessWidget {
             ),
           ),
           SizedBox(height: height * 0.01),
-          Text(
+            Text(
             'AL HUDA ACADEMY',
             style: TextStyle(
               color: Colors.white,
               fontSize: width * 0.06,
               fontWeight: FontWeight.w900,
               letterSpacing: 2,
+              fontFamily: 'Copperplate',
             ),
-          ),
+            ),
+            
+            Text(
+            'Islamic Learning and Researching Institute',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: width * 0.035,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              fontFamily: 'FontleroyBrownNF',
+            ),
+            ),
           SizedBox(height: height * 0.015),
           // Social Icons
           Row(
