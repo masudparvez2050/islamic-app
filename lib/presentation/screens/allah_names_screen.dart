@@ -669,9 +669,9 @@ class _AllahNamesScreenState extends State<AllahNamesScreen> with SingleTickerPr
                           child: Text(
                             meaning,
                             style: TextStyle(
-                              fontSize: screenWidth * 0.032, 
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w400,
+                              fontSize: screenWidth * 0.040,
+                              color: Color(0xFF00BFA5),
+                              fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.center,
                             maxLines: 1,
@@ -688,9 +688,9 @@ class _AllahNamesScreenState extends State<AllahNamesScreen> with SingleTickerPr
                           child: Text(
                             englishMeaning,
                             style: TextStyle(
-                              fontSize: screenWidth * 0.028,
-                              color: Colors.black45,
-                              fontStyle: FontStyle.italic,
+                              fontSize: screenWidth * 0.040,
+                              color: Color(0xFF00BFA5),
+                              fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.center,
                             maxLines: 1,

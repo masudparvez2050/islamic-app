@@ -180,7 +180,7 @@ class _QiblaScreenState extends State<QiblaScreen> with SingleTickerProviderStat
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: screenHeight * 0.05), // 5% of screen height
+                    SizedBox(height: screenHeight * 0.01), // 5% of screen height
                     // Compass Card
                     Container(
                       width: screenWidth * 0.88, // 88% of screen width
@@ -333,74 +333,70 @@ class _QiblaScreenState extends State<QiblaScreen> with SingleTickerProviderStat
                       ),
                     ),
 
-                    SizedBox(height: screenHeight * 0.04), // 4% of screen height
+                    SizedBox(height: screenHeight * 0.02), // 4% of screen height
 
                     // Direction info card
                     Container(
-                      width: screenWidth * 0.88, // 88% of screen width
-                      padding: EdgeInsets.all(screenWidth * 0.05), // 5% of screen width
+                      width: screenWidth * 0.88,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.05,
+                        vertical: screenWidth * 0.035,
+                      ),
                       decoration: BoxDecoration(
                         color: cardColor,
-                        borderRadius: BorderRadius.circular(screenWidth * 0.06), // 6% of screen width
+                        borderRadius: BorderRadius.circular(screenWidth * 0.06),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.05),
-                            blurRadius: screenWidth * 0.05, // 5% of screen width
-                            offset: Offset(0, screenHeight * 0.0125), // 1.25% of screen height
+                            blurRadius: screenWidth * 0.05,
+                            offset: Offset(0, screenHeight * 0.0125),
                           ),
                         ],
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Text(
-                            'কিবলার দিক',
-                            style: TextStyle(
-                              color: textColor.withOpacity(0.6),
-                              fontSize: screenWidth * 0.035, // 3.5% of screen width
-                              fontWeight: FontWeight.w500,
+                          Container(
+                            padding: EdgeInsets.all(screenWidth * 0.02),
+                            decoration: BoxDecoration(
+                              color: accentColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(screenWidth * 0.025),
+                            ),
+                            child: Icon(
+                              Icons.navigation_rounded,
+                              color: accentColor,
+                              size: screenWidth * 0.05,
                             ),
                           ),
-                          SizedBox(height: screenHeight * 0.01), // 1% of screen height
-                          Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(screenWidth * 0.025), // 2.5% of screen width
-                                decoration: BoxDecoration(
-                                  color: accentColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(screenWidth * 0.03), // 3% of screen width
+                          SizedBox(width: screenWidth * 0.03),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  qiblaDirection != null
+                                      ? _getDirectionText(qiblaDirection)
+                                      : 'দিক গণনা হচ্ছে...',
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: screenWidth * 0.045,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                child: Icon(
-                                  Icons.navigation_rounded,
-                                  color: accentColor,
-                                  size: screenWidth * 0.06, // 6% of screen width
+                                SizedBox(height: screenHeight * 0.005),
+                                Text(
+                                  'কিবলার দিকে নামাজ পড়তে ${qiblaDirection != null ? _getDirectionText(qiblaDirection) : 'দিক নির্ধারণ করা যায়নি'} মুখ করুন',
+                                  style: TextStyle(
+                                    color: textColor.withOpacity(0.7),
+                                    fontSize: screenWidth * 0.035,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: screenWidth * 0.04), // 4% of screen width
-                              Text(
-                                qiblaDirection != null
-                                    ? _getDirectionText(qiblaDirection)
-                                    : 'দিক গণনা হচ্ছে...',
-                                style: TextStyle(
-                                  color: textColor,
-                                  fontSize: screenWidth * 0.055, // 5.5% of screen width
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: screenHeight * 0.02), // 2% of screen height
-                          Text(
-                            'কিবলার দিকে নামাজ পড়তে ${qiblaDirection != null ? _getDirectionText(qiblaDirection) : 'দিক নির্ধারণ করা যায়নি'} মুখ করুন',
-                            style: TextStyle(
-                              color: textColor.withOpacity(0.8),
-                              fontSize: screenWidth * 0.0375, // 3.75% of screen width
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-
+SizedBox(height: screenHeight * 0.02),
                     // Calibration button at bottom
                     Padding(
                       padding: EdgeInsets.only(bottom: screenHeight * 0.0375), // 3.75% of screen height
@@ -428,10 +424,11 @@ class _QiblaScreenState extends State<QiblaScreen> with SingleTickerProviderStat
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: [
+                            children: [
                             Icon(
                               Icons.refresh_rounded,
                               size: screenWidth * 0.05, // 5% of screen width
+                              color: Colors.white,
                             ),
                             SizedBox(width: screenWidth * 0.02), // 2% of screen width
                             Text(

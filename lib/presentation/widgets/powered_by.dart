@@ -84,10 +84,10 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.white.withOpacity(0.25), // Increased opacity for better visibility
             boxShadow: [
               BoxShadow(
-                color: Colors.teal.withOpacity(0.1),
+                color: Colors.green.withOpacity(0.20), // Slightly increased shadow opacity
                 blurRadius: 20,
                 spreadRadius: 1,
               ),
@@ -96,8 +96,8 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.white.withOpacity(0.2),
-                Colors.white.withOpacity(0.05),
+                Colors.teal.shade50.withOpacity(0.3), // Lighter teal color with some opacity
+                Colors.white.withOpacity(0.15),      // Slightly increased opacity
               ],
             ),
           ),
@@ -126,11 +126,11 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                           ).createShader(bounds);
                         },
                         child: Text(
-                          'আমাদের App সম্পর্কে মূল্যবান অভিমত ও পরামর্শ জানাতে\nফেসবুক গ্রুপে পোস্ট করুন অথবা ই-মেইল করুন',
+                          'আমাদের App সম্পর্কে আপনার মূল্যবান অভিমত ও পরামর্শ জানাতে\nফেসবুক গ্রুপে পোস্ট করুন অথবা ই-মেইল করুন',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: isSmallScreen ? width * 0.035 : width * 0.04,
+                            fontSize: isSmallScreen ? width * 0.034 : width * 0.036,
                             height: 1.6,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.3,
@@ -147,7 +147,7 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
               // Buttons
               Wrap(
                 alignment: WrapAlignment.center,
-                spacing: width * 0.04,
+                spacing: width * 0.02, // Reduced spacing between buttons
                 runSpacing: height * 0.015,
                 children: [
                   // Facebook button
@@ -196,8 +196,8 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                                   highlightColor: Colors.transparent,
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.05,
-                                      vertical: height * 0.018,
+                                      horizontal: width * 0.03, // Reduced horizontal padding
+                                      vertical: height * 0.015, // Slightly reduced vertical padding
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -206,24 +206,24 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                                           duration: const Duration(milliseconds: 300),
                                           curve: Curves.easeOut,
                                           transform: Matrix4.translationValues(
-                                            _isHoveringPost ? -4.0 : 0.0, 
+                                            _isHoveringPost ? -2.0 : 0.0, // Reduced animation distance
                                             0.0, 
                                             0.0
                                           ),
                                           child: Icon(
                                             Icons.facebook,
                                             color: Colors.white,
-                                            size: isSmallScreen ? width * 0.05 : width * 0.055,
+                                            size: isSmallScreen ? width * 0.045 : width * 0.05, // Slightly smaller icon
                                           ),
                                         ),
-                                        SizedBox(width: width * 0.02),
+                                        SizedBox(width: width * 0.01), // Reduced spacing
                                         Text(
                                           'পোস্ট করুন',
                                           style: TextStyle(
-                                            fontSize: isSmallScreen ? width * 0.035 : width * 0.04,
+                                            fontSize: isSmallScreen ? width * 0.032 : width * 0.035, // Smaller font size
                                             fontWeight: FontWeight.w600,
                                             color: Colors.white,
-                                            letterSpacing: 0.5,
+                                            letterSpacing: 0.3, // Reduced letter spacing
                                           ),
                                         ),
                                         AnimatedOpacity(
@@ -232,16 +232,16 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                                           child: AnimatedContainer(
                                             duration: const Duration(milliseconds: 300),
                                             transform: Matrix4.translationValues(
-                                              _isHoveringPost ? 0.0 : -8.0, 
+                                              _isHoveringPost ? 0.0 : -4.0, // Reduced animation distance
                                               0.0, 
                                               0.0
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsets.only(left: width * 0.02),
+                                              padding: EdgeInsets.only(left: width * 0.01), // Reduced padding
                                               child: Icon(
                                                 Icons.arrow_forward,
                                                 color: Colors.white,
-                                                size: isSmallScreen ? width * 0.05 : width * 0.055,
+                                                size: isSmallScreen ? width * 0.04 : width * 0.045, // Smaller icon
                                               ),
                                             ),
                                           ),
@@ -304,8 +304,8 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                                   highlightColor: Colors.transparent,
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.05,
-                                      vertical: height * 0.018,
+                                      horizontal: width * 0.03, // Reduced horizontal padding
+                                      vertical: height * 0.015, // Slightly reduced vertical padding
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -314,24 +314,24 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                                           duration: const Duration(milliseconds: 300),
                                           curve: Curves.easeOut,
                                           transform: Matrix4.translationValues(
-                                            _isHoveringEmail ? -4.0 : 0.0, 
+                                            _isHoveringEmail ? -2.0 : 0.0, // Reduced animation distance
                                             0.0, 
                                             0.0
                                           ),
                                           child: Icon(
                                             Icons.email_outlined,
                                             color: Colors.white,
-                                            size: isSmallScreen ? width * 0.05 : width * 0.055,
+                                            size: isSmallScreen ? width * 0.045 : width * 0.05, // Slightly smaller icon
                                           ),
                                         ),
-                                        SizedBox(width: width * 0.02),
+                                        SizedBox(width: width * 0.01), // Reduced spacing
                                         Text(
                                           'ই-মেইল করুন',
                                           style: TextStyle(
-                                            fontSize: isSmallScreen ? width * 0.035 : width * 0.04,
+                                            fontSize: isSmallScreen ? width * 0.032 : width * 0.035, // Smaller font size
                                             fontWeight: FontWeight.w600,
                                             color: Colors.white,
-                                            letterSpacing: 0.5,
+                                            letterSpacing: 0.3, // Reduced letter spacing
                                           ),
                                         ),
                                         AnimatedOpacity(
@@ -340,16 +340,16 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                                           child: AnimatedContainer(
                                             duration: const Duration(milliseconds: 300),
                                             transform: Matrix4.translationValues(
-                                              _isHoveringEmail ? 0.0 : -8.0, 
+                                              _isHoveringEmail ? 0.0 : -4.0, // Reduced animation distance
                                               0.0, 
                                               0.0
                                             ),
                                             child: Padding(
-                                              padding: EdgeInsets.only(left: width * 0.02),
+                                              padding: EdgeInsets.only(left: width * 0.01), // Reduced padding
                                               child: Icon(
                                                 Icons.arrow_forward,
                                                 color: Colors.white,
-                                                size: isSmallScreen ? width * 0.05 : width * 0.055,
+                                                size: isSmallScreen ? width * 0.04 : width * 0.045, // Smaller icon
                                               ),
                                             ),
                                           ),

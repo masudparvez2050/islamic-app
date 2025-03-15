@@ -91,7 +91,7 @@ class Footer extends StatelessWidget {
             ),
             
             Text(
-            'Islamic Learning and Researching Institute',
+            'Islamic Learning and Cultural Institute',
             style: TextStyle(
               color: Colors.white,
               fontSize: width * 0.035,

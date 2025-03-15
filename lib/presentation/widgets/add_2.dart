@@ -7,9 +7,9 @@ import 'package:url_launcher_platform_interface/url_launcher_platform_interface.
 
 class Advertisement2 extends StatefulWidget {
   static const List<String> defaultImageUrls = [
-    'https://api.alhudabd.com/images/courses/2ad86b26-8dad-414d-ae95-ced499db048d.png',
-    'https://api.alhudabd.com/images/courses/f58eb1e9-f2ae-4c6d-90b7-bd4bdc40336f.png',
-    'https://api.alhudabd.com/images/courses/54f5b533-2cff-495c-83be-08840fa32199.png',
+    // 'https://api.alhudabd.com/images/courses/2ad86b26-8dad-414d-ae95-ced499db048d.png',
+    // 'https://api.alhudabd.com/images/courses/f58eb1e9-f2ae-4c6d-90b7-bd4bdc40336f.png',
+    // 'https://api.alhudabd.com/images/courses/54f5b533-2cff-495c-83be-08840fa32199.png',
   ];
 
   static const List<String> defaultLinks = [

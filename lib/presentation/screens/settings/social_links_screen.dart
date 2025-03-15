@@ -198,17 +198,17 @@ class SocialLinksScreen extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.04),
                   
                   // Feedback button
-                  ElevatedButton(
+                    ElevatedButton(
                     onPressed: () {
-                      // Launch Facebook feedback page
-                      _launchURL('https://www.facebook.com/share/1E2Sy7qSQ1/');
+                      // Launch Facebook group page
+                      _launchURL('https://www.facebook.com/groups/1469984167721446/?ref=share&mibextid=NSMWBT');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF00BFA5),
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(vertical: screenHeight * 0.018),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 0,
                     ),

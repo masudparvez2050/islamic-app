@@ -51,8 +51,9 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
         title: Text(
           'সেটিংস',
           style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: screenWidth * 0.05, // 5% of screen width
+        fontWeight: FontWeight.w600,
+        fontSize: screenWidth * 0.05, // 5% of screen width
+        color: Colors.white,
           ),
         ),
         backgroundColor: const Color(0xFF00BFA5),
@@ -60,7 +61,8 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
-            Icons.arrow_back_ios_rounded,
+        Icons.arrow_back_ios_rounded,
+        color: Colors.white,
             size: screenWidth * 0.06, // 6% of screen width
           ),
           onPressed: () => Navigator.of(context).pop(),

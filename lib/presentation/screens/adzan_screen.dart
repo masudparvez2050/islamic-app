@@ -26,6 +26,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
     {'name': 'আসর', 'time': null, 'isAlertOn': false, 'icon': Icons.wb_twilight_outlined},
     {'name': 'মাগরিব', 'time': null, 'isAlertOn': false, 'icon': Icons.nights_stay_outlined},
     {'name': 'ইশা', 'time': null, 'isAlertOn': false, 'icon': Icons.star_outline},
+    {'name': 'তাহাজ্জুদ', 'time': null, 'isAlertOn': false, 'icon': Icons.nightlight_round, 'isCustomTime': true},
   ];
   Timer? _prayerCheckTimer;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -38,6 +39,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
     tz.initializeTimeZones();
     _initializeNotifications().then((_) {
       _loadToggleStates();
+      _loadTahajjudTime();
       _fetchPrayerTimes();
     });
   }
@@ -46,6 +48,85 @@ class _AdzanScreenState extends State<AdzanScreen> {
   void dispose() {
     _prayerCheckTimer?.cancel();
     super.dispose();
+  }
+
+  // Load saved Tahajjud time from SharedPreferences
+  Future<void> _loadTahajjudTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final tahajjudHour = prefs.getInt('tahajjud_hour');
+    final tahajjudMinute = prefs.getInt('tahajjud_minute');
+    
+    if (tahajjudHour != null && tahajjudMinute != null) {
+      final now = DateTime.now();
+      final tahajjudTime = DateTime(
+        now.year, 
+        now.month, 
+        now.day, 
+        tahajjudHour, 
+        tahajjudMinute
+      );
+      
+      setState(() {
+        final tahajjudPrayer = prayerList.firstWhere((p) => p['name'] == 'তাহাজ্জুদ');
+        tahajjudPrayer['time'] = tahajjudTime;
+      });
+    }
+  }
+
+  // Save Tahajjud time to SharedPreferences
+  Future<void> _saveTahajjudTime(TimeOfDay time) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('tahajjud_hour', time.hour);
+    await prefs.setInt('tahajjud_minute', time.minute);
+    
+    final now = DateTime.now();
+    final tahajjudTime = DateTime(
+      now.year, 
+      now.month, 
+      now.day, 
+      time.hour, 
+      time.minute
+    );
+    
+    setState(() {
+      final tahajjudPrayer = prayerList.firstWhere((p) => p['name'] == 'তাহাজ্জুদ');
+      tahajjudPrayer['time'] = tahajjudTime;
+    });
+    
+    final tahajjudPrayer = prayerList.firstWhere((p) => p['name'] == 'তাহাজ্জুদ');
+    if (tahajjudPrayer['isAlertOn'] == true) {
+      _schedulePrayerNotification('তাহাজ্জুদ');
+    }
+  }
+
+  // Show time picker for Tahajjud
+  Future<void> _showTahajjudTimePicker(BuildContext context) async {
+    final tahajjudPrayer = prayerList.firstWhere((p) => p['name'] == 'তাহাজ্জুদ');
+    final initialTime = tahajjudPrayer['time'] != null 
+        ? TimeOfDay.fromDateTime(tahajjudPrayer['time'] as DateTime)
+        : const TimeOfDay(hour: 3, minute: 30); // Default Tahajjud time
+
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF00BFA5),
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.black87,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedTime != null) {
+      _saveTahajjudTime(pickedTime);
+    }
   }
 
   Future<void> _initializeNotifications() async {
@@ -177,7 +258,7 @@ class _AdzanScreenState extends State<AdzanScreen> {
     if (isLoading) return;
 
     final now = DateTime.now();
-    for (var i = 1; i < prayerList.length; i++) {
+    for (var i = 0; i < prayerList.length; i++) {
       var prayer = prayerList[i];
       if (prayer['isAlertOn'] && prayer['time'] != null) {
         final prayerTime = prayer['time'] as DateTime;
@@ -285,11 +366,20 @@ class _AdzanScreenState extends State<AdzanScreen> {
         ),
       );
 
+      // Schedule for today's time
+      var scheduledDate = tz.TZDateTime.from(prayerTime, tz.local);
+      
+      // If it's Tahajjud or the scheduled time is in the past, set it for tomorrow
+      final now = tz.TZDateTime.now(tz.local);
+      if (prayerName == 'তাহাজ্জুদ' || scheduledDate.isBefore(now)) {
+        scheduledDate = scheduledDate.add(const Duration(days: 1));
+      }
+
       await flutterLocalNotificationsPlugin.zonedSchedule(
         prayerName.hashCode,
-        'আজান',
-        '$prayerName এর আজান বাজছে!',
-        tz.TZDateTime.from(prayerTime, tz.local),
+        prayerName == 'তাহাজ্জুদ' ? 'তাহাজ্জুদ নামাজের সময়' : 'আজান',
+        prayerName == 'তাহাজ্জুদ' ? 'তাহাজ্জুদ নামাজের সময় হয়েছে' : '$prayerName এর আজান বাজছে!',
+        scheduledDate,
         platformDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
@@ -342,21 +432,30 @@ class _AdzanScreenState extends State<AdzanScreen> {
         nextPrayerTime = prayerList[0]['time'] as DateTime?;
       }
     }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'আজান',
-          style: TextStyle(
-            fontSize: screenWidth * 0.055,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+      title: Text(
+        'আজান',
+        style: TextStyle(
+        fontSize: screenWidth * 0.055,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
         ),
-        backgroundColor: Colors.teal,
-        centerTitle: true,
-        elevation: 0,
+      ),
+      backgroundColor: Colors.teal,
+      centerTitle: true,
+      elevation: 4,
+      iconTheme: IconThemeData(color: Colors.white),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+        bottom: Radius.circular(20),
+        ),
+      ),
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -546,6 +645,23 @@ class _AdzanScreenState extends State<AdzanScreen> {
   }
 
   Widget _buildPrayerTimesList(double screenWidth, double screenHeight) {
+    // Determine the next prayer outside of the ListView builder
+    final now = DateTime.now();
+    String nextPrayerName = '';
+    
+    for (var i = 0; i < prayerList.length - 1; i++) { // Skip tahajjud for standard prayers
+      final prayerTime = prayerList[i]['time'] as DateTime?;
+      if (prayerTime != null && now.isBefore(prayerTime)) {
+        nextPrayerName = prayerList[i]['name'];
+        break;
+      }
+    }
+    
+    // If no upcoming prayer found today, default to Fajr
+    if (nextPrayerName.isEmpty && prayerList[0]['time'] != null) {
+      nextPrayerName = prayerList[0]['name'];
+    }
+    
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -568,17 +684,19 @@ class _AdzanScreenState extends State<AdzanScreen> {
             indent: screenWidth * 0.175,
             color: Colors.grey.withOpacity(0.2)),
         itemBuilder: (context, index) {
+          final prayer = prayerList[index];
           return _buildPrayerTimeItem(
-            prayerList[index]['name'],
-            _formatTime(prayerList[index]['time'] as DateTime?),
-            prayerList[index]['isAlertOn'],
-            prayerList[index]['icon'],
+            prayer['name'],
+            _formatTime(prayer['time'] as DateTime?),
+            prayer['isAlertOn'],
+            prayer['icon'],
             (value) {
               setState(() {
-                prayerList[index]['isAlertOn'] = value;
-                _saveToggleState(prayerList[index]['name'], value);
+                prayer['isAlertOn'] = value;
+                _saveToggleState(prayer['name'], value);
               });
             },
+            prayer['isCustomTime'] == true,
             screenWidth,
             screenHeight,
           );
@@ -588,18 +706,31 @@ class _AdzanScreenState extends State<AdzanScreen> {
   }
 
   Widget _buildPrayerTimeItem(String prayerName, String time, bool isAlertOn, IconData icon, Function(bool)? onToggle,
-      double screenWidth, double screenHeight) {
+      bool isCustomTime, double screenWidth, double screenHeight) {
     final now = DateTime.now();
     final prayerTime = prayerList.firstWhere((p) => p['name'] == prayerName)['time'] as DateTime?;
 
-    final int prayerIndex = prayerList.indexWhere((p) => p['name'] == prayerName);
-    final bool isActive = prayerTime != null &&
-        ((prayerName == 'ফজর' &&
-                prayerList.last['time'] != null &&
-                now.isAfter(prayerList.last['time'] as DateTime)) ||
-            (prayerIndex > 0 &&
-                now.isAfter(prayerList[prayerIndex - 1]['time'] as DateTime) &&
-                now.isBefore(prayerTime)));
+    // Find the next prayer that will occur after the current time
+    String nextPrayerName = '';
+    DateTime? nextPrayerTime;
+    
+    for (var i = 0; i < prayerList.length - 1; i++) { // Skip tahajjud in this calculation
+      final prayer = prayerList[i];
+      final time = prayer['time'] as DateTime?;
+      if (time != null && now.isBefore(time)) {
+        nextPrayerName = prayer['name'];
+        nextPrayerTime = time;
+        break;
+      }
+    }
+    
+    // If no upcoming prayer found today, default to Fajr (for the next day)
+    if (nextPrayerName.isEmpty && prayerList[0]['time'] != null) {
+      nextPrayerName = prayerList[0]['name'];
+    }
+    
+    // A prayer is active only if it's the next one to occur
+    final bool isActive = prayerName == nextPrayerName;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: screenHeight * 0.0075),
@@ -627,23 +758,45 @@ class _AdzanScreenState extends State<AdzanScreen> {
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
-            children: [
-            Text(
-              time,
-              style: TextStyle(
-              fontSize: screenWidth * 0.04,
-              color: isActive ? Color(0xFF00BFA5) : Colors.black54,
-              fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
+          children: [
+            isCustomTime 
+            ? ElevatedButton(
+                onPressed: () => _showTahajjudTimePicker(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF00BFA5),
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.02,
+                    vertical: screenHeight * 0.005
+                  ),
+                  minimumSize: Size(screenWidth * 0.15, screenHeight * 0.01),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                  ),
+                ),
+                child: Text(
+                  time.isEmpty ? 'সময় সেট করুন' : time,
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.035,
+                  ),
+                ),
+              )
+            : Text(
+                time,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.04,
+                  color: isActive ? Color(0xFF00BFA5) : Colors.black54,
+                  fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
+                ),
               ),
-            ),
             SizedBox(width: screenWidth * 0.03),
             Transform.scale(
               scale: 0.75,
               child: Switch.adaptive(
-              value: isAlertOn,
-              onChanged: onToggle,
-              activeColor: Color(0xFF00BFA5),
-              activeTrackColor: Color(0xFF00BFA5).withOpacity(0.3),
+                value: isAlertOn,
+                onChanged: onToggle,
+                activeColor: Color(0xFF00BFA5),
+                activeTrackColor: Color(0xFF00BFA5).withOpacity(0.3),
               ),
             ),
           ],

@@ -62,7 +62,7 @@ class DonationScreen extends StatelessWidget {
                   ),
                   SizedBox(height: screenHeight * 0.01),
                   Text(
-                    'আপনার দান আমাদের ইসলামিক জ্ঞান প্রচার এবং সম্প্রদায়কে সমর্থন করার মিশন চালিয়ে যেতে সাহায্য করে।',
+                    'আপনার দান আমাদের ইসলামি শিক্ষা ও ইসলামি সংস্কৃতি প্রচার-প্রসার চালিয়ে যেতে সাহায্য করে। সেজন্য আপনার দান আমরা  কৃতজ্ঞতার সাথে গ্রহণ করছি।',
                     style: TextStyle(
                       fontSize: screenWidth * 0.038,
                       color: Colors.white.withOpacity(0.9),
@@ -73,7 +73,7 @@ class DonationScreen extends StatelessWidget {
             ),
             SizedBox(height: screenHeight * 0.025),
             Text(
-              'দান করার উপায়',
+              'দানের ধরন',
               style: TextStyle(
                 fontSize: screenWidth * 0.045,
                 fontWeight: FontWeight.w600,

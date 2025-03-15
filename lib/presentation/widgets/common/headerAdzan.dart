@@ -22,12 +22,18 @@ class ResponsiveHeader extends StatelessWidget implements PreferredSizeWidget {
           fontSize: screenWidth * 0.07,
         ),
       ),
-      iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+      ),
       backgroundColor: backgroundColor,
       elevation: 0,
       toolbarHeight: screenWidth * 0.15,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+      ),
     );
   }
 
