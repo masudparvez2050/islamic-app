@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:math' as math;
 
 class TasbihScreen extends StatefulWidget {
   const TasbihScreen({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isOptionsVisible = false;
+  bool _isButtonPressed = false;
   final List<String> _tasbihTypes = [
     'সাধারণ',
     'সুবহানআল্লাহ',
@@ -24,6 +26,17 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
     'আস্তাগফিরুল্লাহ',
     'দরুদ শরিফ',
   ];
+  
+  // Map of target counts for each tasbih type
+  final Map<String, int> _targetCounts = {
+    'সাধারণ': 0, // No target for general
+    'সুবহানআল্লাহ': 33,
+    'আলহামদুলিল্লাহ': 33,
+    'আল্লাহু আকবার': 34,
+    'লা ইলাহা ইল্লাল্লাহু': 100,
+    'আস্তাগফিরুল্লাহ': 100,
+    'দরুদ শরিফ': 100,
+  };
 
   @override
   void initState() {
@@ -50,12 +63,21 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
   }
 
   void _incrementCount() {
-    HapticFeedback.lightImpact();
+    HapticFeedback.mediumImpact();
     setState(() {
       _count++;
       _totalCount++;
       _animationController.reset();
       _animationController.forward();
+    });
+    
+    // Add a slight delay for more natural feel
+    Future.delayed(const Duration(milliseconds: 150), () {
+      if (mounted) {
+        setState(() {
+          _isButtonPressed = false;
+        });
+      }
     });
   }
 
@@ -78,6 +100,11 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
     setState(() {
       _count = count;
     });
+  }
+
+  // Helper method to get current target count
+  int _getCurrentTargetCount() {
+    return _targetCounts[_selectedTasbih] ?? 0;
   }
 
   @override
@@ -229,7 +256,7 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
                             Column(
                               children: [
                                 Text(
-                                  'লক্ষ্য: ৩৩',
+                                  'লক্ষ্য: ${_bnDigit(_getCurrentTargetCount())}',
                                   style: TextStyle(
                                     fontSize: screenWidth * 0.04, // 4% of screen width
                                     color: primaryColor,
@@ -245,7 +272,7 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
                                       width: screenWidth * 0.4, // 40% of screen width
                                       height: screenWidth * 0.4, // 40% of screen width
                                       child: CircularProgressIndicator(
-                                        value: _count / 33,
+                                        value: _getCurrentTargetCount() > 0 ? _count / _getCurrentTargetCount() : 0,
                                         strokeWidth: screenWidth * 0.02, // 2% of screen width
                                         backgroundColor: Colors.grey.withOpacity(0.2),
                                         valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
@@ -324,13 +351,26 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
                     padding: EdgeInsets.only(bottom: screenHeight * 0.05), // 5% of screen height
                     child: Column(
                       children: [
-                        // Main counter button
+                        // Main counter button - modernized with better animations
                         GestureDetector(
-                          onTap: _incrementCount,
-                          child: Container(
-                            width: screenWidth * 0.28, // 28% of screen width
-                            height: screenWidth * 0.28, // 28% of screen width
-                            margin: EdgeInsets.symmetric(vertical: screenHeight * 0.02), // 2% of screen height
+                          onTapDown: (_) {
+                            setState(() {
+                              _isButtonPressed = true;
+                            });
+                          },
+                          onTapUp: (_) {
+                            _incrementCount();
+                          },
+                          onTapCancel: () {
+                            setState(() {
+                              _isButtonPressed = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            width: screenWidth * (_isButtonPressed ? 0.26 : 0.28), // Shrink when pressed
+                            height: screenWidth * (_isButtonPressed ? 0.26 : 0.28),
+                            margin: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
@@ -340,19 +380,33 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: primaryColor.withOpacity(0.3),
-                                  spreadRadius: screenWidth * 0.0025, // 0.25% of screen width
-                                  blurRadius: screenWidth * 0.0375, // 3.75% of screen width
-                                  offset: Offset(0, screenHeight * 0.00625), // 0.625% of screen height
+                                  color: primaryColor.withOpacity(_isButtonPressed ? 0.2 : 0.5),
+                                  spreadRadius: _isButtonPressed ? 1 : 3,
+                                  blurRadius: _isButtonPressed ? screenWidth * 0.025 : screenWidth * 0.05,
+                                  offset: _isButtonPressed 
+                                      ? Offset(0, screenHeight * 0.003) 
+                                      : Offset(0, screenHeight * 0.00625),
                                 ),
                               ],
                             ),
-                            child: Center(
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: screenWidth * 0.1, // 10% of screen width
+                            child: TweenAnimationBuilder<double>(
+                              tween: Tween<double>(
+                                begin: 0.0,
+                                end: _isButtonPressed ? 1.0 : 0.0,
                               ),
+                              duration: const Duration(milliseconds: 150),
+                              builder: (context, value, child) {
+                                return Transform.rotate(
+                                  angle: value * math.pi / 180, // Subtle rotation effect
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.add_circle_outline,
+                                      color: Colors.white,
+                                      size: screenWidth * (_isButtonPressed ? 0.09 : 0.1),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -514,7 +568,7 @@ class _TasbihScreenState extends State<TasbihScreen> with SingleTickerProviderSt
         setState(() {
           _selectedTasbih = type;
           if (_selectedTasbih != 'সাধারণ') {
-            _setPresetCount(33); // Set to 33 for specific tasbih
+            _setPresetCount(0); // Start from 0 for specific tasbih
           } else {
             _count = 0; // Reset for general tasbih
           }

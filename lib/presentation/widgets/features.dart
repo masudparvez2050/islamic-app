@@ -22,15 +22,16 @@ class Features extends StatelessWidget {
     final features = [
       {'name': 'নামাজ সময়সূচী', 'icon': FontAwesomeIcons.clock},
       {'name': 'সেহরি ইফতার', 'icon': FontAwesomeIcons.utensils},
-      {'name': 'রমজান', 'icon': FontAwesomeIcons.calendarAlt},
+      {'name': 'মেডিটেশন', 'icon': FontAwesomeIcons.spa},
       {'name': 'আল\'কুরান', 'icon': FontAwesomeIcons.bookOpen},
       {'name': 'আজান', 'icon': FontAwesomeIcons.volumeUp},
       {'name': 'কিবলা', 'icon': FontAwesomeIcons.compass},
-      {'name': 'দান করুন', 'icon': FontAwesomeIcons.handHoldingHeart},
+      {'name': 'ইসলামি খবর', 'icon': FontAwesomeIcons.newspaper},
       {'name': 'তাসবিহ', 'icon': FontAwesomeIcons.stopwatch},
       {'name': 'হাদিস', 'icon': FontAwesomeIcons.book},
       {'name': 'আল্লাহর ৯৯\'নাম', 'icon': FontAwesomeIcons.listOl},
-      {'name': 'ইসলামি খবর', 'icon': FontAwesomeIcons.newspaper},
+      {'name': 'দান করুন', 'icon': FontAwesomeIcons.handHoldingHeart},
+      
     ];
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -82,11 +83,11 @@ class Features extends StatelessWidget {
                               builder: (context) =>
                                   const SehriIftarScreen()));
                       break;
-                    case 'রমজান':
+                    case 'মেডিটেশন':
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const RamadanScreen()));
+                              builder: (context) => const MeditationScreen()));
                       break;
                     case 'আল\'কুরান':
                       Navigator.push(
@@ -211,18 +212,18 @@ class AllFeaturesModal extends StatefulWidget {
 
 class _AllFeaturesModalState extends State<AllFeaturesModal> {
   final allFeatures = [
+    {'name': 'নামাজ সময়সূচী', 'icon': FontAwesomeIcons.clock, 'screen': NamazScheduleScreen()},
+    {'name': 'সেহরি ইফতার', 'icon': FontAwesomeIcons.utensils, 'screen': SehriIftarScreen()},
+    {'name': 'মেডিটেশন', 'icon': FontAwesomeIcons.spa, 'screen': const MeditationScreen()},
     {'name': 'আল\'কুরান', 'icon': FontAwesomeIcons.bookOpen, 'screen': QuranScreen()},
     {'name': 'আজান', 'icon': FontAwesomeIcons.volumeUp, 'screen': AdzanScreen()},
     {'name': 'কিবলা', 'icon': FontAwesomeIcons.compass, 'screen': QiblaScreen()},
-    {'name': 'দান করুন', 'icon': FontAwesomeIcons.handHoldingHeart, 'screen': DonationScreen()},
-    {'name': 'নামাজ সময়সূচী', 'icon': FontAwesomeIcons.clock, 'screen': NamazScheduleScreen()},
-    {'name': 'সেহরি ইফতার', 'icon': FontAwesomeIcons.utensils, 'screen': SehriIftarScreen()},
-    {'name': 'রমজান', 'icon': FontAwesomeIcons.calendarAlt, 'screen': RamadanScreen()},
+    {'name': 'ইসলামি খবর', 'icon': FontAwesomeIcons.newspaper, 'screen': const RecentNewsScreen()},
     {'name': 'তাসবিহ', 'icon': FontAwesomeIcons.stopwatch, 'screen': TasbihScreen()},
     {'name': 'হাদিস', 'icon': FontAwesomeIcons.book, 'screen': HadithScreen()},
     {'name': 'আল্লাহর ৯৯\'নাম', 'icon': FontAwesomeIcons.listOl, 'screen': AllahNamesScreen()},
-    {'name': 'ইসলামি খবর', 'icon': FontAwesomeIcons.newspaper, 'screen': const RecentNewsScreen()},
-    {'name': 'দৈনিক মেডিটেশন', 'icon': FontAwesomeIcons.spa, 'screen': const MeditationScreen()},
+    {'name': 'দান করুন', 'icon': FontAwesomeIcons.handHoldingHeart, 'screen': DonationScreen()},
+    {'name': 'রমজান', 'icon': FontAwesomeIcons.calendarAlt, 'screen': RamadanScreen()},
     {'name': 'মোটিভেশন', 'icon': FontAwesomeIcons.solidLightbulb, 'screen': const MotivationScreen()},
   ];
 

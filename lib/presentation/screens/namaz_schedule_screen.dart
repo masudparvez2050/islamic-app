@@ -264,13 +264,14 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final timeLeft = _getTimeLeft(endTime);
 
+    // Get the appropriate color based on prayer name and active status
+    Color cardColor = _getPrayerCardColor(prayerName, isActivePrayer);
+
     return FadeTransition(
       opacity: animation,
       child: Card(
         margin: EdgeInsets.symmetric(vertical: screenWidth * 0.005, horizontal: screenWidth * 0.04), // 0.5% and 4%
-        color: isActivePrayer
-            ? const Color.fromARGB(255, 52, 151, 141)
-            : const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2),
+        color: cardColor,
         child: ListTile(
           leading: Icon(icon, color: Colors.white, size: screenWidth * 0.07), // 7% of screen width
           title: Row(
@@ -290,14 +291,14 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
                     'শুরু: ${DateFormat.jm('bn').format(startTime)}',
                     style: TextStyle(
                       fontSize: screenWidth * 0.045, // 4.5% of screen width
-                      color: isActivePrayer ? Colors.white : Colors.white,
+                      color: Colors.white,
                     ),
                   ),
                   Text(
                     'শেষ: ${DateFormat.jm('bn').format(endTime)}',
                     style: TextStyle(
                       fontSize: screenWidth * 0.045, // 4.5% of screen width
-                      color: isActivePrayer ? Colors.white : Colors.white,
+                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -307,6 +308,17 @@ class _NamazScheduleScreenState extends State<NamazScheduleScreen> {
         ),
       ),
     );
+  }
+
+  // Helper method to determine the appropriate color for prayer cards
+  Color _getPrayerCardColor(String prayerName, bool isActive) {
+    if (prayerName == 'নিষিদ্ধ সময়' && isActive) {
+      return Colors.red[800]!; // Red theme for active forbidden time
+    } else if (isActive) {
+      return const Color.fromARGB(255, 52, 151, 141); // Default active color
+    } else {
+      return const Color.fromARGB(255, 7, 107, 165).withOpacity(0.2); // Default inactive color
+    }
   }
 
   DateTime _getTahajjudTime() {

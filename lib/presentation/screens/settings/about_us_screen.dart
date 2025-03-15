@@ -127,13 +127,37 @@ class AboutUsScreen extends StatelessWidget {
                 children: [
                   _buildSocialButton(FontAwesomeIcons.facebook, Colors.blue[800]!, 'https://www.facebook.com/share/1E2Sy7qSQ1/', screenWidth),
                   _buildSocialButton(FontAwesomeIcons.youtube, Colors.red, 'https://www.youtube.com/@alhudaacademy1123', screenWidth),
-                  // _buildSocialButton(FontAwesomeIcons.instagram, Colors.purple, 'https://instagram.com/alhudabd', screenWidth),
+                  _buildSocialButton(FontAwesomeIcons.globe, Colors.blue, 'https://alhudabd.com', screenWidth),
                   // _buildSocialButton(FontAwesomeIcons.twitter, Colors.blue, 'https://twitter.com/alhudabd', screenWidth),
                 ],
               ),
             ),
             
             SizedBox(height: screenHeight * 0.04),
+               // Feedback button
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Launch Facebook group page
+                          _launchURL('https://www.facebook.com/groups/1469984167721446/?ref=share&mibextid=NSMWBT');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF00BFA5),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.05,
+                            vertical: screenHeight * 0.018,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text('আপনার মতামত জানান'),
+                      ),
+                    ),
+                    
+                    SizedBox(height: screenHeight * 0.03),
             
             // Copyright text
             Center(

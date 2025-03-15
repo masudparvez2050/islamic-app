@@ -126,7 +126,7 @@ class _PoweredByState extends State<PoweredBy> with SingleTickerProviderStateMix
                           ).createShader(bounds);
                         },
                         child: Text(
-                          'আমাদের App সম্পর্কে আপনার মূল্যবান অভিমত ও পরামর্শ জানাতে\nফেসবুক গ্রুপে পোস্ট করুন অথবা ই-মেইল করুন',
+                          'App সম্পর্কে আপনার মূল্যবান অভিমত ও পরামর্শ জানাতে\nফেসবুক গ্রুপে পোস্ট করুন অথবা ই-মেইল করুন',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,

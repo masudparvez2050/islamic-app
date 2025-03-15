@@ -147,7 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen> with TickerProviderStat
                     _buildSettingData('আমাদের সম্পর্কে', Icons.info_rounded, const AboutUsScreen()),
                     // _buildSettingData('ডেভেলপার', Icons.code_rounded, const DevelopersScreen()),
                     _buildSettingData('পাওয়ার্ড বাই', Icons.bolt_rounded, const PoweredByScreen()),
-                    _buildSettingData('সোশ্যাল লিংক', Icons.share_rounded, const SocialLinksScreen()),
+                    // _buildSettingData('সোশ্যাল লিংক', Icons.share_rounded, const SocialLinksScreen()),
                   ], 8),
                 ]),
               ),
