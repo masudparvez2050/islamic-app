@@ -6,6 +6,7 @@ import 'package:dharma/presentation/screens/ramadan/ramadan_rules_screen.dart';
 import 'package:dharma/presentation/screens/ramadan/donation_screen.dart';
 import 'package:dharma/presentation/screens/ramadan/itikaf_screen.dart';
 import 'package:dharma/presentation/widgets/common/headerRamadanScreen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 class RamadanScreen extends StatelessWidget {
@@ -107,7 +108,7 @@ class RamadanScreen extends StatelessWidget {
         },
         {
           'title': 'রমজানের দোয়া',
-          'icon': Icons.favorite_rounded,
+          'icon': FontAwesomeIcons.handsPraying, // Using FontAwesome icon
           'color': const Color(0xFFE91E63),
           'screen': const RamadanDuaScreenWithHeader(),
         },
