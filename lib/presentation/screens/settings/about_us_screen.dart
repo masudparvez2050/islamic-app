@@ -109,6 +109,7 @@ class AboutUsScreen extends StatelessWidget {
                 _buildTeamMember('সহকারি পরিচালক (মহিলা বিষয়ক)', 'সানজিদা রহমান', screenWidth, theme),
                 _buildDivider(),
                 _buildTeamMember('নির্বাহী পরিচালক', 'খলিলুর রহমান মাহদী', screenWidth, theme),
+                _buildTeamMember('অ্যাপ ডেভেলপার', 'মাসুদুর রহমান ও তার সহযোগী সদস্য', screenWidth, theme),
               ],
             ),
             

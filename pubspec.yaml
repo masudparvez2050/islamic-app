@@ -73,6 +73,10 @@ flutter:
       fonts:
         - asset: assets/fonts/FontleroyBrownNF.ttf
 
+    - family: Bitopi_Bijoy
+      fonts:
+        - asset: assets/fonts/Bitopi_Bijoy.ttf
+
   assets:
     - assets/images/
     - assets/images/alhuda_logo.png

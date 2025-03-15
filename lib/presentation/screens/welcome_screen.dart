@@ -152,7 +152,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                           SizedBox(height: height * 0.02),
                           
                           Text(
-                            'আধুনিক জীবনের জন্য আধ্যাত্মিক জ্ঞান',
+                            'আধুনিক জীবনে ইসলামি জ্ঞান',
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.8),
                               fontSize: width * 0.032,

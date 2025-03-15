@@ -58,18 +58,19 @@ class PoweredByScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.02),
-                  Text(
+                    Text(
                     'আল হুদা একাডেমি',
                     style: TextStyle(
                       fontSize: screenWidth * 0.06,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      fontFamily: 'Bitopi_Bijoy',
+                      color: Colors.green,
                       shadows: [
-                        Shadow(
-                          blurRadius: 10.0,
-                          color: Colors.black.withOpacity(0.2),
-                          offset: const Offset(0, 2),
-                        ),
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(0, 2),
+                      ),
                       ],
                     ),
                   ),
