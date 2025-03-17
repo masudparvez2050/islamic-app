@@ -22,7 +22,7 @@ class Features extends StatelessWidget {
     final features = [
       {'name': 'নামাজ সময়সূচী', 'icon': FontAwesomeIcons.clock},
       {'name': 'সেহরি ইফতার', 'icon': FontAwesomeIcons.utensils},
-      {'name': 'মেডিটেশন', 'icon': FontAwesomeIcons.spa},
+      {'name': 'মোটিভেশন', 'icon': FontAwesomeIcons.solidLightbulb},
       {'name': 'আল\'কুরান', 'icon': FontAwesomeIcons.bookOpen},
       {'name': 'আজান', 'icon': FontAwesomeIcons.volumeUp},
       {'name': 'কিবলা', 'icon': FontAwesomeIcons.compass},
@@ -83,11 +83,11 @@ class Features extends StatelessWidget {
                               builder: (context) =>
                                   const SehriIftarScreen()));
                       break;
-                    case 'মেডিটেশন':
+                    case 'মোটিভেশন':
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const MeditationScreen()));
+                              builder: (context) => const MotivationScreen()));
                       break;
                     case 'আল\'কুরান':
                       Navigator.push(
@@ -214,7 +214,7 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
   final allFeatures = [
     {'name': 'নামাজ সময়সূচী', 'icon': FontAwesomeIcons.clock, 'screen': NamazScheduleScreen()},
     {'name': 'সেহরি ইফতার', 'icon': FontAwesomeIcons.utensils, 'screen': SehriIftarScreen()},
-    {'name': 'মেডিটেশন', 'icon': FontAwesomeIcons.spa, 'screen': const MeditationScreen()},
+    {'name': 'মোটিভেশন', 'icon': FontAwesomeIcons.solidLightbulb, 'screen': const MotivationScreen()},
     {'name': 'আল\'কুরান', 'icon': FontAwesomeIcons.bookOpen, 'screen': QuranScreen()},
     {'name': 'আজান', 'icon': FontAwesomeIcons.volumeUp, 'screen': AdzanScreen()},
     {'name': 'কিবলা', 'icon': FontAwesomeIcons.compass, 'screen': QiblaScreen()},
@@ -224,7 +224,7 @@ class _AllFeaturesModalState extends State<AllFeaturesModal> {
     {'name': 'আল্লাহর ৯৯\'নাম', 'icon': FontAwesomeIcons.listOl, 'screen': AllahNamesScreen()},
     {'name': 'দান করুন', 'icon': FontAwesomeIcons.handHoldingHeart, 'screen': DonationScreen()},
     {'name': 'রমজান', 'icon': FontAwesomeIcons.calendarAlt, 'screen': RamadanScreen()},
-    {'name': 'মোটিভেশন', 'icon': FontAwesomeIcons.solidLightbulb, 'screen': const MotivationScreen()},
+    {'name': 'মেডিটেশন', 'icon': FontAwesomeIcons.spa, 'screen': const MeditationScreen()},
   ];
 
   @override

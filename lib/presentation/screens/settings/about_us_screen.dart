@@ -102,7 +102,7 @@ class AboutUsScreen extends StatelessWidget {
               [
                 _buildTeamMember('ধর্ম ও ফতোয়া বিষয়ক উপদেষ্টা', 'মুফতি ইমরান বিন ইলিয়াস', screenWidth, theme),
                 _buildDivider(),
-                _buildTeamMember('মিডিয়া ও সংস্কৃতি বিষয়ক উপদেষ্টা', 'হুমায়ূন আইয়ূব', screenWidth, theme),
+                _buildTeamMember('মিডিয়া ও সংস্কৃতি বিষয়ক উপদেষ্টা', 'হুমায়ুন আইয়ুব', screenWidth, theme),
                 _buildDivider(),
                 _buildTeamMember('পরিচালক', 'আতাউর রহমান আলহাদী', screenWidth, theme),
                 _buildDivider(),
